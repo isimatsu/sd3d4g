@@ -1,0 +1,156 @@
+body {
+  width: 100%;
+  margin: 0 auto;
+  height: 100svh;
+  background-image: linear-gradient(339deg, rgba(200, 233, 255, 1), rgb(255, 255, 255));
+}
+
+.material-symbols-rounded {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 600,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+main{
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff70;
+}
+
+.sm{
+  display: block;
+  max-width: 500px;
+  height: 100svh;
+  margin: 0 auto;
+  padding: 15px;
+  overflow-y: scroll;
+  background-image: url(../img/back.png);
+  background-size: cover;       /* 画面いっぱいに拡大縮小 */
+  background-position: center;  /* 中央に配置 */
+  background-repeat: no-repeat; /* 繰り返しなし */
+}
+
+.page-header{
+    width: 100%;
+    padding: 80px 10px;
+}
+
+.page-header h1{
+  font-size: 35px;
+  color: #0084FF;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.page-header p{
+
+}
+
+.menu-bar-area{
+  width: 95%;
+  max-width: 480px;
+  height: 80px;
+  border-radius: 60px;
+  position: fixed;
+  bottom: 10px;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 6px;
+
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);           
+  -webkit-backdrop-filter: blur(10px);             
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+}
+
+.menu-bar-btn{
+  width: 25%;
+  height: 90%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #004482;
+  border-radius: 60px;
+}
+
+
+.menu-bar-btn span{
+  font-size: 35px;
+}
+
+.menu-bar-btn p{
+  font-size: 14px;
+  line-height: 0.9;
+}
+
+.menu-bar-btn:hover{
+  transition: 1s;
+  background-color: #f8fcff;
+}
+
+.page-contents{
+  margin-bottom: 300px;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-account{
+  height: 48px;
+  border-radius: 60px;
+  right: 0;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2); 
+  backdrop-filter: blur(10px);           
+  -webkit-backdrop-filter: blur(10px);             
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+}
+
+.header-account span{
+  padding-right: 10px;
+}
+
+.header-account:hover{
+  transition: 1s;
+  background-color: #f8fcff;
+  color: #004482;
+}
+
+.basic-btn{
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  height: 55px;
+  border-radius: 20px;
+  color: #fff;
+  text-decoration: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blue-btn{
+  background-color: #0084FF;
+}
+
+.gray-btn{
+  background-color: #909BA6;
+}

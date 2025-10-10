@@ -20,8 +20,8 @@
             </div>
             <div class="page-header">
                 <h1>ログイン</h1>
-                <p>ログインします。アカウント情報を入力してください。
-                    またアカウントをお持ちでない方は<a href="../"新規登録</p>
+                <p>ログインします。アカウント情報を入力してください。<br>
+                    またアカウントをお持ちでない方は<a href="../signup/index.php">新規登録</a></p>
             </div>
             <div class="page-contents">
 

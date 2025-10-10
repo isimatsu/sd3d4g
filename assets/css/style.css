@@ -52,14 +52,15 @@ main{
 }
 
 .page-header h1{
-  font-size: 35px;
+  font-size: 30px;
   color: #0084FF;
   padding-bottom: 20px;
   text-align: center;
 }
 
 .page-header p{
-
+  font-size: 15px;
+  color: #333;
 }
 
 .menu-bar-area{
@@ -82,6 +83,11 @@ main{
   -webkit-backdrop-filter: blur(10px);             
   border: 1px solid rgba(255, 255, 255, 0.3); 
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+}
+
+.menu-bar-area:hover{
+  height: 80px;
+  transition: 0.3s;
 }
 
 .menu-bar-btn{
@@ -146,7 +152,9 @@ main{
 }
 
 .header-account:hover{
-  transition: 1s;
+  transition: 0.3s;
+  height: 60px;
+  padding: 0 25px;
   background-color: #f8fcff;
   color: #004482;
 }
@@ -169,8 +177,18 @@ main{
   background-color: #0084FF;
 }
 
+.blue-btn:hover{
+  background-color: #1a68ad;
+  transition: 0.1s;
+}
+
 .gray-btn{
   background-color: #909BA6;
+}
+
+.gray-btn:hover{
+  background-color: #697179;
+  transition: 0.1s;
 }
 
 .music-card{
@@ -185,11 +203,17 @@ main{
   align-items: center;
 }
 
+.music-card:hover{
+  height: 80px;
+  transition: 0.3s;
+}
+
 .music-card div{
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 
 .music-action-btn span{
   padding: 0 5px;

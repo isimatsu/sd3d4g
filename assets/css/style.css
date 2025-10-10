@@ -253,7 +253,6 @@ main{
   padding-bottom: 10px;
 }
 
-<<<<<<< Updated upstream
 .page-center-content{
   width: 100%;
   height: calc(100svh - 140px);
@@ -268,8 +267,8 @@ main{
 
 .welcome p{
   padding: 10px 0;
-=======
+}
+
 .error-message{
   color: red;
->>>>>>> Stashed changes
 }

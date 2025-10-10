@@ -16,13 +16,7 @@
     <main>
         <sction class="sm">
             <div class="header">
-                <div>
-
-                </div>
-                <a href="#" class="header-account">
-                    <span class="material-symbols-rounded">account_circle</span>
-                    <p>アカウント名</p>
-                </a>
+                <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
                 <h1>pagetitle</h1>

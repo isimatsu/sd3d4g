@@ -37,7 +37,7 @@
                 </from><!--basic-form-->
 
                 <div class="error-message">
-                    <p><strong>*:メールアドレスかパスワードが違います・</strong></p>
+                    <p><strong>*メールアドレスかパスワードが違います</strong></p>
                 </div>
 
 

@@ -29,7 +29,7 @@
         </sction>
     </main>
     <div class="menu-bar-area">
-        <?php include '../assets/include/menu-bar.php '?>
+        <?php include '../assets/include/menu-bar.php'?>
     </div>
 </body>
 </html>

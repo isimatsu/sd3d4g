@@ -26,7 +26,7 @@
             </div>
             <div class="page-header">
                 <h1>新規作成</h1>
-                <p>アカウントを登録します。登録する情報を入力して下さい既にアカウントをお持ちの方は<a href="#">ログイン</a></p>
+                <p>アカウントを登録します。登録する情報を入力して下さい既にアカウントをお持ちの方は<a href="../signin/">ログイン</a></p>
             </div>
             <div class="page-contents">
                 <from action="#" class="basic-form">

@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
-    <title>ログイン -旅行提案アプリ-</title>
+    <title>新規作成 -旅行提案アプリ-</title>
 </head>
 <body>
     <main>
@@ -25,22 +25,26 @@
                 </a>
             </div>
             <div class="page-header">
-                <h1>ログイン</h1>
-                <p>ここにページの説明が入ります。ここにページの説明が入ります</p>
+                <h1>新規作成</h1>
+                <p>アカウントを登録します。登録する情報を入力して下さい既にアカウントをお持ちの方は<a href="#">ログイン</a></p>
             </div>
             <div class="page-contents">
                 <from action="#" class="basic-form">
                     <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
+                        <p class="input-name">お名前</p>
+                        <input class="basic-form-input" type="text" placeholder="例：田中太郎">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
+                        <p class="input-name">メールアドレス</p>
+                        <input class="basic-form-input" type="text" placeholder="例：abc@abc.com">
+                    </div><!--basic-form-box-->
+                    <div class="basic-form-box">
+                        <p class="input-name">パスワード</p>
+                        <input class="basic-form-input" type="text" placeholder="例：8文字以上">
                     </div><!--basic-form-box-->
                 </from><!--basic-form-->
 
-                <a href="" class="basic-btn blue-btn">ログイン</a>
+                <a href="" class="basic-btn blue-btn">新規登録</a>
                 
             </div>
         </sction>

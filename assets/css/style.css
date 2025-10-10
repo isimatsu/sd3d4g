@@ -252,3 +252,19 @@ main{
   font-weight: 700;
   padding-bottom: 10px;
 }
+
+.page-center-content{
+  width: 100%;
+  height: calc(100svh - 140px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome{
+  text-align: center;
+}
+
+.welcome p{
+  padding: 10px 0;
+}

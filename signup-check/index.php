@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
-    <title>ログイン -旅行提案アプリ-</title>
+    <title>登録確認 -旅行提案アプリ-</title>
 </head>
 <body>
     <main>
@@ -26,7 +26,7 @@
             </div>
             <div class="page-header">
                 <h1>登録確認</h1>
-                <p>以下の内容で登録します。よろしいですか？</p>
+                <pstyle="text-align:center;">以下の内容で登録します。よろしいですか？</p>
             </div>
             <div class="page-contents">
                 <from action="#" class="basic-form">

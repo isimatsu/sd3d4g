@@ -23,18 +23,18 @@
                 <p>アカウントを登録します。登録する情報を入力して下さい既にアカウントをお持ちの方は<a href="../signin/">ログイン</a></p>
             </div>
             <div class="page-contents">
-                <from action="#" class="basic-form">
+                <from action="../signup-check/index.php" class="basic-form">
                     <div class="basic-form-box">
                         <p class="input-name">お名前</p>
-                        <input class="basic-form-input" type="text" placeholder="例：田中太郎">
+                        <input class="basic-form-input" name="user_name" type="text" placeholder="例：田中太郎">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" type="text" placeholder="例：abc@abc.com">
+                        <input class="basic-form-input" name="email" type="text" placeholder="例：abc@abc.com">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" type="text" placeholder="例：8文字以上">
+                        <input class="basic-form-input" name="password" type="text" placeholder="例：8文字以上">
                     </div><!--basic-form-box-->
                 </from><!--basic-form-->
 

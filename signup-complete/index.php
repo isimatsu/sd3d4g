@@ -1,3 +1,17 @@
+<?php
+$user_name=$_POST['user_name'];
+$email=$_POST['email'];
+$password=$_POST['password'];
+
+$pdo=new PDO(
+	'mysql:host=mysql326.phy.lolipop.lan;
+            dbname=LAA1682282-sd3d4g;charset=utf8',
+                'LAA1682282',
+                'Passsd3g');
+
+$sql=$pdo->prepare('INSERT INTO user(user_name,email,password),value(?,?,?)');
+$sql->execute([$user_name,$email,$password]);
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

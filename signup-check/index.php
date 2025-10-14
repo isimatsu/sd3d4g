@@ -53,7 +53,9 @@ $password=$_POST['password'];
                 <button class="basic-btn blue-btn">登録完了</a>
                 </form>
                 <p></p>
-                <a href="../signup/index.php" class="basic-btn gray-btn">戻る</a>
+                <form action="../signup/index.php" method="post">
+                <button class="basic-btn gray-btn">戻る</a>
+                </form>
                 
             </div>
         </sction>

@@ -35,22 +35,22 @@ $password=$_POST['password'];
                 <p style="text-align:center;">以下の内容で登録します。よろしいですか？</p>
             </div>
             <div class="page-contents">
-                <from action="#"  style="text-align:center;">
+                <form action="#"  style="text-align:center;">
                     <div class="basic-form-box">
-                        <p style="display: inline-block;width: 200px;color: #666;">お名前：<?= $user_name ?></p>
+                        <p style="display: inline-block;width: 200px;color: #666;">お名前：<?php echo $user_name; ?></p>
                     </div><!--basic-form-box-->
 
                     <div class="basic-form-box">
-                        <p style="display: inline-block;width: 200px;color: #666;">メールアドレス：<?= $email ?></p>
+                        <p style="display: inline-block;width: 200px;color: #666;">メールアドレス：<?php echo $email; ?></p>
                     </div><!--basic-form-box-->
 
-                </from><!--basic-form-->
+                </form><!--basic-form-->
 
                 <form action="../signup-complete/index.php" method="post">
                     <input type="hidden" name="user_name" value="<?=$user_name?>">
                     <input type="hidden" name="email" value="<?=$email?>">
                     <input type="hidden" name="password" value="<?=$password?>">
-                <a href="../signup-complete/index.php" class="basic-btn blue-btn">登録完了</a>
+                <button class="basic-btn blue-btn">登録完了</a>
                 </form>
                 <p></p>
                 <a href="../signup/index.php" class="basic-btn gray-btn">戻る</a>

@@ -16,18 +16,12 @@
     <main>
         <sction class="sm">
             <div class="header">
-                <div>
-
-                </div>
-                <a href="#" class="header-account">
-                    <span class="material-symbols-rounded">account_circle</span>
-                    <p>アカウント名</p>
-                </a>
+                <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
                 <h1>ログイン</h1>
-                <p>ログインします。アカウント情報を入力してください。
-                    またアカウントをお持ちでない方は<a href="../"新規登録</p>
+                <p>ログインします。アカウント情報を入力してください。<br>
+                    またアカウントをお持ちでない方は<a href="../signup/index.php">新規登録</a></p>
             </div>
             <div class="page-contents">
 
@@ -43,7 +37,7 @@
                 </from><!--basic-form-->
 
                 <div class="error-message">
-                    <p><strong>*:メールアドレスかパスワードが違います・</strong></p>
+                    <p><strong>*メールアドレスかパスワードが違います</strong></p>
                 </div>
 
 

@@ -1,3 +1,13 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
+            dbname=LAA1682282-sd3d4g;charset=utf8',
+                'LAA1682282',
+                'Passsd3d');
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

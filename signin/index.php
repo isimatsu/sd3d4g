@@ -25,23 +25,24 @@
             </div>
             <div class="page-contents">
 
-            <from action="#" class="basic-form">
+            <form action="./index.php" class="basic-form">
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" type="text" placeholder="aso@asojuku.ac.jp">
+                        <input class="basic-form-input" name="email" type="text" placeholder="aso@asojuku.ac.jp">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" type="text" >
+                        <input class="basic-form-input" name="password" type="text" >
                     </div><!--basic-form-box-->
-                </from><!--basic-form-->
+                    <button class="basic-btn blue-btn">ログイン</button>
+            </form><!--basic-form-->
 
                 <div class="error-message">
                     <p><strong>*メールアドレスかパスワードが違います</strong></p>
                 </div>
 
 
-                <a href="" class="basic-btn blue-btn">ログイン</a>
+
                 
                 
 

@@ -26,18 +26,18 @@
             </div>
             <div class="page-header">
                 <h1>登録確認</h1>
-                <pstyle="text-align:center;">以下の内容で登録します。よろしいですか？</p>
+                <p style="text-align:center;">以下の内容で登録します。よろしいですか？</p>
             </div>
             <div class="page-contents">
-                <from action="#" class="basic-form">
+                <from action="#"  style="text-align:center;">
                     <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
+                        <p style="display: inline-block;width: 200px;color: #666;">お名前：</p>
                     </div><!--basic-form-box-->
+
                     <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
+                        <p style="display: inline-block;width: 200px;color: #666;">メールアドレス：</p>
                     </div><!--basic-form-box-->
+
                 </from><!--basic-form-->
 
                 <a href="" class="basic-btn blue-btn">登録完了</a>

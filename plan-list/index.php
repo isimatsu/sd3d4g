@@ -23,8 +23,8 @@
                 <p>過去に生成した旅程の一覧です</p>
             </div>
             <div class="page-contents">
-
-               
+            <img src="../assets/img/spot_img/1.jpg" class="img2" width="350" height="180">
+            <img src="../assets/img/spot_img/40.jpg" class="img2" width="350" height="180">
 
                 
 

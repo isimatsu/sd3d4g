@@ -27,11 +27,11 @@
 
             <from action="#" class="basic-form">
                     <div class="basic-form-box">
-                        <p class="input-address">メールアドレス</p>
+                        <p class="input-name">メールアドレス</p>
                         <input class="basic-form-input" type="text" placeholder="aso@asojuku.ac.jp">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
-                        <p class="input-password">パスワード</p>
+                        <p class="input-name">パスワード</p>
                         <input class="basic-form-input" type="text" >
                     </div><!--basic-form-box-->
                 </from><!--basic-form-->

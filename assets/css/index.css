@@ -1,0 +1,111 @@
+.hero-plan-list{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 350px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+}
+
+.plan-card{
+    flex-shrink: 0;
+    width: 55%;
+    height: 250px;
+    margin: 0 10px;
+    background-color: aqua;
+    border-radius: 30px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    scroll-snap-align: center;
+}   
+
+.plan-card-detail{
+    width: 100%;
+    height: 80px;
+    border-radius: 0 0 30px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px);           
+    -webkit-backdrop-filter: blur(10px);             
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+}
+
+.plan-card-detail p{
+    font-size: 12px;
+}
+
+.plan-card-detail h2{
+    font-size: 20px;
+    padding: 5px 0;
+}
+
+.main-card{
+    transform: rotate(3deg);
+}
+
+.side-card{
+    transform: rotate(357deg);
+}
+
+
+.hero-music-list{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+}
+
+.music-card{
+    flex-shrink: 0;
+    width: 55%;
+    height: 250px;
+    margin: 0 10px;
+    background-color: aqua;
+    border-radius: 30px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    scroll-snap-align: center;
+}   
+
+.music-card-detail{
+    width: 100%;
+    height: 80px;
+    border-radius: 0 0 30px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(10px);           
+    -webkit-backdrop-filter: blur(10px);             
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+}
+
+.music-card-detail p{
+    font-size: 12px;
+}
+
+.music-card-detail h2{
+    font-size: 20px;
+    padding: 5px 0;
+}
+

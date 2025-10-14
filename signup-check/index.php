@@ -1,3 +1,9 @@
+<?php
+$user_name=$_POST['user_name'];
+$email=$_POST['email'];
+$password=$_POST['password'];
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -26,23 +32,30 @@
             </div>
             <div class="page-header">
                 <h1>登録確認</h1>
-                <pstyle="text-align:center;">以下の内容で登録します。よろしいですか？</p>
+                <p style="text-align:center;">以下の内容で登録します。よろしいですか？</p>
             </div>
             <div class="page-contents">
-                <from action="#" class="basic-form">
+                <form action="#"  style="text-align:center;">
                     <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
+                        <p style="display: inline-block;width: 200px;color: #666;">お名前：<?php echo $user_name; ?></p>
                     </div><!--basic-form-box-->
-                    <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
-                    </div><!--basic-form-box-->
-                </from><!--basic-form-->
 
-                <a href="" class="basic-btn blue-btn">登録完了</a>
+                    <div class="basic-form-box">
+                        <p style="display: inline-block;width: 200px;color: #666;">メールアドレス：<?php echo $email; ?></p>
+                    </div><!--basic-form-box-->
+
+                </form><!--basic-form-->
+
+                <form action="../signup-complete/index.php" method="post">
+                    <input type="hidden" name="user_name" value="<?=$user_name?>">
+                    <input type="hidden" name="email" value="<?=$email?>">
+                    <input type="hidden" name="password" value="<?=$password?>">
+                <button class="basic-btn blue-btn">登録完了</a>
+                </form>
                 <p></p>
-                <a href="" class="basic-btn gray-btn">戻る</a>
+                <form action="../signup/index.php" method="post">
+                <button class="basic-btn gray-btn">戻る</a>
+                </form>
                 
             </div>
         </sction>

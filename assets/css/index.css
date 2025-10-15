@@ -3,7 +3,7 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 350px;
+    height: 300px;
     overflow-x: scroll;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -49,6 +49,8 @@
     padding: 5px 0;
 }
 
+
+
 .main-card{
     transform: rotate(3deg);
 }
@@ -63,16 +65,16 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 150px;
+    height: 200px;
     overflow-x: scroll;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
 }
 
-.music-card{
+.hero-music-card{
     flex-shrink: 0;
     width: 55%;
-    height: 250px;
+    height: 140px;
     margin: 0 10px;
     background-color: aqua;
     border-radius: 30px;
@@ -85,7 +87,7 @@
 
 .music-card-detail{
     width: 100%;
-    height: 80px;
+    height: 70px;
     border-radius: 0 0 30px 30px;
     display: flex;
     justify-content: center;
@@ -107,5 +109,46 @@
 .music-card-detail h2{
     font-size: 20px;
     padding: 5px 0;
+}
+
+.new-plan-create-box{
+    width: 100%;
+    padding: 20px;
+    background-image: linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
+    border-radius: 35px/40px;
+}
+
+.new-plan-create{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    border-radius: 20px;
+    background-color: #FF7B54;
+    color: #fff;
+    
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.new-plan-create span{
+    margin-right: 10px;
+}
+
+/* スクロールバー */
+
+::-webkit-scrollbar {   
+  height: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff00;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b5dbfb00;
+  border-radius: 10px;
 }
 

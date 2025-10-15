@@ -19,6 +19,7 @@
         height: 45px;
         position: fixed;
         top: 15px;
+        max-width: 470px;
     }
 
     .page-contents{
@@ -60,14 +61,69 @@
                     </a><!--plan-card-->
                 </div>
                 <div class="hero-music-list">
-                    <a href="" class="music-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
+                    <a href="" class="hero-music-card main-card" style="background-image: url(assets/img/music_img/1.jpg);">
                         <div class="music-card-detail">
                             <div>
-                                <p>2025/10/10 ~ 2025/10/12</p>
-                                <h2>福岡旅行</h2>
+                                <h2>花、真っ白</h2>
+                                <p>藤井風</p>
                             </div>
                         </div>
                     </a><!--plan-card-->
+                    <a href="" class="hero-music-card side-card" style="background-image: url(assets/img/music_img/1.jpg);">
+                        <div class="music-card-detail">
+                            <div>
+                                <h2>花、真っ白</h2>
+                                <p>藤井風</p>
+                            </div>
+                        </div>
+                    </a><!--plan-card-->
+                    <a href="" class="hero-music-card main-card" style="background-image: url(assets/img/music_img/1.jpg);">
+                        <div class="music-card-detail">
+                            <div>
+                                <h2>花、真っ白</h2>
+                                <p>藤井風</p>
+                            </div>
+                        </div>
+                    </a><!--plan-card-->
+                </div>
+                <div class="new-plan-create-box">
+                    <a class="new-plan-create" href="#">
+                        <span class="material-symbols-rounded">add_circle</span>
+                        旅程を作成
+                    </a>
+                    <form>
+                        <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F6F4F2;">
+                                <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>京都</h5>
+                                <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F2F6F2;">
+                                <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>東京</h5>
+                                <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F2F6F4;">
+                                <span class="material-symbols-rounded" style="color: #94B4AB;"">nature</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>北海道</h5>
+                                <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                    </form>
                 </div>
             </div>
         </sction>
@@ -77,15 +133,14 @@
     </div>
 </body>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const planList = document.querySelector('.hero-plan-list');
-    const mainCard = document.querySelector('.main-card');
-    
-    if (planList && mainCard) {
-        // 真ん中のカードを中央に配置
-        const scrollPosition = mainCard.offsetLeft - (planList.offsetWidth / 2) + (mainCard.offsetWidth / 2);
-        planList.scrollLeft = scrollPosition;
-    }
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        const planList = document.querySelector('.hero-plan-list');
+        const mainCard = document.querySelector('.main-card');
+        
+        if (planList && mainCard) {
+            const scrollPosition = mainCard.offsetLeft - (planList.offsetWidth / 2) + (mainCard.offsetWidth / 2);
+            planList.scrollLeft = scrollPosition;
+        }
+    });
 </script>
 </html>

@@ -306,3 +306,30 @@ main{
   padding: 0 20px;
   background-color: #EDEDED;
 }
+
+.pref-select-btn{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+
+}
+
+.pref-icon{
+  width: 70px;
+  height: 70px;
+  border-radius: 15px;
+  margin: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pref-detail h5{
+  font-size: 20px;
+}
+
+.pref-icon span{
+  font-size: 40px;
+}

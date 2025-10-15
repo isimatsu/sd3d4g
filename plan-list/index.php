@@ -19,34 +19,15 @@
                 <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
-                <h1>ログイン</h1>
-                <p>ログインします。アカウント情報を入力してください。<br>
-                    またアカウントをお持ちでない方は<a href="../signup/index.php">新規登録</a></p>
+                <h1>旅程一覧</h1>
+                <p>過去に生成した旅程の一覧です</p>
             </div>
             <div class="page-contents">
-
-            <form action="./index.php" class="basic-form">
-                    <div class="basic-form-box">
-                        <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" name="email" type="text" placeholder="aso@asojuku.ac.jp">
-                    </div><!--basic-form-box-->
-                    <div class="basic-form-box">
-                        <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" name="password" type="text" >
-                    </div><!--basic-form-box-->
-                    <button class="basic-btn blue-btn">ログイン</button>
-            </form><!--basic-form-->
-
-                <div class="error-message">
-                    <p><strong>*メールアドレスかパスワードが違います</strong></p>
-                </div>
-
-
+            <img src="../assets/img/spot_img/1.jpg" class="img2" width="350" height="180">
+            <img src="../assets/img/spot_img/40.jpg" class="img2" width="350" height="180">
 
                 
-                
 
-                
             </div>
         </sction>
     </main>

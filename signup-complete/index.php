@@ -40,7 +40,7 @@ $sql->execute([$user_name,$email,$password]);
                         <img src="../assets/img/ariflight.png">
                         <h1>ようこそ</h1>
                         <p>アカウント登録が完了しました。これからあなたにぴったりの旅をご提案します。</p>
-                        <a href="" class="basic-btn blue-btn">はじめる</a>
+                        <a href="./index.php" class="basic-btn blue-btn">はじめる</a>
                     </div>
                 </div>
             </div>

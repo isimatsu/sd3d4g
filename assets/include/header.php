@@ -1,6 +1,16 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+    session_start();
+    if(isset($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+        $user_name = $_SESSION['user_name'];
+    }
+?>
 <div>
 </div>
 <a href="#" class="header-account">
     <span class="material-symbols-rounded">account_circle</span>
-    <p>アカウント名</p>
+    <p><?php echo $user_name ?></p>
 </a>

@@ -7,6 +7,8 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
             dbname=LAA1682282-sd3d4g;charset=utf8',
                 'LAA1682282',
                 'Passsd3d');
+
+$sql=$pdo->prepare('SELECT * FROM user WHERE ')
 ?>
 <!DOCTYPE html>
 <html lang="ja">

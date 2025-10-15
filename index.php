@@ -1,3 +1,35 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
+$pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
+            dbname=LAA1682282-sd3d4g;charset=utf8',
+                'LAA1682282',
+                'Passsd3d');
+    $email=$_POST['email'];
+    $password=$_POST['password'];
+    if(isset($email)){
+        if(isset($password)){
+        $sql=$pdo->prepare('SELECT * FROM user WHERE email=? and password=?');
+        $sql->execute([$email,$password]);
+        $rowCount = $sql->rowCount();
+        if($rowCount==1){
+            foreach($sql as $row){
+                $_SESSION['user_id']=$row['user_id'];
+                $_SESSION['user_name']=$row['user_name'];
+            }
+        }else{
+            header("Location: ../signup/index.php");
+        }
+    }else{
+            header("Location: ../signup/index.php");
+        }
+}else{
+            header("Location: ../signup/index.php");
+        }
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

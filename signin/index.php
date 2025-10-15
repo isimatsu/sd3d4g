@@ -16,7 +16,6 @@
     <main>
         <sction class="sm">
             <div class="header">
-                <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
                 <h1>ログイン</h1>

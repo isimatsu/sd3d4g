@@ -283,18 +283,19 @@ main{
 .question-card{
   width: 100%;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 35px/40px;
+  margin: 10px 0;
+  background-color: #ffffffc9;
+  border-radius: 40px;
 }
 
 .question-title-logo{
   width: 60px;
   height: 60px;
-  border-radius: 15px;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: #edfbff;
 }
 
 .question-title-logo img{
@@ -307,6 +308,14 @@ main{
 }
 
 .question-pref{
+  width: 100%;
+  height: 60px;
+  border-radius: 20px;
+  padding: 0 20px;
+  background-color: #EDEDED;
+}
+
+.select-style{
   width: 100%;
   height: 60px;
   border-radius: 20px;

@@ -24,7 +24,7 @@
             </div>
             <div class="page-contents">
 
-            <form action="./index.php" class="basic-form">
+            <form action="../index.php" class="basic-form">
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
                         <input class="basic-form-input" name="email" type="text" placeholder="aso@asojuku.ac.jp">

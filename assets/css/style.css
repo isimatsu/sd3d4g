@@ -12,6 +12,13 @@ body {
   background-image: linear-gradient(339deg, rgba(200, 233, 255, 1), rgb(255, 255, 255));
 }
 
+@media screen and (max-width: 500px) {
+  body{
+    background-color: #7eb5e3;
+  }
+  
+}
+
 .material-symbols-rounded {
   font-variation-settings:
   'FILL' 0,

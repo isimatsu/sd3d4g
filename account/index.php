@@ -1,14 +1,24 @@
 <?php
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+    if(isset($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+    }
 $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
             dbname=LAA1682282-sd3d4g;charset=utf8',
                 'LAA1682282',
                 'Passsd3d');
 
-$sql=$pdo->prepare('SELECT * FROM user WHERE ')
+$sql=$pdo->prepare('SELECT * FROM user WHERE user_id=?');
+$sql->execute([$user_id]);
+foreach($sql as $row){
+    $user_name=$row['user_name'];
+    $email=$row['email'];
+    $password=$row['password'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -47,11 +57,11 @@ $sql=$pdo->prepare('SELECT * FROM user WHERE ')
                 <from action="#" class="basic-form">
                     <div class="basic-form-box">
                         <p class="input-name">お名前</p>
-                        <input class="basic-form-input" type="text" placeholder="○○　○○">
+                        <input class="basic-form-input" type="text" placeholder="<?= $user_name ?>">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" type="text" placeholder="aso@asojuku.ac.jp">
+                        <input class="basic-form-input" type="text" placeholder="<?= $email ?>">
                     </div><!--basic-form-box-->
                      <div class="basic-form-box">
                         <p class="input-name">パスワード</p>

@@ -12,7 +12,7 @@ if(isset($_SESSION['user_id'])){
 ?>
 <div>
 </div>
-<a href="#" class="header-account">
+<a href="https://aso2301128.boy.jp/sd3d4g/account/" class="header-account">
     <span class="material-symbols-rounded">account_circle</span>
     <p><?php echo $user_name ?></p>
 </a>

@@ -28,11 +28,11 @@
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
-                                <img class="" src="../assets/img/flag.svg">
+                                <img class="" src="../assets/img/mappin3d.png">
                             </div>
                             <h2>行き先は？</h2>
                         </div>
-                        <select class="question-pref" name="prefecture">
+                        <select class="question-pref select-style" name="prefecture">
                             <option value="0" default>選択してください</option>
                             <option value="1">北海道</option>
                             <option value="2">青森県</option>
@@ -83,8 +83,58 @@
                             <option value="47">沖縄県</option>
                         </select>
                         <div class="popularity-spot">
-                            
+                                                    <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F6F4F2;">
+                                <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>京都</h5>
+                                <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F2F6F2;">
+                                <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>東京</h5>
+                                <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F2F6F4;">
+                                <span class="material-symbols-rounded" style="color: #94B4AB;"">nature</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>北海道</h5>
+                                <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
+                            </div>
+                        </label><!--pref-select-btn-->
                         </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-title">
+                            <div class="question-title-logo">
+                                <img class="" src="../assets/img/hand.png">
+                            </div>
+                            <h2>誰と行きますか？</h2>
+                            <select class="select-style">
+                                <option value="1人">一人</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-title">
+                            <div class="question-title-logo">
+                                <img class="" src="../assets/img/mappin3d.png">
+                            </div>
+                            <h2>行き先は？</h2>
+                        </div>
+
                     </div>
                 </form>
             </div>

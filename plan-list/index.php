@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/trip.css">
      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,11 +24,24 @@
                 <p>過去に生成した旅程の一覧です</p>
             </div>
             <div class="page-contents">
-            <img src="../assets/img/spot_img/1.jpg" class="img2" width="350" height="180">
-            <img src="../assets/img/spot_img/40.jpg" class="img2" width="350" height="180">
-
-                
-
+                    </a><!--plan-card-->
+                    <a href="" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
+                        <div class="plan-card-detail">
+                            <div>
+                                <h2>北海道旅行</h2>
+                                <p>2025/10/10 ~ 2025/10/12</p>
+                            </div>
+                        </div>
+                    </a><!--plan-card-->
+                    <a href="" class="plan-card side-card" style="background-image: url(../assets/img/spot_img/40.jpg);">
+                        <div class="plan-card-detail">
+                            <div>
+                                <h2>福岡旅行</h2>
+                                <p>2025/10/10 ~ 2025/10/12</p>
+                            </div>
+                        </div>
+                    </a><!--plan-card-->
+    
             </div>
         </sction>
     </main>

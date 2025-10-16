@@ -33,7 +33,7 @@
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" name="password" type="text" placeholder="例：8文字以上">
+                        <input class="basic-form-input" name="password" type="password" placeholder="例：8文字以上">
                     </div><!--basic-form-box-->
                      <button class="basic-btn blue-btn">新規登録</button>
                 </form><!--basic-form-->

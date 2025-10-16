@@ -31,7 +31,7 @@
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" name="password" type="text" >
+                        <input class="basic-form-input" name="password" type="password" >
                     </div><!--basic-form-box-->
                     <button class="basic-btn blue-btn">ログイン</button>
             </form><!--basic-form-->

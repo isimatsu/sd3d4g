@@ -20,10 +20,10 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
                 $_SESSION['user_name']=$row['user_name'];
             }
         }
-    }else{
+    }else if(!$_SESSION['user_id']){
             header("Location: ../signup/index.php");
         }
-}else{
+}else if(!$_SESSION['user_id']){
             header("Location: ../signup/index.php");
         }
 

@@ -8,25 +8,31 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
                 'LAA1682282',
                 'Passsd3d');
     
-    if(isset($_POST['email'])){
-        if(isset($_POST['password'])){
-            $email=$_POST['email'];
-            $password=$_POST['password'];
-        $sql=$pdo->prepare('SELECT * FROM user WHERE email=? and password=?');
-        $sql->execute([$email,$password]);
-        $rowCount = $sql->rowCount();
-        if($rowCount==1){
-            foreach($sql as $row){
-                $_SESSION['user_id']=$row['user_id'];
-                $_SESSION['user_name']=$row['user_name'];
-            }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if ($email !== '' && $password !== '') {
+        $sql = $pdo->prepare('SELECT * FROM user WHERE email = ? AND password = ?');
+        $sql->execute([$email, $password]);
+
+        if ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+            $_SESSION['user_id'] = $row['user_id'];
+            $_SESSION['user_name'] = $row['user_name'];
+            header('Location: index.php');
+            exit;
+        } else {
+            echo 'メールアドレスまたはパスワードが違います。';
         }
-    }else if(!isset($_SESSION['user_id'])){
-            header("Location: /signup/index.php");
-        }
-}else if(!isset($_SESSION['user_id'])){
-            header("Location: /signup/index.php");
-        }
+    } else {
+        echo 'メールアドレスとパスワードを入力してください。';
+    }
+} else {
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: signin/index.php');
+        exit;
+    }
+}
 
 ?>
 <!DOCTYPE html>

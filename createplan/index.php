@@ -1,3 +1,7 @@
+<?php
+    session_start();    
+    
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -16,8 +20,7 @@
     <main>
         <sction class="sm">
             <div class="header">
-                <?php include '../assets/include/header.php '?>
-
+                <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
                 <h1>旅程の新規作成</h1>

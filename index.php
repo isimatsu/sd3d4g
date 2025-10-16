@@ -22,10 +22,10 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
             }
         }
     }else if(!isset($_SESSION['user_id'])){
-            header("Location: ../signup/index.php");
+            header("Location: /signup/index.php");
         }
 }else if(!isset($_SESSION['user_id'])){
-            header("Location: ../signup/index.php");
+            header("Location: /signup/index.php");
         }
 
 ?>

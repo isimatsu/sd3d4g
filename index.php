@@ -7,10 +7,11 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
             dbname=LAA1682282-sd3d4g;charset=utf8',
                 'LAA1682282',
                 'Passsd3d');
-    $email=$_POST['email'];
-    $password=$_POST['password'];
-    if(isset($email)){
-        if(isset($password)){
+    
+    if(isset($_POST['email'])){
+        if(isset($_POST['password'])){
+            $email=$_POST['email'];
+            $password=$_POST['password'];
         $sql=$pdo->prepare('SELECT * FROM user WHERE email=? and password=?');
         $sql->execute([$email,$password]);
         $rowCount = $sql->rowCount();
@@ -20,10 +21,10 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
                 $_SESSION['user_name']=$row['user_name'];
             }
         }
-    }else if(!$_SESSION['user_id']){
+    }else if(!isset($_SESSION['user_id'])){
             header("Location: ../signup/index.php");
         }
-}else if(!$_SESSION['user_id']){
+}else if(!isset($_SESSION['user_id'])){
             header("Location: ../signup/index.php");
         }
 

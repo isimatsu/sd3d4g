@@ -32,6 +32,7 @@
                                 <p>2025/10/10 ~ 2025/10/12</p>
                             </div>
                         </div>
+                        <div class="delete-btn"><span class="material-symbols-rounded">delete</span></div>
                     </a><!--plan-card-->
                     <a href="" class="plan-card side-card" style="background-image: url(../assets/img/spot_img/40.jpg);">
                         <div class="plan-card-detail">
@@ -40,6 +41,7 @@
                                 <p>2025/10/10 ~ 2025/10/12</p>
                             </div>
                         </div>
+                        <div class="delete-btn"><span class="material-symbols-rounded">delete</span></div>
                     </a><!--plan-card-->
     
             </div>

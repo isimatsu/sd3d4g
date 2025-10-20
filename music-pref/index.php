@@ -19,6 +19,7 @@
                 <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
+                <a href="../music-rank/index.php">戻る</a>
                 <h1>○○県のランキング</h1>
             </div>
             <div class="page-contents">

@@ -20,7 +20,7 @@
             </div>
             <div class="page-header">
                 <a href="../music-rank/index.php">戻る</a>
-                <h1>全国のランキング</h1>
+                <h1>履歴</h1>
             </div>
             <div class="page-contents">
                 <div class="music-card">

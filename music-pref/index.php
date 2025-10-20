@@ -19,13 +19,9 @@
                 <?php include '../assets/include/header.php'?>
             </div>
             <div class="page-header">
-                <h1>pagetitle</h1>
-                <p>ここにページの説明が入ります。ここにページの説明が入ります</p>
+                <h1>○○県のランキング</h1>
             </div>
             <div class="page-contents">
-                <a href="" class="basic-btn blue-btn">はじめる</a>
-                <a href="" class="basic-btn gray-btn">キャンセル</a>
-
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: #E6B422 ;">#1</p>
@@ -59,18 +55,84 @@
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
                 </div><!--music-card-->
-
-                <from action="#" class="basic-form">
-                    <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
-                    </div><!--basic-form-box-->
-                    <div class="basic-form-box">
-                        <p class="input-name">ここに入力名</p>
-                        <input class="basic-form-input" type="text" placeholder="例：ここのプレースホルダです。">
-                    </div><!--basic-form-box-->
-                </from><!--basic-form-->
-
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#4</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#5</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#6</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#7</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#8</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#9</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                <div class="music-card">
+                    <div class="music-info">
+                        <p style="font-weight: bold; color: black ;">#10</p>
+                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
+                        <p>曲名がはいる</p>
+                    </div>
+                    <div class="music-action-btn">
+                        <span class="music-play material-symbols-rounded">play_circle</span>
+                        <span class="music-favorite material-symbols-rounded">favorite</span>
+                    </div>
+                </div><!--music-card-->
+                
 
             </div>
         </sction>

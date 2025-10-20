@@ -53,6 +53,8 @@
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
                 </div><!--music-card-->
+                 <a class="all" href="../music-pref/index.php">すべて表示</a>
+                
                  <h1>全国のランキング</h1>
                  <div class="music-card">
                     <div class="music-info">
@@ -87,6 +89,8 @@
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
                 </div><!--music-card-->
+                <a class="all" href="../music-japan/index.php">すべて表示</a>
+
                  <h1>履歴</h1>
                  <div class="music-card">
                     <div class="music-info">
@@ -121,6 +125,8 @@
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
                 </div><!--music-card-->
+                 <a class="all" href="../music-history/index.php">すべて表示</a>
+
             </div>
             <div class="page-contents">
 

@@ -3,6 +3,12 @@
 $apiKey = 'AIzaSyDAPZGCn6Y5_jWyvb-ceUO4K66DaGltnNE';
 $model = 'gemini-2.5-flash';
 
+// データベース接続設定
+$host = 'mysql326.phy.lolipop.lan';
+$dbname = 'LAA1682282-sd3d4g';
+$username = 'LAA1682282';
+$password = 'Passsd3g';
+
 // システムプロンプト
 $systemInstruction = <<<'EOT'
 あなたは旅程を提案するAIです。以下の条件に沿って旅程を提案し【出力フォーマット】に沿った出力を行ってください。また、旅行と目的地に相性の良い曲や歌を2～5件ほど提案してください
@@ -27,6 +33,7 @@ $systemInstruction = <<<'EOT'
   "itinerary": [
     {
       "segment_type": "move",
+      "segment_info": "plane",
       "segment_name": "移動手段",
       "start_time": "2025-10-20T08:00:00",
       "end_time": "2025-10-20T10:30:00",
@@ -34,30 +41,10 @@ $systemInstruction = <<<'EOT'
     },
     {
       "segment_type": "point",
+      "segment_info": "tourist",
       "segment_name": "地点名(観光地など)",
       "start_time": "2025-10-20T11:00:00",
       "end_time": "2025-10-20T13:00:00",
-      "song_id": null
-    },
-    {
-      "segment_type": "move",
-      "segment_name": "移動手段",
-      "start_time": "2025-10-20T13:00:00",
-      "end_time": "2025-10-20T14:00:00",
-      "song_id": "https://www.youtube.com/watch?v=abcd1234"
-    },
-    {
-      "segment_type": "point",
-      "segment_name": "地点名(食事場所など)",
-      "start_time": "2025-10-20T14:15:00",
-      "end_time": "2025-10-20T15:30:00",
-      "song_id": null
-    },
-    {
-      "segment_type": "point",
-      "segment_name": "宿泊地",
-      "start_time": "2025-10-20T18:00:00",
-      "end_time": "2025-10-21T09:00:00",
       "song_id": null
     }
   ],
@@ -65,10 +52,6 @@ $systemInstruction = <<<'EOT'
     {
       "title": "Pretender - Official髭男dism",
       "url": "https://www.youtube.com/watch?v=TQ8WlA2GXbk"
-    },
-    {
-      "title": "打上花火 - DAOKO × 米津玄師",
-      "url": "https://www.youtube.com/watch?v=-tKVN2mAKRI"
     }
   ]
 }
@@ -126,6 +109,9 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 // レスポンス処理
+$dbSaveResult = '';
+$tripId = null;
+
 if ($httpCode === 200) {
     $responseData = json_decode($response, true);
     
@@ -137,6 +123,85 @@ if ($httpCode === 200) {
                 $resultText .= $part['text'];
             }
         }
+    }
+    
+    // JSONを抽出（コードブロックの場合も対応）
+    $jsonText = $resultText;
+    if (preg_match('/```json\s*(.*?)\s*```/s', $resultText, $matches)) {
+        $jsonText = $matches[1];
+    } elseif (preg_match('/```\s*(.*?)\s*```/s', $resultText, $matches)) {
+        $jsonText = $matches[1];
+    }
+    
+    // JSONをパース
+    $tripData = json_decode($jsonText, true);
+    
+    // データベースに保存
+    if ($tripData && isset($tripData['itinerary'])) {
+        try {
+            $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // トランザクション開始
+            $pdo->beginTransaction();
+            
+            // 1. tripテーブルにデータを挿入
+            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_days, user_id, pref_id) 
+                              VALUES (:trip_name, :trip_overview, :trip_days, :user_id, :pref_id)";
+            $tripStmt = $pdo->prepare($tripInsertSql);
+            
+            // 旅行日数を計算
+            $startDate = new DateTime($tripData['itinerary'][0]['start_time']);
+            $endDate = new DateTime(end($tripData['itinerary'])['end_time']);
+            $tripDays = $endDate->diff($startDate)->days + 1;
+            
+            $tripStmt->execute([
+                ':trip_name' => $tripData['tripTitle'],
+                ':trip_overview' => $tripData['trip_overview'],
+                ':trip_days' => $tripDays . '日間',
+                ':user_id' => 1,
+                ':pref_id' => 1
+            ]);
+            
+            // 挿入されたtrip_idを取得
+            $tripId = $pdo->lastInsertId();
+            
+            // 2. trip_infoテーブルにセグメントデータを挿入
+            $segmentInsertSql = "INSERT INTO trip_info 
+                                 (trip_id, segment_type, segment_info, segment_name, start_time, end_time, link) 
+                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :start_time, :end_time, :link)";
+            $segmentStmt = $pdo->prepare($segmentInsertSql);
+            
+            $segmentTypeMap = [
+                'move' => 1,
+                'point' => 2
+            ];
+            
+            foreach ($tripData['itinerary'] as $segment) {
+                $segmentStmt->execute([
+                    ':trip_id' => $tripId,
+                    ':segment_type' => $segmentTypeMap[$segment['segment_type']] ?? 2,
+                    ':segment_info' => $segment['segment_info'],
+                    ':segment_name' => $segment['segment_name'],
+                    ':start_time' => date('H:i:s', strtotime($segment['start_time'])),
+                    ':end_time' => date('H:i:s', strtotime($segment['end_time'])),
+                    ':link' => $segment['song_id']
+                ]);
+            }
+            
+            // コミット
+            $pdo->commit();
+            
+            $dbSaveResult = "✅ データベースに保存完了！ (Trip ID: {$tripId}, セグメント数: " . count($tripData['itinerary']) . ")";
+            
+        } catch (PDOException $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            $dbSaveResult = "❌ DB保存エラー: " . $e->getMessage();
+        }
+    } else {
+        $dbSaveResult = "⚠️ JSONパースに失敗しました";
     }
     
     // HTML表示
@@ -160,11 +225,28 @@ if ($httpCode === 200) {
                 padding: 30px;
                 border-radius: 8px;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
             }
             h1 {
                 color: #333;
                 border-bottom: 3px solid #4CAF50;
                 padding-bottom: 10px;
+            }
+            .status {
+                padding: 15px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+            .status.success {
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+            .status.error {
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
             }
             pre {
                 background-color: #f8f8f8;
@@ -185,6 +267,13 @@ if ($httpCode === 200) {
     <body>
         <div class="container">
             <h1>🗾 旅程提案結果</h1>
+            
+            <?php if ($dbSaveResult): ?>
+            <div class="status <?php echo strpos($dbSaveResult, '✅') !== false ? 'success' : 'error'; ?>">
+                <?php echo htmlspecialchars($dbSaveResult, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+            <?php endif; ?>
+            
             <div class="json-result">
                 <pre><?php echo htmlspecialchars($resultText, ENT_QUOTES, 'UTF-8'); ?></pre>
             </div>

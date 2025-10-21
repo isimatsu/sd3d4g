@@ -23,7 +23,7 @@
                 <p style="text-align:center;">楽曲を登録します。必要な情報を入力してください。</p>
             </div>
             <div class="page-contents">
-                <form action="check.php" class="basic-form">
+                <form action="check.php" method="POST" class="basic-form">
                     <div class="basic-form-box">
                         <p class="input-name">曲名</p>
                         <input class="basic-form-input" name="song_name" type="text">
@@ -36,7 +36,7 @@
 
                     <div class="basic-form-box">
                         <p class="input-name">ゆかりの地域</p>
-                        <input class="basic-form-input" name="pref_id" type="text" placeholder="例：東京都渋谷区">
+                        <input class="basic-form-input" name="pref" type="text" placeholder="例：東京都渋谷区">
                     </div><!--basic-form-box-->
 
                     <div class="basic-form-box">

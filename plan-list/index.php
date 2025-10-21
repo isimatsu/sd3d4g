@@ -6,7 +6,7 @@ error_reporting(E_ALL);
     $host = 'mysql326.phy.lolipop.lan';
 	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
-    $pass = 'Passsd3g';
+    $pass = 'Passsd3d';
 
     try{
         //DB接続
@@ -15,7 +15,7 @@ error_reporting(E_ALL);
 
         //trip_idがNULL or 空でないデータを昇順で取得
         $sql = "SELECT * FROM trip WHERE trip_id IS NOT NULL AND trip_id <> '' ORDER BY trip_id ASC";
-        $stmt = $pdo->query($spl);
+        $stmt = $pdo->query($sql);
         $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }catch(PDOException $e){
         die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));

@@ -90,6 +90,10 @@ error_reporting(E_ALL);
                         <div class="delete-btn"><span class="material-symbols-rounded">delete</span></div>
                     </a>--plan-card--
                     -->
+
+                    <div class="empty-state"><span class="material-symbols-rounded">event_busy</span></div>
+                    <p>旅程一覧がありません</p>
+
             </div>
         </sction>
     </main>

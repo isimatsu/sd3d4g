@@ -7,7 +7,7 @@
 
     try{
         //DB接続
-        $pdo = new PDO('mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass');
+        $pdo = new PDO('mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         //trip_idがNULL or 空でないデータを昇順で取得

@@ -1,7 +1,7 @@
 <?php
     //DB接続情報
-    $host = 'mysql:host=mysql326.phy.lolipop.lan';
-	$dbname = 'dbname=LAA1682282-sd3d4g';
+    $host = 'mysql326.phy.lolipop.lan';
+	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
     $pass = 'Passsd3g';
 

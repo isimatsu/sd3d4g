@@ -1,4 +1,5 @@
 <?php
+
     //DB接続情報
     $host = 'mysql326.phy.lolipop.lan';
 	$dbname = 'LAA1682282-sd3d4g';

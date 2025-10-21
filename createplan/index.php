@@ -60,7 +60,7 @@
                 <p>あなたに合った旅程を提案します。旅行先、日程、同行者を教えてください</p>
             </div>
             <div class="page-contents">
-                <form action="../APItest/index.php" method="POST">
+                <form action="../createplan-complete/index.php" method="POST">
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">

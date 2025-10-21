@@ -25,9 +25,6 @@ if($_POST['waypoint'] == ''){
     $waypoint = $_POST['waypoint'];
 }
 
-echo "{$trip_start} - {$trip_end}、{$departure_prefecture}から出発し{$destination_prefecture}";
-
-
 
 // システムプロンプト
 $systemInstruction = <<<'EOT'
@@ -192,14 +189,15 @@ if ($httpCode === 200) {
             $prefId = 1; // 実際には目的地から動的に取得すべき
             
             // 1. tripテーブルにデータを挿入
-            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, /*trip_days,*/ user_id, pref_id) 
-                              VALUES (:trip_name, :trip_overview, /*:trip_days,*/ :user_id, :pref_id)";
+            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_start, trip_end,user_id, pref_id) 
+                              VALUES (:trip_name, :trip_overview, :trip_start, :trip_end, :user_id, :pref_id)";
             $tripStmt = $pdo->prepare($tripInsertSql);
             //trip_daysをtrip_start,endに変更したため一旦コメントアウト
             $tripStmt->execute([
                 ':trip_name' => $tripData['tripTitle'],
                 ':trip_overview' => $tripData['trip_overview'],
-                //':trip_days' => $tripDays . '日間',
+                ':trip_start' => $trip_start,
+                ':trip_end' => $trip_end,
                 ':user_id' => 11, // テストユーザーID
                 ':pref_id' => $prefId
             ]);
@@ -299,73 +297,29 @@ if ($httpCode === 200) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>旅程提案結果</title>
-        <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
-            .container {
-                background: white;
-                padding: 30px;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                margin-bottom: 20px;
-            }
-            h1 {
-                color: #333;
-                border-bottom: 3px solid #4CAF50;
-                padding-bottom: 10px;
-            }
-            .status {
-                padding: 15px;
-                border-radius: 5px;
-                margin-bottom: 20px;
-                font-weight: bold;
-            }
-            .status.success {
-                background-color: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-            }
-            .status.error {
-                background-color: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f5c6cb;
-            }
-            pre {
-                background-color: #f8f8f8;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                padding: 15px;
-                overflow-x: auto;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-            .json-result {
-                font-family: 'Courier New', monospace;
-                font-size: 14px;
-                line-height: 1.6;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+        <title>旅程作成完了 -旅行提案アプリ-</title>
     </head>
     <body>
-        <div class="container">
-            <h1>🗾 旅程提案結果</h1>
-            
-            <?php if ($dbSaveResult): ?>
-            <div class="status <?php echo strpos($dbSaveResult, '✅') !== false ? 'success' : 'error'; ?>">
-                <?php echo htmlspecialchars($dbSaveResult, ENT_QUOTES, 'UTF-8'); ?>
-            </div>
-            <?php endif; ?>
-            
-            <div class="json-result">
-                <pre><?php echo htmlspecialchars($resultText, ENT_QUOTES, 'UTF-8'); ?></pre>
-            </div>
-        </div>
+        <main>
+            <sction class="sm">
+                <div class="page-contents">
+                    <div class="page-center-content">
+                        <div class="welcome">
+                            <img src="../assets/img/ariflight.png">
+                            <h2>旅程が完成しました</h2>
+                            <a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>
+                        </div>
+                    </div>
+                </div>
+            </sction>
+        </main>
     </body>
     </html>
     <?php

@@ -349,3 +349,16 @@ main{
 .pref-icon span{
   font-size: 40px;
 }
+
+
+.date-input{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.date-style{
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}

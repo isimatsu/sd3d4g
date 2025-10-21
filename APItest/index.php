@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 // Gemini APIキーを環境変数または直接設定
 $apiKey = 'AIzaSyDAPZGCn6Y5_jWyvb-ceUO4K66DaGltnNE';
 $model = 'gemini-2.5-flash';
@@ -7,7 +10,7 @@ $model = 'gemini-2.5-flash';
 $host = 'mysql326.phy.lolipop.lan';
 $dbname = 'LAA1682282-sd3d4g';
 $username = 'LAA1682282';
-$password = 'Passsd3g';
+$password = 'Passsd3d';
 
 // システムプロンプト
 $systemInstruction = <<<'EOT'
@@ -108,6 +111,23 @@ $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
+// YouTube URLから動画IDを抽出する関数
+function extractYoutubeId($url) {
+    if (empty($url)) return null;
+    parse_str(parse_url($url, PHP_URL_QUERY), $params);
+    return $params['v'] ?? null;
+}
+
+// 曲名とアーティスト名を分割する関数
+function parseSongTitle($title) {
+    // "曲名 - アーティスト名" の形式を想定
+    $parts = explode(' - ', $title, 2);
+    return [
+        'song_name' => trim($parts[0] ?? $title),
+        'singer_name' => trim($parts[1] ?? '不明')
+    ];
+}
+
 // レスポンス処理
 $dbSaveResult = '';
 $tripId = null;
@@ -125,7 +145,7 @@ if ($httpCode === 200) {
         }
     }
     
-    // JSONを抽出（コードブロックの場合も対応）
+    // JSONを抽出
     $jsonText = $resultText;
     if (preg_match('/```json\s*(.*?)\s*```/s', $resultText, $matches)) {
         $jsonText = $matches[1];
@@ -139,37 +159,80 @@ if ($httpCode === 200) {
     // データベースに保存
     if ($tripData && isset($tripData['itinerary'])) {
         try {
-            $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+            $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             // トランザクション開始
             $pdo->beginTransaction();
-            
-            // 1. tripテーブルにデータを挿入
-            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_days, user_id, pref_id) 
-                              VALUES (:trip_name, :trip_overview, :trip_days, :user_id, :pref_id)";
-            $tripStmt = $pdo->prepare($tripInsertSql);
             
             // 旅行日数を計算
             $startDate = new DateTime($tripData['itinerary'][0]['start_time']);
             $endDate = new DateTime(end($tripData['itinerary'])['end_time']);
             $tripDays = $endDate->diff($startDate)->days + 1;
             
+            // 目的地の都道府県IDを取得（ここでは北海道=1と仮定）
+            $prefId = 1; // 実際には目的地から動的に取得すべき
+            
+            // 1. tripテーブルにデータを挿入
+            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, /*trip_days,*/ user_id, pref_id) 
+                              VALUES (:trip_name, :trip_overview, /*:trip_days,*/ :user_id, :pref_id)";
+            $tripStmt = $pdo->prepare($tripInsertSql);
+            //trip_daysをtrip_start,endに変更したため一旦コメントアウト
             $tripStmt->execute([
                 ':trip_name' => $tripData['tripTitle'],
                 ':trip_overview' => $tripData['trip_overview'],
-                ':trip_days' => $tripDays . '日間',
-                ':user_id' => 1,
-                ':pref_id' => 1
+                //':trip_days' => $tripDays . '日間',
+                ':user_id' => 11, // テストユーザーID
+                ':pref_id' => $prefId
             ]);
             
-            // 挿入されたtrip_idを取得
             $tripId = $pdo->lastInsertId();
             
-            // 2. trip_infoテーブルにセグメントデータを挿入
+            // 2. songテーブルに楽曲を挿入してIDを取得
+            $songMap = []; // YouTube URL => song_id のマッピング
+            
+            if (isset($tripData['recommended_songs'])) {
+                $songInsertSql = "INSERT INTO song (song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
+                                  VALUES (:song_name, :singer_name, :link, :user_id, :trip_id, :pref_id, :song_time, :image_path)";
+                $songStmt = $pdo->prepare($songInsertSql);
+                
+                foreach ($tripData['recommended_songs'] as $song) {
+                    $parsed = parseSongTitle($song['title']);
+                    $youtubeId = extractYoutubeId($song['url']);
+                    
+                    $songStmt->execute([
+                        ':song_name' => $parsed['song_name'],
+                        ':singer_name' => $parsed['singer_name'],
+                        ':link' => $song['url'],
+                        ':user_id' => 11,
+                        ':trip_id' => $tripId,
+                        ':pref_id' => $prefId,
+                        ':song_time' => 0, // 再生時間は不明なので0
+                        ':image_path' => "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg"
+                    ]);
+                    
+                    $songMap[$song['url']] = $pdo->lastInsertId();
+                }
+            }
+            
+            // 3. まずダミー楽曲を作成（song_id=1にする）
+            $checkDummySql = "SELECT song_id FROM song WHERE song_id = 1";
+            $checkResult = $pdo->query($checkDummySql)->fetch();
+            
+            if (!$checkResult) {
+                $dummySongSql = "INSERT INTO song (song_id, song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
+                                 VALUES (1, '楽曲なし', '不明', '', 11, :trip_id, :pref_id, 0, '')";
+                $dummySongStmt = $pdo->prepare($dummySongSql);
+                $dummySongStmt->execute([
+                    ':trip_id' => $tripId,
+                    ':pref_id' => $prefId
+                ]);
+            }
+            
+            // 4. trip_infoテーブルにセグメントデータを挿入
             $segmentInsertSql = "INSERT INTO trip_info 
-                                 (trip_id, segment_type, segment_info, segment_name, start_time, end_time, link) 
-                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :start_time, :end_time, :link)";
+                                 (trip_id, segment_type, segment_info, segment_name, start_time, end_time, song_id) 
+                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :start_time, :end_time, :song_id)";
             $segmentStmt = $pdo->prepare($segmentInsertSql);
             
             $segmentTypeMap = [
@@ -178,6 +241,13 @@ if ($httpCode === 200) {
             ];
             
             foreach ($tripData['itinerary'] as $segment) {
+                $songIdDb = 1; // デフォルトはダミー楽曲ID
+                
+                // 移動セグメントで楽曲URLがある場合、対応するsong_idを取得
+                if ($segment['segment_type'] === 'move' && !empty($segment['song_id'])) {
+                    $songIdDb = $songMap[$segment['song_id']] ?? 1;
+                }
+                
                 $segmentStmt->execute([
                     ':trip_id' => $tripId,
                     ':segment_type' => $segmentTypeMap[$segment['segment_type']] ?? 2,
@@ -185,14 +255,14 @@ if ($httpCode === 200) {
                     ':segment_name' => $segment['segment_name'],
                     ':start_time' => date('H:i:s', strtotime($segment['start_time'])),
                     ':end_time' => date('H:i:s', strtotime($segment['end_time'])),
-                    ':link' => $segment['song_id']
+                    ':song_id' => $songIdDb
                 ]);
             }
             
             // コミット
             $pdo->commit();
             
-            $dbSaveResult = "✅ データベースに保存完了！ (Trip ID: {$tripId}, セグメント数: " . count($tripData['itinerary']) . ")";
+            $dbSaveResult = "✅ データベースに保存完了！ (Trip ID: {$tripId}, セグメント数: " . count($tripData['itinerary']) . ", 楽曲数: " . count($songMap) . ")";
             
         } catch (PDOException $e) {
             if ($pdo->inTransaction()) {

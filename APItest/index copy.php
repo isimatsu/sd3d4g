@@ -12,23 +12,6 @@ $dbname = 'LAA1682282-sd3d4g';
 $username = 'LAA1682282';
 $password = 'Passsd3d';
 
-//入力情報受け取り
-$destination_prefecture = $_POST['destination_prefecture'];
-$departure_prefecture = $_POST['departure_prefecture'];
-$companion = $_POST['companion'];
-$trip_start = $_POST['trip_start'];
-$trip_end = $_POST['trip_end'];
-$move = $_POST['move'];
-if($_POST['waypoint'] == ''){
-    $waypoint = 'なし';
-}else{
-    $waypoint = $_POST['waypoint'];
-}
-
-echo "{$trip_start} - {$trip_end}、{$departure_prefecture}から出発し{$destination_prefecture}";
-
-
-
 // システムプロンプト
 $systemInstruction = <<<'EOT'
 あなたは旅程を提案するAIです。以下の条件に沿って旅程を提案し【出力フォーマット】に沿った出力を行ってください。また、旅行と目的地に相性の良い曲や歌を2～5件ほど提案してください
@@ -80,13 +63,12 @@ EOT;
 // ユーザー入力(ここに旅行の条件を入力)
 $userInput = "
 「入力項目」
-・出発地：$departure_prefecture
-・目的地：$destination_prefecture
-・人数：$companion
-・出発日：$trip_start
-・終了日：$trip_end
-・移動手段：$move
-・絶対に経由する場所：$waypoint";
+・出発地：福岡
+・目的地：北海道
+・人数：2人
+・日程：3日間
+・移動手段：公共交通
+・絶対に経由する場所：なし";
 
 // リクエストボディの作成
 $requestBody = [

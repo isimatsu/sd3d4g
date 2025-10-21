@@ -4,7 +4,7 @@
     $host = 'mysql326.phy.lolipop.lan';
 	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
-    $pass = 'Passsd3g';
+    $pass = 'Passsd3d';
 
     try{
         //DB接続

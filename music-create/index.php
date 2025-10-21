@@ -14,7 +14,7 @@
 </head>
 <body>
     <main>
-        <sction class="sm">
+        <section class="sm">
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
@@ -23,29 +23,33 @@
                 <p style="text-align:center;">楽曲を登録します。必要な情報を入力してください。</p>
             </div>
             <div class="page-contents">
-                <from action="check.php" class="basic-form">
+                <form action="check.php" class="basic-form">
                     <div class="basic-form-box">
                         <p class="input-name">曲名</p>
-                        <input class="basic-form-input" name="user_name" type="text">
+                        <input class="basic-form-input" name="song_name" type="text">
                     </div><!--basic-form-box-->
 
                     <div class="basic-form-box">
                         <p class="input-name">アーティスト名</p>
-                        <input class="basic-form-input" name="email" type="text">
+                        <input class="basic-form-input" name="singer_name" type="text">
                     </div><!--basic-form-box-->
 
                     <div class="basic-form-box">
                         <p class="input-name">ゆかりの地域</p>
-                        <input class="basic-form-input" name="password" type="text" placeholder="例：東京都渋谷区">
+                        <input class="basic-form-input" name="pref_id" type="text" placeholder="例：東京都渋谷区">
                     </div><!--basic-form-box-->
 
-                     <div class="basic-form-box">
+                    <div class="basic-form-box">
                         <p class="input-name">楽曲リンク</p>
-                        <input class="basic-form-input" name="password" type="text" placeholder="例：Youtube">
-                    </div><!--basic-form-box-->
+                        <input class="basic-form-input" name="link" type="url" placeholder="例：Youtube">
+                    </div>
+                    <!-- 画像アップロード-->
+                        <p class="input-name">画像ファイル</p>
+                        <input name="image_path" type="file" accept="image/*">
+                    
+                     <button type="submit" class="basic-btn blue-btn">新規登録</button>
                 </from><!--basic-form-->
 
-                <a href="" class="basic-btn blue-btn">新規登録</a>
                 
             </div>
         </sction>

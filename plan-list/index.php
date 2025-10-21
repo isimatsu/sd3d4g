@@ -6,7 +6,7 @@ error_reporting(E_ALL);
     $host = 'mysql326.phy.lolipop.lan';
 	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
-    $pass = 'Passsd3d';
+    $pass = 'Passsd3g';
 
     try{
         //DB接続

@@ -36,6 +36,18 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+.load-screen{
+    background-color: #ffffffff;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
 </style>
 <body>
     <main>
@@ -48,7 +60,7 @@
                 <p>あなたに合った旅程を提案します。旅行先、日程、同行者を教えてください</p>
             </div>
             <div class="page-contents">
-                <form action="" method="POST">
+                <form action="../createplan-complete/index.php" method="POST">
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
@@ -144,7 +156,7 @@
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
-                                <img class="" src="../assets/img/mappin3d.png">
+                                <img class="" src="../assets/img/door_3d.png">
                             </div>
                             <h2>出発地は？</h2>
                         </div>
@@ -214,15 +226,20 @@
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
-                                <img class="" src="../assets/img/mappin3d.png">
+                                <img class="" src="../assets/img/calendar_3d.png">
                             </div>
-                            <h2>滞在期間を教えて</h2>
+                            <h2>滞在期間</h2>
+                        </div>
+                        <div class="date-input">
+                            <input type="date" name="trip_start" class="date-style">
+                            <span class="material-symbols-rounded">arrow_forward</span>
+                            <input type="date" name="trip_end" class="date-style">
                         </div>
                     </div>
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
-                                <img class="" src="../assets/img/mappin3d.png">
+                                <img class="" src="../assets/img/automobile_3d.png">
                             </div>
                             <h2>移動手段</h2>
                         </div>
@@ -238,15 +255,18 @@
                             </div>
                             <h2>経由したい場所</h2>
                         </div>
-                        <input type="text" class="basic-form-input" placeholder="地域、名所を入力">
+                        <input type="text" name="waypoint" class="basic-form-input" placeholder="地域、名所を入力">
                     </div>
-                    <button class="basic-btn plan-create-btn">この条件で作成</button>
+                    <button class="basic-btn plan-create-btn" onclick="click_load()">この条件で作成</button>
                 </form>
             </div>
         </sction>
     </main>
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
+    </div>
+    <div class="load-screen" id="load_screen">
+        <p>あなたにぴったりな<br>旅程を作成しています！</p>
     </div>
 </body>
 <script>
@@ -269,6 +289,12 @@ fadeInElements.forEach(element => {
     element.classList.add('fade-in');
     observer.observe(element);
 });
-    </script>
+
+function click_load(){
+   const load_screen = document.getElementById('load_screen');
+   load_screen.style.display = 'flex'
+}
+
+</script>
 
 </html>

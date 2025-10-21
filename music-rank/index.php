@@ -1,3 +1,15 @@
+<?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    //DB接続情報
+    $host = 'mysql326.phy.lolipop.lan';
+	$dbname = 'LAA1682282-sd3d4g';
+    $user = 'LAA1682282';
+    $pass = 'Passsd3d';
+
+    
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>

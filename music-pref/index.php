@@ -1,3 +1,32 @@
+<?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    //DB接続情報
+    $host = 'mysql326.phy.lolipop.lan';
+	$dbname = 'LAA1682282-sd3d4g';
+    $user = 'LAA1682282';
+    $pass = 'Passsd3d';
+
+    try {
+        $pdo = new PDO(
+            "mysql:host=$host;dbname=$dbname;charset=utf8",
+            $user,
+            $password,
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+
+    // goodの多い順で最大50件取得
+    $sql = "SELECT * FROM songs ORDER BY good DESC LIMIT 50";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }catch(PDOException $e){
+        die("データベース接続エラー： " . htmlspecialchars($e->getMessage(),ENT_QUOTES,'UTF-8'));
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>

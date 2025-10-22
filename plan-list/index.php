@@ -53,7 +53,7 @@ error_reporting(E_ALL);
                 <?php if(count($trips) > 0): ?>
                     <?php foreach($trips as $trip): ?>
                     <!-- リンクが決まり次第加筆してください -->
-                    <a href="../plan?= htmlspecialchars($trip['trip_id']) ?>"
+                    <a href="../plan?plan_id=<?= htmlspecialchars($trip['trip_id'])?>"
                         class="plan-card main-card" 
                         style="background-image: url(../assets/img/spot_img/1.jpg);">
 

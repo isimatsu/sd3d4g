@@ -6,6 +6,31 @@
     }
 
     //plan_idでDBから引っ張る
+    $plan_id = $_GET['plan_id'];
+
+    //DB接続情報
+    $host = 'mysql326.phy.lolipop.lan';
+	$dbname = 'LAA1682282-sd3d4g';
+    $user = 'LAA1682282';
+    $pass = 'Passsd3d';
+
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $sql = "SELECT * FROM `trip` WHERE `trip_id` = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$plan_id]);
+        $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    } catch (PDOException $e) {
+        die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
+    }
+
+    foreach($trips as $trip_info){
+        
+    }
+    
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -28,14 +53,13 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <div class="plan-hero">
-                
+            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/1.png);">
+                <div class="trip-title">
+                    <h1><?=$trip_info['trip_name']?></h1>
+                    <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
+                </div>
             </div>
             <div class="page-contents">
-                <div class="trip-title">
-                    <h1>北海道旅行</h1>
-                    <h5>～</h5>
-                </div>
             </div>
         </sction>
     </main>

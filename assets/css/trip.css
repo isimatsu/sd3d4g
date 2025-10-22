@@ -56,12 +56,5 @@
     justify-content: center;
     height: 60vh;
     color: #555;
-  }
-  .empty-state .icon {
-    font-size: 64px;
-    margin-bottom: 16px;
-    color: #888;
-  }
-  .empty-state p {
-    font-weight: bold;
+    text-align: center;
   }

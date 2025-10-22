@@ -292,6 +292,7 @@ if ($httpCode === 200) {
     
     // HTML表示
     ?>
+
     <!DOCTYPE html>
     <html lang="ja">
     <head>
@@ -299,6 +300,7 @@ if ($httpCode === 200) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
         <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+        <link rel="stylesheet" type="text/css" href="../assets/css/index.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -306,14 +308,43 @@ if ($httpCode === 200) {
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
         <title>旅程作成完了 -旅行提案アプリ-</title>
     </head>
+    <style>
+        .complete{
+            display: block;
+        }
+
+        .complete-card{
+            display: flex;
+            text-align: center;
+        }
+
+        .plan-card{
+            width: 200px;
+        }
+
+        .complete-mess{
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
     <body>
         <main>
             <sction class="sm">
                 <div class="page-contents">
                     <div class="page-center-content">
-                        <div class="welcome">
-                            <img src="../assets/img/ariflight.png">
-                            <h2>旅程が完成しました</h2>
+                        <div class="complete">
+                            <p class="complete-mess">！旅程が完成しました！</p>
+                            <div class="complete-card">
+                                <a href="" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
+                                    <div class="plan-card-detail">
+                                        <div>
+                                            <p>2025/10/10 ~ 2025/10/12</p>
+                                            <h2>北海道旅行</h2>
+                                        </div>
+                                    </div>
+                                </a><!--plan-card-->
+                            </div>
                             <a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>
                         </div>
                     </div>

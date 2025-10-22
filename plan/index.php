@@ -6,6 +6,7 @@
     }
 
     //plan_idでDBから引っ張る
+    
 ?>
 <!DOCTYPE html>
 <html lang="ja">

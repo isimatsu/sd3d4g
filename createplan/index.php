@@ -47,6 +47,12 @@
     justify-content: center;
     align-items: center;
     display: none;
+    text-align: center;
+}
+
+.load-screen p{
+    font-size: 20px;
+    font-weight: bold;
 }
 </style>
 <body>
@@ -266,7 +272,10 @@
         <?php include '../assets/include/menu-bar.php'?>
     </div>
     <div class="load-screen" id="load_screen">
-        <p>あなたにぴったりな<br>旅程を作成しています！</p>
+        <div style="text-align: center;">
+            <img src="../assets/img/load.gif" width="200px">
+            <p>あなたにぴったりな<br>旅程を作成しています！</p>
+        </div>
     </div>
 </body>
 <script>

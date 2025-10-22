@@ -3,7 +3,7 @@
     display: block;
     flex-shrink: 0;
     height: 250px;
-    margin: 0 10px;
+    margin: 0;
     background-color: aqua;
     border-radius: 30px;
     background-size: cover;
@@ -15,7 +15,8 @@
 
 .plan-card-detail{
     width: 100%;
-    height: 80px;
+    height: auto;
+    padding: 10px;
     background: rgba(255,255,255,0.8);
     border-radius: 0 0 30px 30px;
     text-align: center;
@@ -29,13 +30,13 @@
     text-align: left;
     font-size: 12px;
     color: black;
+    padding: 10px 0;
 }
 
 .plan-card-detail h2{
     text-align: left;
     color: #0084FF;
     font-size: 20px;
-    padding: 5px 0;
 }
 .delete-btn {
   position: absolute;

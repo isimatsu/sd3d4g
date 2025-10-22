@@ -53,7 +53,7 @@ error_reporting(E_ALL);
                 <?php if(count($trips) > 0): ?>
                     <?php foreach($trips as $trip): ?>
                     <!-- リンクが決まり次第加筆してください -->
-                    <a href="../plan?= htmlspecialchars($trip['trip_id']) ?>"
+                    <a href="../plan?plan_id=<?= htmlspecialchars($trip['trip_id'])?>"
                         class="plan-card main-card" 
                         style="background-image: url(../assets/img/spot_img/1.jpg);">
 
@@ -70,7 +70,7 @@ error_reporting(E_ALL);
                     <?php endforeach; ?>
                 <?php else: ?><!-- 旅程が空だった場合は以下を表示 -->
                     <div class="empty-state">
-                        <span class="material-symbols-rounded">event_busy</span>
+                        <span class="material-symbols-rounded" style="font-size: 60px;">event_busy</span>
                         <p >旅程一覧がありません</p>
                     </div>
                 <?php endif; ?>

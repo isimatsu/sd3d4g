@@ -1,3 +1,4 @@
+session_start();
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -55,9 +56,9 @@ try {
         } else {
             exit('❌ 画像のアップロードに失敗しました。');
         }
-    } else {
-        exit('❌ 画像が選択されていません。');
-    }
+        } else {
+            exit('❌ 画像が選択されていません。');
+        }
 
     // ------------------------------
     // 都道府県名からpref_idを取得
@@ -68,8 +69,6 @@ try {
 
     if ($pref) {
     $pref_id = $pref['pref_id'];
-    } else {
-    $pref_id = null; // 不明な都道府県名の場合
     }
 
     // ------------------------------

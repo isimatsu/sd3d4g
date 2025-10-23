@@ -11,8 +11,13 @@ error_reporting(E_ALL);
 
     try{
         //DB接続
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo = new PDO(
+            "mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass,
+            [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]
+        );
 
         //trip_idがNULL or 空でないデータを昇順で取得
         $sql = "SELECT * FROM trip WHERE trip_id IS NOT NULL AND trip_id <> '' ORDER BY trip_id ASC";
@@ -21,6 +26,24 @@ error_reporting(E_ALL);
     }catch(PDOException $e){
         die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
     }
+
+    //削除処理(post)
+    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['trip_id'])){
+        $trip_id = (int)$_POST['trip_id'];
+
+        try{
+            $stmt = $pdo->prepare("DELETE FROM trip WHERE trip_id = ?");
+             $stmt->execute([$trip_id]);
+        } catch (PDOException $e) {
+            $message = "削除に失敗しました: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+        }
+    }
+
+    //旅程一覧取得
+    //trip_idがNULL or 空でないデータを昇順で取得
+    $sql = "SELECT * FROM trip WHERE trip_id IS NOT NULL AND trip_id <> '' ORDER BY trip_id ASC";
+    $stmt = $pdo->query($sql);
+    $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -66,7 +89,7 @@ error_reporting(E_ALL);
                                 </p>
                             <?php endif; ?>
                         </div>
-                        <a href="../" class="delete-btn"><span class="material-symbols-rounded">delete</span></a>
+                        <a href="../../sd3d4g/plan-delete/index.php" class="delete-btn"><span class="material-symbols-rounded">delete</span></a>
                     </a>
                     <?php endforeach; ?>
                 <?php else: ?><!-- 旅程が空だった場合は以下を表示 -->

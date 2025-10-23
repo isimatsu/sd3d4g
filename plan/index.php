@@ -23,13 +23,20 @@
         $stmt->execute([$plan_id]);
         $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        $parts_sql = "SELECT * FROM `trip_info` WHERE `trip_id` = ? ORDER BY `trip_info`.`segment_id` ASC";
+        $stmt = $pdo->prepare($parts_sql);
+        $stmt->execute([$plan_id]);
+        $parts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     } catch (PDOException $e) {
         die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
     }
 
+    
     foreach($trips as $trip_info){
         
     }
+
     
 ?>
 <!DOCTYPE html>
@@ -44,22 +51,102 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../assets/css/plan.css">
     <title>旅程 -旅行提案アプリ-</title>
 </head>
 
 <body>
     <main>
-        <sction class="sm">
+        <sction class="sm" style="position: relative;">
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
             <div class="plan-hero" style="background-image: url(../assets/img/spot_img/1.jpg);">
                 <div class="trip-title">
-                    <h1><?=$trip_info['trip_name']?></h1>
-                    <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
+                    <div>
+                        <h1><?=$trip_info['trip_name']?></h1>
+                        <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
+                    </div>
                 </div>
             </div>
             <div class="page-contents">
+                <div class="plan-tree">
+                    <!-- <div class="tree-move">
+                        <div class="move-line"></div>
+                        <div class="move-info">
+                            <div class="move-detail">
+                                <span class="move-icon material-symbols-rounded">travel</span>
+                                <p>移動名</p>
+                            </div>
+                        </div>
+                    </div>move -->
+                    <!-- <div class="tree-point">
+                        <div class="point-card">
+                            <div class="point-info">
+                                <div class="point-detail">
+                                    <span class="move-icon material-symbols-rounded">distance</span>
+                                    <div class="point-name">
+                                        <h5>time</h5>
+                                        <h5>aaaa</h5>
+                                        <p>dsdadadsada</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>point -->
+                    <?php
+                        foreach($parts as $parts_tree){
+                            $segment_type = $parts_tree['segment_type'];
+                            $segment_name = $parts_tree['segment_name'];
+                            $start_time = $parts_tree['start_time'];
+                            switch($parts_tree['segment_info']):
+                                case 'plane':
+                                    $segment_icon_name = 'travel';
+                                    break;
+                                case 'train':
+                                    $segment_icon_name = 'train';
+                                    break;
+                                default:
+                                    $segment_icon_name = 'directions_car';
+                                endswitch;
+
+                            if($segment_type == 1){
+                                //move
+                                echo "
+                                    <div class='tree-move'>
+                                        <div class='move-line'></div>
+                                        <div class='move-info'>
+                                            <div class='move-detail'>
+                                                <span class='move-icon material-symbols-rounded'>{$segment_icon_name}</span>
+                                                <p>{$segment_name}</p>
+                                            </div>
+                                        </div>
+                                    </div><!--move-->
+                                ";
+                            }else if($segment_type == 2){
+                                //point
+                                echo "
+                                <div class='tree-point'>
+                                    <div class='point-card'>
+                                        <div class='point-info'>
+                                            <div class='point-detail'>
+                                                <span class='move-icon material-symbols-rounded'>distance</span>
+                                                <div class='point-name'>
+                                                    <h5>{$start_time}</h5>
+                                                    <h5>{$segment_name}</h5>
+                                                    <p>観光地概要はここに入ります。</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--point-->
+                                ";
+                            }
+                        }
+                    ?>
+                </div>
             </div>
         </sction>
     </main>

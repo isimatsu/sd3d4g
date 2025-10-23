@@ -132,9 +132,12 @@ main{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 999;
 }
 
 .header-account{
+  position: relative;
   height: 45px;
   border-radius: 60px;
   right: 0;

@@ -53,7 +53,7 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/1.png);">
+            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/1.jpg);">
                 <div class="trip-title">
                     <h1><?=$trip_info['trip_name']?></h1>
                     <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>

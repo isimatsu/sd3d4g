@@ -71,6 +71,26 @@
             </div>
             <div class="page-contents">
                 <div class="plan-tree">
+                    <div class='tree-point'>
+                        <div class='point-card'>
+                            <div class='point-info'>
+                                <div class="point_tourist">
+                                    <div class="tourist-info">
+                                        <div class="tourist-img"></div>
+                                        <div class="tourist-name">
+                                            <h5>9:00</h5>
+                                            <h4>観光地名</h4>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="tourist-detail">
+                                        <p>札幌のシンボルであり、北海道大学の前身である札幌農学校の演武場として建てられた歴史的建造物です。
+                                            140年以上正確に時を刻み続ける鐘の音を聞き、内部の資料館で開拓の歴史に触れることができます。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--point-->
                     <!-- <div class="tree-move">
                         <div class="move-line"></div>
                         <div class="move-info">
@@ -100,6 +120,8 @@
                             $segment_type = $parts_tree['segment_type'];
                             $segment_name = $parts_tree['segment_name'];
                             $start_time = $parts_tree['start_time'];
+                            $segment_info = $parts_tree['segment_info'];
+                        
                             switch($parts_tree['segment_info']):
                                 case 'plane':
                                     $segment_icon_name = 'travel';
@@ -126,23 +148,35 @@
                                 ";
                             }else if($segment_type == 2){
                                 //point
-                                echo "
-                                <div class='tree-point'>
-                                    <div class='point-card'>
-                                        <div class='point-info'>
-                                            <div class='point-detail'>
-                                                <span class='move-icon material-symbols-rounded'>distance</span>
-                                                <div class='point-name'>
-                                                    <h5>{$start_time}</h5>
-                                                    <h5>{$segment_name}</h5>
-                                                    <p>観光地概要はここに入ります。</p>
-                                                </div>
-
+                                if($segment_info == 'tourist'){
+                                    $segment_detail = $parts_tree['segment_detail'];
+                                    echo "
+                                    <div class='tree-point'>
+                                        <div class='point-card'>
+                                            <div class='point-info'>
+                                                <div class=
                                             </div>
                                         </div>
-                                    </div>
-                                </div><!--point-->
-                                ";
+                                    </div><!--point-->
+                                    ";  
+                                }else{
+                                    echo "
+                                    <div class='tree-point'>
+                                        <div class='point-card'>
+                                            <div class='point-info'>
+                                                <div class='point-detail'>
+                                                    <span class='move-icon material-symbols-rounded'>distance</span>
+                                                    <div class='point-name'>
+                                                        <h5>{$start_time}</h5>
+                                                        <h5>{$segment_name}</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--point-->
+                                    "; 
+                                }
+
                             }
                         }
                     ?>

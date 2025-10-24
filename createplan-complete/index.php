@@ -38,6 +38,7 @@ $systemInstruction = <<<'EOT'
 	segment_type は「move」か「point」
 　　segment_info は移動は「plane」「train」「boat」「car」「bus」「walking」それ以外は「move」、地点は「tourist」「station」「airport」それ以外は「point」
 　　segment_name は行動の内容(移動なら区間・方法、ポイントなら具体的な目的地名)
+	segment_detailは「point」の「tourist」にのみ観光地の見どころなどを100文字程度で出力してください。
 　　start_time は移動開始や滞在開始時間、end_time は出発時刻など
 　　移動のパーツには song_id を入れる(地点には不要)。選曲は目的地や旅行に合った雰囲気の曲を選んでください。
 　　song_id は必ず YouTube の URL を挿入してください。
@@ -53,6 +54,7 @@ $systemInstruction = <<<'EOT'
       "segment_type": "move",
       "segment_info": "plane",
       "segment_name": "移動手段",
+　  "segment_detail": null,
       "start_time": "2025-10-20T08:00:00",
       "end_time": "2025-10-20T10:30:00",
       "song_id": "https://www.youtube.com/watch?v=5qap5aO4i9A"
@@ -61,6 +63,7 @@ $systemInstruction = <<<'EOT'
       "segment_type": "point",
       "segment_info": "tourist",
       "segment_name": "地点名(観光地など)",
+      "segment_detail": "（見どころを100文字程度で）",
       "start_time": "2025-10-20T11:00:00",
       "end_time": "2025-10-20T13:00:00",
       "song_id": null
@@ -248,8 +251,8 @@ if ($httpCode === 200) {
             
             // 4. trip_infoテーブルにセグメントデータを挿入
             $segmentInsertSql = "INSERT INTO trip_info 
-                                 (trip_id, segment_type, segment_info, segment_name, start_time, end_time, song_id) 
-                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :start_time, :end_time, :song_id)";
+                                 (trip_id, segment_type, segment_info, segment_name, segment_detail,start_time, end_time, song_id) 
+                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :segment_detail,:start_time, :end_time, :song_id)";
             $segmentStmt = $pdo->prepare($segmentInsertSql);
             
             $segmentTypeMap = [
@@ -270,6 +273,7 @@ if ($httpCode === 200) {
                     ':segment_type' => $segmentTypeMap[$segment['segment_type']] ?? 2,
                     ':segment_info' => $segment['segment_info'],
                     ':segment_name' => $segment['segment_name'],
+                    ':segment_detail' => $segment['segment_detail'],
                     ':start_time' => date('H:i:s', strtotime($segment['start_time'])),
                     ':end_time' => date('H:i:s', strtotime($segment['end_time'])),
                     ':song_id' => $songIdDb

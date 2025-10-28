@@ -71,26 +71,7 @@
             </div>
             <div class="page-contents">
                 <div class="plan-tree">
-                    <div class='tree-point'>
-                        <div class='point-card'>
-                            <div class='point-info'>
-                                <div class="point_tourist">
-                                    <div class="tourist-info">
-                                        <div class="tourist-img"></div>
-                                        <div class="tourist-name">
-                                            <h5>9:00</h5>
-                                            <h4>観光地名</h4>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="tourist-detail">
-                                        <p>札幌のシンボルであり、北海道大学の前身である札幌農学校の演武場として建てられた歴史的建造物です。
-                                            140年以上正確に時を刻み続ける鐘の音を聞き、内部の資料館で開拓の歴史に触れることができます。</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!--point-->
+
                     <!-- <div class="tree-move">
                         <div class="move-line"></div>
                         <div class="move-info">
@@ -119,7 +100,8 @@
                         foreach($parts as $parts_tree){
                             $segment_type = $parts_tree['segment_type'];
                             $segment_name = $parts_tree['segment_name'];
-                            $start_time = $parts_tree['start_time'];
+                            $time = $parts_tree['start_time'];
+                            $start_time = date("H:i", strtotime($time));
                             $segment_info = $parts_tree['segment_info'];
                         
                             switch($parts_tree['segment_info']):
@@ -143,6 +125,7 @@
                                                 <span class='move-icon material-symbols-rounded'>{$segment_icon_name}</span>
                                                 <p>{$segment_name}</p>
                                             </div>
+                                            <button class='move-music-btn'><span class='material-symbols-rounded'>music_note</span><p>音楽を再生</p></button>
                                         </div>
                                     </div><!--move-->
                                 ";
@@ -154,7 +137,20 @@
                                     <div class='tree-point'>
                                         <div class='point-card'>
                                             <div class='point-info'>
-                                                <div class=
+                                                <div class='point_tourist'>
+                                                    <div class='tourist-info'>
+                                                        <div class='tourist-img'><span class='material-symbols-rounded'>image</span></div>
+                                                        <div class='tourist-name'>
+                                                            <h5 class='point-card-time'>{$start_time}</h5>
+                                                            <h4 class='point-card-name-tourist'>{$segment_name}</h4>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class='tourist-detail'>
+                                                        <p>{$segment_detail}</p>
+                                                    </div>
+                                                    <button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_location_alt</span></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div><!--point-->
@@ -165,11 +161,14 @@
                                         <div class='point-card'>
                                             <div class='point-info'>
                                                 <div class='point-detail'>
-                                                    <span class='move-icon material-symbols-rounded'>distance</span>
-                                                    <div class='point-name'>
-                                                        <h5>{$start_time}</h5>
-                                                        <h5>{$segment_name}</h5>
+                                                    <div>
+                                                        <span class='point-icon material-symbols-rounded' style='color:#666;'>location_on</span>
+                                                        <div class='point-name'>
+                                                            <h5 class='point-card-time' style='margin: 0 10px;'>{$start_time} </h5>
+                                                            <h5 class='point-card-name'>{$segment_name}</h5>
+                                                        </div>
                                                     </div>
+                                                    <button class='plan-edit-btn'><span class='material-symbols-rounded'>edit_location_alt</span></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,6 +179,67 @@
                             }
                         }
                     ?>
+                </div>
+                <div class="planpage-music-list">
+                    <div class="planpage-music-list-title">
+                        <span class='point-icon material-symbols-rounded'>queue_music</span>
+                        <p><?=$trip_info['trip_name']?>のプレイリスト</p>
+                    </div>
+                    <div class="planpage-music-list-card">
+                        <div>
+                            <p class="music-name">ここにタイトル</p>
+                            <p class="music-aname">アーティスト名</p>
+                        </div>
+                        <div>
+                            <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
+                            <button><span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span></button>
+                        </div>
+                    </div><!--music-list-->
+                    <div class="planpage-music-list-card">
+                        <div>
+                            <p class="music-name">ここにタイトル</p>
+                            <p class="music-aname">アーティスト名</p>
+                        </div>
+                        <div>
+                            <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
+                            <button><span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span></button>
+                        </div>
+                    </div><!--music-list-->
+                    <div class="planpage-music-list-card">
+                        <div>
+                            <p class="music-name">ここにタイトル</p>
+                            <p class="music-aname">アーティスト名</p>
+                        </div>
+                        <div>
+                            <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
+                            <button><span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span></button>
+                        </div>
+                    </div><!--music-list-->
+                </div>
+                <div class="plan-feedback">
+                    <div class="feedback-title">
+                        <h3>提案された旅程はいかがでしたか？</h3>
+                        <p>「良くない」「非常に悪い」選択すると提案は<br>要望に沿って再生成されます</p>
+                    </div>
+                    <form action="#">
+                        <div class="feedback-btn-list">
+                            <input type="radio" name="feedback" id="option1" class="feedback-radio" style="display: none;">
+                            <label class="feedback-level level-good" for="option1">
+                                <div><span class='point-icon material-symbols-rounded'>mood</span><p>良い</p></div>
+                            </label>
+
+                            <input type="radio" name="feedback" id="option2" class="feedback-radio" style="display: none;">
+                            <label class="feedback-level level-bad" for="option2">
+                                <div><span class='point-icon material-symbols-rounded'>sentiment_dissatisfied</span><p>良くない</p></div>
+                            </label>
+
+                            <input type="radio" name="feedback" id="option3" class="feedback-radio" style="display: none;">
+                            <label class="feedback-level level-verybad" for="option3">
+                                <div><span class='point-icon material-symbols-rounded'>sentiment_extremely_dissatisfied</span><p>非常に悪い</p></div>
+                            </label>
+                        </div>
+                        <input type="text" name="" class="feedback-text">
+                    </form>
                 </div>
             </div>
         </sction>

@@ -34,6 +34,7 @@
 
 .tree-move{
     width: 100%;
+    min-height: 200px;
     padding: 10px 30px;
     display: flex;
     justify-content: left;
@@ -41,6 +42,7 @@
 }
 
 .move-line{
+    height: 180px;
     background-color: #666666;
     min-width: 10px;
     min-height: 100px;
@@ -59,8 +61,12 @@
     margin: 0 10px;
 }
 
+.point-icon{
+    font-size: 40px;
+}
+
 .move-detail p{
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
 }
 
@@ -81,6 +87,12 @@
     border-radius: 25px;
     background-color: #ffffff;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.point-detail div{
+    display: flex;
     justify-content: left;
     align-items: center;
 }
@@ -88,6 +100,10 @@
 .tourist-img{
     width: 80px;
     height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666666;
     border-radius: 15px;
     margin-right: 10px;
     background-color: #d9d9d9;
@@ -106,4 +122,170 @@
 
 .tourist-detail p{
     font-size: 14px;
+}
+
+.point-card-time{
+    font-size: 15px;
+    color: #0084FF;
+}
+
+.point-card-name{
+    font-size: 15px;
+}
+
+.point-card-name-tourist{
+    font-size: 20px;
+}
+
+.move-music-btn{
+    background-color: #ffffff;
+    border-radius: 60px;
+    padding: 10px 20px;
+    margin: 10px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FF7B54;
+}
+
+.move-music-btn span{
+    margin-right: 10px;
+}
+
+.move-music-btn p{
+    font-weight: bold;
+}
+
+.plan-edit-btn{
+    color: #888888;
+}
+
+.plan-edit-btn-tourist{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.point-info{
+    position: relative;
+}
+
+.planpage-music-list{
+    width: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    background-image: radial-gradient(#e4ddf9, #e4c7de);;
+}
+
+.planpage-music-list-title{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    color: #7968FF;
+}
+
+.planpage-music-list-title span{
+    color: #7968FF;
+    font-size: 30px;
+}
+
+.planpage-music-list-card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: solid 1px #333;
+}
+
+.music-list-icon{
+    font-size: 25px;
+    margin: 0 5px;
+}
+
+.music-name{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.music-aname{
+    font-size: 12px;
+}
+
+
+
+.plan-feedback{
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.feedback-title{
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.feedback-title h3{
+    color: #0084FF;
+}
+
+.feedback-title p{
+    padding: 20px 0;
+    font-size: 12px;
+    color: #666666;
+}
+
+.feedback-btn-list{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.feedback-level{
+    width: 32%;
+    height: 100px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.feedback-radio:checked + .feedback-level {
+  background-color: #007bff;
+}
+
+.feedback-level div{
+    text-align: center;
+}
+
+/* 初期色 */
+.level-good { background-color: #DBF4D9; color: #50B048; }
+.level-bad { background-color: #FFE6DE; color: #F38C6D; }
+.level-verybad { background-color: #FFD4D4; color: #F38C6D; }
+
+/* 選択時 - 背景を濃くする */
+.feedback-radio:checked + .level-good {
+    background-color: #50B048;
+    color: #fff;
+}
+
+.feedback-radio:checked + .level-bad {
+    background-color: #F38C6D;
+    color: #fff;
+}
+
+.feedback-radio:checked + .level-verybad {
+    background-color: #D93636;
+    color: #fff;
+}
+
+.feedback-text{
+    width: 100%;
+    height: 80px;
+    border-radius: 15px;
+    margin-top: 10px;
+    border: solid 1px #666;
 }

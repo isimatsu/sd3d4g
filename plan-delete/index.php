@@ -1,26 +1,5 @@
 <?php
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-    //DB接続情報
-    $host = 'mysql326.phy.lolipop.lan';
-	$dbname = 'LAA1682282-sd3d4g';
-    $user = 'LAA1682282';
-    $pass = 'Passsd3d';
-
-    try{
-        //DB接続
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        //trip_idがNULL or 空でないデータを昇順で取得
-        $sql = "SELECT * FROM trip WHERE trip_id IS NOT NULL AND trip_id <> '' ORDER BY trip_id ASC";
-        $stmt = $pdo->query($sql);
-        $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }catch(PDOException $e){
-        die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
-    }
 ?>
 <!DOCTYPE html>
 <html lang="ja">

@@ -89,7 +89,14 @@ error_reporting(E_ALL);
                                 </p>
                             <?php endif; ?>
                         </div>
-                        <a href="../../sd3d4g/plan-delete/index.php" class="delete-btn"><span class="material-symbols-rounded">delete</span></a>
+                        <div class="delete-btn">
+                            <form action="(削除処理のリンク)" method="post">
+                                <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['trip_id']) ?>">
+                                <button type="submit" style="background: none; border: none;">
+                                <span class="material-symbols-rounded">delete</span>
+                                </button>
+                            </form>
+                        </div>
                     </a>
                     <?php endforeach; ?>
                 <?php else: ?><!-- 旅程が空だった場合は以下を表示 -->

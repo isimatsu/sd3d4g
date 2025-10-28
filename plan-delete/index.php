@@ -28,7 +28,12 @@ session_start();
             </div>
             <div class="empty-state">
                 <span class="material-symbols-rounded" style="font-size: 60px;">delete</span>
-                <p >旅程一覧を削除しました</p>
+                <p>旅程一覧を削除しました</p>
+                    <a href="../plan-list/index.php" 
+                    style="display: block;margin: 10px 0;width: 100%;height: 55px;border-radius: 20px;
+                            color: #fff;text-decoration: none;display: flex;justify-content: center;
+                            align-items: center;background-color: #0084FF;"
+                    >旅程一覧に戻る</a>
             </div>
         </sction>
     </main>

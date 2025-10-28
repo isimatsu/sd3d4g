@@ -21,10 +21,19 @@ try {
     if (!empty($_POST['trip_id'])) {
         $trip_id = (int)$_POST['trip_id'];
 
+        //song テーブルの該当データの trip_id を NULL にする
+        $stmt = $pdo->prepare("UPDATE song SET trip_id = NULL WHERE trip_id = ?");
+        $stmt->execute([$trip_id]);
+
+        //trip_info の関連データを削除
+        $stmt = $pdo->prepare("DELETE FROM trip_info WHERE trip_id = ?");
+        $stmt->execute([$trip_id]);
+
+        //trip テーブルから該当レコードを削除
         $stmt = $pdo->prepare("DELETE FROM trip WHERE trip_id = ?");
         $stmt->execute([$trip_id]);
 
-        // ✅ 削除完了画面へリダイレクト
+        //削除完了画面へリダイレクト
         header("Location: index.php");
         exit;
     } else {

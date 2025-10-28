@@ -90,7 +90,7 @@ error_reporting(E_ALL);
                             <?php endif; ?>
                         </div>
                         <div class="delete-btn">
-                            <form action="(削除処理のリンク)" method="post">
+                            <form action="../plan-delete/delete.php" method="post">
                                 <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['trip_id']) ?>">
                                 <button type="submit" style="background: none; border: none;">
                                 <span class="material-symbols-rounded">delete</span>

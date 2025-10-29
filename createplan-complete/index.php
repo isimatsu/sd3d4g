@@ -36,7 +36,7 @@ $systemInstruction = <<<'EOT'
 ・旅程JSON(itinerary)
 　→itinerary について
 	segment_type は「move」か「point」
-　　segment_info は移動は「plane」「train」「boat」「car」「bus」「walking」それ以外は「move」、地点は「tourist」「station」「airport」それ以外は「point」
+　　segment_info は移動は「plane」「train」「boat」「car」「bus」「walking」それ以外は「move」、地点は「tourist」「station」「airport」「hotel」それ以外は「point」
 　　segment_name は行動の内容(移動なら区間・方法、ポイントなら具体的な目的地名)
 	segment_detailは「point」の「tourist」にのみ観光地の見どころなどを100文字程度で出力してください。
 　　start_time は移動開始や滞在開始時間、end_time は出発時刻など

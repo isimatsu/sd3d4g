@@ -14,7 +14,7 @@ session_start();
     <title>楽曲詳細 -旅行提案アプリ-</title>
 </head>
 <body>
-    <main class="music-detail-box sm">
+    <main>
         <section class="sm">
             <div class="header">
                 <?php include '../assets/include/header.php'?>
@@ -57,17 +57,17 @@ session_start();
             }
 
             ?>
+        <div class="music-detail-box">
         <?php if (!empty($imagePath)): ?>
             <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" alt="画像">
         <?php else: ?>
             <p>画像が見つかりませんでした。</p>
         <?php endif; ?>
-        <div class="music-detail-box">
-            <p><span class="label">曲名</p><br><?= $songName ?><br>
-            <p><span class="label">アーティスト名</p><br><?= $singerName ?><br>
-            <p><span class="label">ゆかりの地域</p><br><?= $pref_name ?><br>
-            <p><span class="label">楽曲リンク<br><?= $link ?><br>
-            <p><span class="label">いいね</p><br><?= $good ?>
+            <p><span class="label">曲名</span></p><?= $songName ?><br>
+            <p><span class="label">アーティスト名</span></p><?= $singerName ?><br>
+            <p><span class="label">ゆかりの地域</span></p><?= $pref_name ?><br>
+            <p><span class="label">楽曲リンク</span><?= $link ?><br>
+            <p><span class="label">いいね</span></p><?= $good ?>
         </div>
         </sction>
     </main>

@@ -63,6 +63,9 @@
             </div>
             <div class="plan-hero" style="background-image: url(../assets/img/spot_img/1.jpg);">
                 <div class="trip-title">
+                    <!-- <div class="for-user">
+                        <p><?= $user_name ?>さんにぴったりの旅程を作成しました。</p>
+                    </div> -->
                     <div>
                         <h1><?=$trip_info['trip_name']?></h1>
                         <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
@@ -98,13 +101,18 @@
                     </div>point -->
                     <?php
                         foreach($parts as $parts_tree){
+                            $segment_id = $parts_tree['segment_id'];
                             $segment_type = $parts_tree['segment_type'];
                             $segment_name = $parts_tree['segment_name'];
                             $time = $parts_tree['start_time'];
                             $start_time = date("H:i", strtotime($time));
                             $segment_info = $parts_tree['segment_info'];
                         
-                            switch($parts_tree['segment_info']):
+
+                    
+                            if($segment_type == 1){
+                                //移動アイコン
+                                switch($parts_tree['segment_info']):
                                 case 'plane':
                                     $segment_icon_name = 'travel';
                                     break;
@@ -114,8 +122,6 @@
                                 default:
                                     $segment_icon_name = 'directions_car';
                                 endswitch;
-
-                            if($segment_type == 1){
                                 //move
                                 echo "
                                     <div class='tree-move'>
@@ -130,6 +136,23 @@
                                     </div><!--move-->
                                 ";
                             }else if($segment_type == 2){
+
+                                switch($parts_tree['segment_info']):
+                                case 'station':
+                                    $segment_icon_name = 'bus_railway';
+                                    break;
+                                case 'airport_takeoff':
+                                    $segment_icon_name = 'flight_takeoff';
+                                    break;
+                                case 'airport_land':
+                                    $segment_icon_name = 'flight_land';
+                                    break;
+                                case 'hotel':
+                                    $segment_icon_name = 'hotel';
+                                    break;
+                                default:
+                                    $segment_icon_name = 'location_on';
+                                endswitch;
                                 //point
                                 if($segment_info == 'tourist'){
                                     $segment_detail = $parts_tree['segment_detail'];
@@ -149,7 +172,7 @@
                                                     <div class='tourist-detail'>
                                                         <p>{$segment_detail}</p>
                                                     </div>
-                                                    <button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_location_alt</span></button>
+                                                    <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_location_alt</span></button></form>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,14 +185,13 @@
                                             <div class='point-info'>
                                                 <div class='point-detail'>
                                                     <div>
-                                                        <span class='point-icon material-symbols-rounded' style='color:#666;'>location_on</span>
+                                                        <span class='point-icon material-symbols-rounded' style='color:#666;'>{$segment_icon_name}</span>
                                                         <div class='point-name'>
                                                             <h5 class='point-card-time' style='margin: 0 10px;'>{$start_time} </h5>
                                                             <h5 class='point-card-name'>{$segment_name}</h5>
                                                         </div>
                                                     </div>
-                                                    <button class='plan-edit-btn'><span class='material-symbols-rounded'>edit_location_alt</span></button>
-                                                </div>
+                                                <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_location_alt</span></button></form>
                                             </div>
                                         </div>
                                     </div><!--point-->
@@ -238,15 +260,36 @@
                                 <div><span class='point-icon material-symbols-rounded'>sentiment_extremely_dissatisfied</span><p>非常に悪い</p></div>
                             </label>
                         </div>
-                        <input type="text" name="" class="feedback-text">
+                        <input type="text" name="" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
+                        <button type="submit" class="basic-btn blue-btn">再生成</button>
                     </form>
                 </div>
             </div>
         </sction>
+
     </main>
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>
+    <div class='modal-outline'>
+        <div class='modal-area'>
+            <div class='edit-modal-title'>
+                <span class='music-list-icon material-symbols-rounded'>edit_location_alt</span>
+                <h3>選択された箇所の<br>旅程を変更します</h3>
+            </div>
+            <form action='#' method='POST'>
+                <input type="text" name="update_segment_prompt" placeholder="改善してほしい箇所、要望を具体的に入力してください">
+                <button type="submit" class="basic-btn blue-btn">再生成</button>
+            </form>
+        </div>
+    </div>
+    <?php
+        if(isset($_POST['edit_segment_id'])){
+            echo"
+            
+            ";
+        }
+    ?>
 </body>
 
 </html>

@@ -248,6 +248,7 @@
                                 <img class="" src="../assets/img/automobile_3d.png">
                             </div>
                             <h2>移動手段</h2>
+                            <p style="font-size: 10px; color:#333;">※観光地での移動手段</p>
                         </div>
                         <select class="select-style" name="move">
                             <option value="公共交通">交通交通</option>
@@ -273,8 +274,8 @@
     </div>
     <div class="load-screen" id="load_screen">
         <div style="text-align: center;">
-            <img src="../assets/img/load.gif" width="200px">
-            <p>あなたにぴったりな<br>旅程を作成しています！</p>
+            <img src="../assets/img/load.gif" width="80%">
+            <p>あなたにぴったりの</nav><br>旅程を作成しています！</p>
         </div>
     </div>
 </body>

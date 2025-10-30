@@ -52,7 +52,7 @@ try {
         // ファイル移動
         if (move_uploaded_file($tmp_name, $upload_file)) {
             // DBには相対パスで保存（Web公開用）
-            $image_path = $upload_file;
+            $image_path = '../uploads/' .$new_filename;
         } else {
             exit('❌ 画像のアップロードに失敗しました。');
         }

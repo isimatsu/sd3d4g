@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/admin.css">
      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +23,56 @@
                 <h1>管理者画面</h1>
             </div>
             <div class="page-contents">
-                
+                <div class="user-list">
+      <div class="user-row header">
+        <span>アカウント名</span>
+        <span>リクエスト数</span>
+        <span></span>
+      </div>
+
+      <!-- 繰り返し部分 -->
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+      <div class="user-row">
+        <span>〇〇（アカウント名）</span>
+        <span>100</span>
+        <a href="#" class="delete">削除</a>
+      </div>
+    </div>
+
+    <div class="dots">
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</div>
 
 
             </div>

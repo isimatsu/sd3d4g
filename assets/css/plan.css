@@ -24,8 +24,13 @@
     background-image: linear-gradient(transparent, #cce8ff 60% 100%);
 }
 
-.trip-title h1,h2{
+.trip-title h1{
+    color: #333;
+    font-size: 25px;
+}
 
+.trip-title h5{
+    color: #666;
 }
 
 .page-contents{
@@ -288,4 +293,35 @@
     border-radius: 15px;
     margin-top: 10px;
     border: solid 1px #666;
+}
+
+.modal-outline{
+    position: fixed;
+    top: 0;
+    z-index: 500;
+    width: 100%;
+    height: 100svh;
+    background-color: #888888cf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.modal-area{
+    width: 80%;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 40px;
+    padding: 20px;
+}
+
+.edit-modal-title{
+    color: #007bff;
+    padding: 20px 0 ;
+    text-align: center;
+}
+
+.edit-modal-title span{
+    font-size: 30px;
 }

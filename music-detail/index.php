@@ -41,34 +41,34 @@ session_start();
             $imagePath = $song['image_path'];
             $songName    = htmlspecialchars($song['song_name'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
             $singerName  = htmlspecialchars($song['singer_name'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
-            $prefName    = htmlspecialchars($song['pref_id'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
+            $pref_id     =(int)($song['pref_id'] ?? 0);
             $link        = htmlspecialchars($song['link'] ?? '', ENT_QUOTES, 'UTF-8');
             $good        = (int)($song['good'] ?? 0);
+
+            // pref_idから都道府県名を取得
+            $stmt = $pdo->prepare('SELECT pref_name FROM pref WHERE pref_id = ? LIMIT 1');
+            $stmt->execute([$pref_id]);
+            $pref = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($pref) {
+                $pref_name = $pref['pref_name'];
+            } else {
+                $pref_name = '（不明）';
+            }
+
             ?>
+        <div class="music-detail-box">
         <?php if (!empty($imagePath)): ?>
             <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" alt="画像">
         <?php else: ?>
             <p>画像が見つかりませんでした。</p>
         <?php endif; ?>
-
-        // ------------------------------
-        // pref_idから都道府県名を取得
-        // ------------------------------
-        $stmt = $pdo->prepare('SELECT pref_name FROM pref WHERE pref_id = ? LIMIT 1');
-        $stmt->execute([$pref_id]);
-        $pref = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($pref) {
-            $pref_name = $pref['pref_name'];
-        } else {
-            $pref_name = '（不明）';
-        }
-
-            <div><p>曲名</p><br><?= $songName ?></div><br>
-            <div><p>アーティスト名</p><br><?= $singerName ?></div><br>
-            <div><p>ゆかりの地域</p><br><?= $prefName ?></div><br>
-            <div><p>楽曲リンク<br><?= $prefName ?></div><br>
-            <div><p>いいね</p><br><?= $good ?></div>
+            <p><span class="label">曲名</span></p><?= $songName ?><br>
+            <p><span class="label">アーティスト名</span></p><?= $singerName ?><br>
+            <p><span class="label">ゆかりの地域</span></p><?= $pref_name ?><br>
+            <p><span class="label">楽曲リンク</span><?= $link ?><br>
+            <p><span class="label">いいね</span></p><?= $good ?>
+        </div>
         </sction>
     </main>
     <div class="menu-bar-area">

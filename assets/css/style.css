@@ -244,6 +244,41 @@ main{
   margin: 0 15px;
 }
 
+.music-detail-page {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 40px 0;
+  background: linear-gradient(to bottom, #fffaf5, #e3f4ff);
+}
+
+.music-detail-box {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.music-detail-box img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+}
+
+.music-detail-box .label {
+  font-weight: bold;
+  display: block;
+}
+
+.music-detail-box p {
+  line-height: 1.8;
+}
+
 .basic-form-box{
   margin: 20px 0;
 }

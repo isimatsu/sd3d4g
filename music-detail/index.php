@@ -63,11 +63,11 @@ session_start();
         <?php else: ?>
             <p>画像が見つかりませんでした。</p>
         <?php endif; ?>
-            <p><span class="label">曲名</span></p><?= $songName ?><br>
-            <p><span class="label">アーティスト名</span></p><?= $singerName ?><br>
-            <p><span class="label">ゆかりの地域</span></p><?= $pref_name ?><br>
-            <p><span class="label">楽曲リンク</span><?= $link ?><br>
-            <p><span class="label">いいね</span></p><?= $good ?>
+            <p><span class="label">曲名</span></p><?= $songName ?><br><br>
+            <p><span class="label">アーティスト名</span></p><?= $singerName ?><br><br>
+            <p><span class="label">ゆかりの地域</span></p><?= $pref_name ?><br><br>
+            <p><span class="label">楽曲リンク</span><?= $link ?><br><br>
+            <p><span class="label">いいね</span></p><?= $good ?><br><br>
         </div>
         </sction>
     </main>

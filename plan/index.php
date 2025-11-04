@@ -271,25 +271,32 @@
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>
-    <div class='modal-outline'>
-        <div class='modal-area'>
-            <div class='edit-modal-title'>
-                <span class='music-list-icon material-symbols-rounded'>edit_location_alt</span>
-                <h3>選択された箇所の<br>旅程を変更します</h3>
-            </div>
-            <form action='#' method='POST'>
-                <input type="text" name="update_segment_prompt" placeholder="改善してほしい箇所、要望を具体的に入力してください">
-                <button type="submit" class="basic-btn blue-btn">再生成</button>
-            </form>
-        </div>
-    </div>
     <?php
         if(isset($_POST['edit_segment_id'])){
+            $edit_segment_id = $_POST['edit_segment_id'];
             echo"
-            
+            <div class='modal-outline' id='modal_outline'>
+                <div class='modal-area'>
+                    <button onClick='modal_close()' class='model-close-btn'><span class='material-symbols-rounded'>close</span></button>
+                    <div class='edit-modal-title'>
+                        <span class='material-symbols-rounded'>edit_location_alt</span>
+                        <h3>選択された箇所の<br>旅程を変更します</h3>
+                    </div>
+                    <p>segment_id{$edit_segment_id}を編集します</p>
+                    <form action='#' method='POST'>
+                        <input type='text' name='update_segment_prompt' class='feedback-text' placeholder='改善してほしい箇所、要望を具体的に入力してください'>
+                        <button type='submit' class='basic-btn blue-btn'>再生成</button>
+                    </form>
+                </div>
+            </div>
             ";
         }
     ?>
 </body>
-
+<script>
+    function modal_close(){
+        const modal = document.getElementById('modal_outline')
+        modal.style.display = 'none';
+    }
+</script>
 </html>

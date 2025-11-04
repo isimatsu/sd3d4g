@@ -310,10 +310,10 @@
 
 .modal-area{
     width: 80%;
-    height: 500px;
     background-color: #fff;
     border-radius: 40px;
     padding: 20px;
+    position: relative;
 }
 
 .edit-modal-title{
@@ -324,4 +324,10 @@
 
 .edit-modal-title span{
     font-size: 30px;
+}
+
+.model-close-btn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }

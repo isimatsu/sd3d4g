@@ -33,7 +33,7 @@ session_start();
             // 2. データベースから画像パスを取得
             $sql = "SELECT song_name, singer_name, pref_id, link, good, image_path  FROM song WHERE song_id = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':id', 176, PDO::PARAM_INT); // 例: id=1の画像を取得
+            $stmt->bindValue(':id', 194, PDO::PARAM_INT); // 例: id=1の画像を取得
             $stmt->execute();
             $song = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -63,11 +63,27 @@ session_start();
         <?php else: ?>
             <p>画像が見つかりませんでした。</p>
         <?php endif; ?>
-            <p><span class="label">曲名</span></p><?= $songName ?><br><br>
-            <p><span class="label">アーティスト名</span></p><?= $singerName ?><br><br>
-            <p><span class="label">ゆかりの地域</span></p><?= $pref_name ?><br><br>
-            <p><span class="label">楽曲リンク</span><?= $link ?><br><br>
-            <p><span class="label">いいね</span></p><?= $good ?><br><br>
+        
+        <br>
+        <div class="basic-form-box">
+            <p class="input-name">曲名</span></p>
+            <?= $songName ?>
+        </div>
+        <div class="basic-form-box">
+            <p class="input-name">アーティスト名</span></p>
+            <?= $singerName ?>
+        </div>
+        <div class="basic-form-box">
+            <p class="input-name">ゆかりの地域</span></p>
+            <?= $pref_name ?>
+        </div>
+        <div class="basic-form-box">
+            <p class="input-name">楽曲リンク</span></p>
+            <?= $link ?>
+        </div>
+        <div class="basic-form-box">
+            <p class="input-name">いいね</span></p><?= $good ?>
+        </div>
         </div>
         </sction>
     </main>

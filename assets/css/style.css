@@ -258,25 +258,23 @@ main{
 .music-detail-box {
   max-width: 400px;
   margin: 0 auto;
-  text-align: center;
 }
 
 .music-detail-box img {
-  width: 90px;
-  height: 90px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
-  border-radius: 5px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  margin-bottom: 20px;
-}
-
-.music-detail-box .label {
-  font-weight: bold;
+  border-radius: 8px;
+  margin: 20px auto;
   display: block;
 }
 
+.music-detail-box .label {
+  font-size: 15px;
+}
+
 .music-detail-box p {
-  line-height: 1.8;
+  margin-left: 20px;
 }
 
 .basic-form-box{

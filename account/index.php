@@ -3,6 +3,7 @@ session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+    
 
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
@@ -11,6 +12,15 @@ $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
             dbname=LAA1682282-sd3d4g;charset=utf8',
                 'LAA1682282',
                 'Passsd3d');
+if(isset($_POST['account_name'])){
+    echo '更新内容を受け取りました';
+    $user_name=$_POST['update_name'];
+    $email=$_POST['update_email'];
+    $password=$_POST['update_password'];
+
+$sql=$pdo->prepare('INSERT INTO user(user_name,email,password)value(?,?,?)');
+$sql->execute([$user_name,$email,$password]);
+}
 
 $sql=$pdo->prepare('SELECT * FROM user WHERE user_id=?');
 $sql->execute([$user_id]);
@@ -54,21 +64,21 @@ foreach($sql as $row){
                 <h1>アカウント管理</h1>
             </div>
             <div class="page-contents">
-                <from action="#" class="basic-form">
+                <form action="#" class="basic-form" method="POST">
                     <div class="basic-form-box">
                         <p class="input-name">お名前</p>
-                        <input class="basic-form-input" type="text" placeholder="<?= $user_name ?>">
+                        <input class="basic-form-input" type="text" placeholder="<?= $user_name ?>" name="apdate_name">
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" type="text" placeholder="<?= $email ?>">
+                        <input class="basic-form-input" type="text" placeholder="<?= $email ?>" name="apdate_email">
                     </div><!--basic-form-box-->
                      <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" type="text">
+                        <input class="basic-form-input" type="text" name="apdate_password">
                     </div><!--basic-form-box-->
-                </from><!--basic-form-->
-                <a href="" class="basic-btn blue-btn">変更</a>
+                     <button type="submit" class="basic-btn blue-btn">変更</button>
+                </form><!--basic-form-->
                 <a href="" class="basic-btn gray-btn">ログアウト</a>
 
                 

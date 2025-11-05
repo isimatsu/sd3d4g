@@ -131,7 +131,7 @@
                                                 <span class='move-icon material-symbols-rounded'>{$segment_icon_name}</span>
                                                 <p>{$segment_name}</p>
                                             </div>
-                                            <button class='move-music-btn'><span class='material-symbols-rounded'>music_note</span><p>音楽を再生</p></button>
+                                            <button class='move-music-btn' onClick='play_music()'><span class='material-symbols-rounded'>music_note</span><p>音楽を再生</p></button>
                                         </div>
                                     </div><!--move-->
                                 ";
@@ -271,32 +271,169 @@
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>
-    <?php
-        if(isset($_POST['edit_segment_id'])){
-            $edit_segment_id = $_POST['edit_segment_id'];
-            echo"
-            <div class='modal-outline' id='modal_outline'>
-                <div class='modal-area'>
-                    <button onClick='modal_close()' class='model-close-btn'><span class='material-symbols-rounded'>close</span></button>
-                    <div class='edit-modal-title'>
-                        <span class='material-symbols-rounded'>edit_location_alt</span>
-                        <h3>選択された箇所の<br>旅程を変更します</h3>
-                    </div>
-                    <p>segment_id{$edit_segment_id}を編集します</p>
-                    <form action='#' method='POST'>
-                        <input type='text' name='update_segment_prompt' class='feedback-text' placeholder='改善してほしい箇所、要望を具体的に入力してください'>
-                        <button type='submit' class='basic-btn blue-btn'>再生成</button>
-                    </form>
-                </div>
-            </div>
-            ";
-        }
+<?php
+if (isset($_POST['edit_segment_id'])) {
+    $edit_segment_id = $_POST['edit_segment_id'];
+
+    $sql = "SELECT * FROM `trip_info` WHERE `segment_id` = ? AND `trip_id` = ? ORDER BY `segment_id` ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$edit_segment_id, $plan_id]);
+    $segment = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($segment as $row) {
+        $edit_segment_name = $row['segment_name'];
+    }
     ?>
+    <!-- HTML部分ここから -->
+    <div class='modal-outline' id='modal_outline'>
+        <div class='modal-area'>
+            <button onClick='modal_close()' class='model-close-btn'>
+                <span class='material-symbols-rounded'>close</span>
+            </button>
+            <div class='edit-modal-title'>
+                <span class='material-symbols-rounded'>edit_location_alt</span>
+                <h3>選択された箇所の<br>旅程を変更します</h3>
+            </div>
+
+            <?php foreach ($segment as $parts_tree): 
+                $segment_id = $parts_tree['segment_id'];
+                $segment_type = $parts_tree['segment_type'];
+                $segment_name = $parts_tree['segment_name'];
+                $time = $parts_tree['start_time'];
+                $start_time = date("H:i", strtotime($time));
+                $segment_info = $parts_tree['segment_info'];
+            ?>
+
+                <?php if ($segment_type == 1): ?>
+                    <?php
+                    //移動アイコン
+                    switch ($segment_info):
+                        case 'plane':
+                            $segment_icon_name = 'travel';
+                            break;
+                        case 'train':
+                            $segment_icon_name = 'train';
+                            break;
+                        default:
+                            $segment_icon_name = 'directions_car';
+                    endswitch;
+                    ?>
+                    <div class='tree-move'>
+                        <div class='move-line'></div>
+                        <div class='move-info'>
+                            <div class='move-detail'>
+                                <span class='move-icon material-symbols-rounded'><?= $segment_icon_name ?></span>
+                                <p><?= htmlspecialchars($segment_name) ?></p>
+                            </div>
+                            <button class='move-music-btn'>
+                                <span class='material-symbols-rounded'>music_note</span>
+                                <p>音楽を再生</p>
+                            </button>
+                        </div>
+                    </div>
+
+                <?php elseif ($segment_type == 2): ?>
+                    <?php
+                    switch ($segment_info):
+                        case 'station':
+                            $segment_icon_name = 'bus_railway';
+                            break;
+                        case 'airport_takeoff':
+                            $segment_icon_name = 'flight_takeoff';
+                            break;
+                        case 'airport_land':
+                            $segment_icon_name = 'flight_land';
+                            break;
+                        case 'hotel':
+                            $segment_icon_name = 'hotel';
+                            break;
+                        default:
+                            $segment_icon_name = 'location_on';
+                    endswitch;
+                    ?>
+
+                    <?php if ($segment_info == 'tourist'): ?>
+                        <?php $segment_detail = $parts_tree['segment_detail']; ?>
+                        <div class='tree-point'>
+                            <div class='point-card'>
+                                <div class='point-info'>
+                                    <div class='point_tourist'>
+                                        <div class='tourist-info'>
+                                            <div class='tourist-img'>
+                                                <span class='material-symbols-rounded'>image</span>
+                                            </div>
+                                            <div class='tourist-name'>
+                                                <h5 class='point-card-time'><?= $start_time ?></h5>
+                                                <h4 class='point-card-name-tourist'><?= htmlspecialchars($segment_name) ?></h4>
+                                            </div>
+                                        </div>
+                                        <div class='tourist-detail'>
+                                            <p><?= htmlspecialchars($segment_detail) ?></p>
+                                        </div>
+                                        <form action='#' method='POST'>
+                                            <input type='hidden' name='edit_segment_id' value='<?= $segment_id ?>'>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <?php else: ?>
+                        <div class='tree-point'>
+                            <div class='point-card'>
+                                <div class='point-info'>
+                                    <div class='point-detail'>
+                                        <div>
+                                            <span class='point-icon material-symbols-rounded' style='color:#666;'><?= $segment_icon_name ?></span>
+                                            <div class='point-name'>
+                                                <h5 class='point-card-time' style='margin: 0 10px;'><?= $start_time ?></h5>
+                                                <h5 class='point-card-name'><?= htmlspecialchars($segment_name) ?></h5>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <form action='#' method='POST'>
+                <input type='text' name='update_segment_prompt' class='feedback-text' placeholder='改善してほしい箇所、要望を具体的に入力してください'>
+                <button type='submit' class='basic-btn blue-btn'>再生成</button>
+            </form>
+        </div>
+    </div>
+<?php
+}
+?>
+
+<div class='modal-outline music-play' id='music_modal_outline'>
+    <div class='modal-area music-modal-area'>
+        <button onClick='modal_close()' class='model-close-btn'>
+            <span class='material-symbols-rounded'>close</span>
+        </button>
+        <iframe width="100%" 
+            src="https://www.youtube.com/embed/【動画ID】" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+
 </body>
 <script>
     function modal_close(){
         const modal = document.getElementById('modal_outline')
         modal.style.display = 'none';
+    }
+
+    function play_music(){
+        const music_modal = document.getElementById('music_modal_outline')
+        music_modal.style.display = 'block';
     }
 </script>
 </html>

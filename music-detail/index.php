@@ -67,22 +67,23 @@ session_start();
         <br>
         <div class="basic-form-box">
             <p class="input-name">曲名</span></p>
-            <?= $songName ?>
+            <p><?= $songName ?></p>
         </div>
         <div class="basic-form-box">
             <p class="input-name">アーティスト名</span></p>
-            <?= $singerName ?>
+            <p><?= $singerName ?></p>
         </div>
         <div class="basic-form-box">
             <p class="input-name">ゆかりの地域</span></p>
-            <?= $pref_name ?>
+            <p><?= $pref_name ?></p>
         </div>
         <div class="basic-form-box">
             <p class="input-name">楽曲リンク</span></p>
-            <?= $link ?>
+            <p><?= $link ?></p>
         </div>
         <div class="basic-form-box">
-            <p class="input-name">いいね</span></p><?= $good ?>
+            <p class="input-name">いいね</span></p>
+            <p><?= $good ?></p>
         </div>
         </div>
         </sction>

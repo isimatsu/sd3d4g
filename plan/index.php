@@ -207,36 +207,32 @@
                         <span class='point-icon material-symbols-rounded'>queue_music</span>
                         <p><?=$trip_info['trip_name']?>のプレイリスト</p>
                     </div>
-                    <div class="planpage-music-list-card">
-                        <div>
-                            <p class="music-name">ここにタイトル</p>
-                            <p class="music-aname">アーティスト名</p>
-                        </div>
-                        <div>
-                            <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
-                            <button><span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span></button>
-                        </div>
-                    </div><!--music-list-->
-                    <div class="planpage-music-list-card">
-                        <div>
-                            <p class="music-name">ここにタイトル</p>
-                            <p class="music-aname">アーティスト名</p>
-                        </div>
-                        <div>
-                            <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
-                            <button><span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span></button>
-                        </div>
-                    </div><!--music-list-->
-                    <div class="planpage-music-list-card">
-                        <div>
-                            <p class="music-name">ここにタイトル</p>
-                            <p class="music-aname">アーティスト名</p>
-                        </div>
-                        <div>
-                            <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
-                            <button><span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span></button>
-                        </div>
-                    </div><!--music-list-->
+                    <?php
+                        $sql = "SELECT * FROM `song` WHERE `trip_id` = ? ORDER BY `trip_id` DESC";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute([$plan_id]);
+                        $music = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach($music as $row){
+                            $singer_name = $row['singer_name'];
+                            $song_name = $row['song_name'];
+                            $music_url = $row['link'];
+                            echo <<<HTML
+                                <div class="planpage-music-list-card">
+                                    <div>
+                                        <p class="music-name">{$song_name}</p>
+                                        <p class="music-aname">{$singer_name}</p>
+                                    </div>
+                                    <div>
+                                        <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
+                                        <button class="music-play-btn" data-url="{$music_url}">
+                                            <span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span>
+                                        </button>
+                                    </div>
+                                </div><!--music-list-->
+                            HTML;
+                        }
+                    ?>
                 </div>
                 <div class="plan-feedback">
                     <div class="feedback-title">
@@ -409,31 +405,77 @@ if (isset($_POST['edit_segment_id'])) {
 }
 ?>
 
+<?php
+$music_url = 'https://www.youtube.com/watch?v=TQ8WlA2GXbk' ?? ''; 
+
+if (strpos($music_url, 'watch?v=') !== false) {
+    $music_embed_url = str_replace('watch?v=', 'embed/', $music_url) . '?enablejsapi=1';
+} elseif (strpos($music_url, 'youtu.be/') !== false) {
+    $music_embed_url = str_replace('youtu.be/', 'www.youtube.com/embed/', $music_url) . '?enablejsapi=1';
+} else {
+    $music_embed_url = $music_url;
+}
+?>
+
+
 <div class='modal-outline music-play' id='music_modal_outline'>
-    <div class='modal-area music-modal-area'>
-        <button onClick='modal_close()' class='model-close-btn'>
-            <span class='material-symbols-rounded'>close</span>
-        </button>
-        <iframe width="100%" 
-            src="https://www.youtube.com/embed/【動画ID】" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen>
-        </iframe>
-    </div>
+  <div class='modal-area music-modal-area'>
+    <button onClick='music_modal_close()' class='model-close-btn play-model-close-btn'>
+      <span class='material-symbols-rounded'>close</span>
+    </button>
+
+    <iframe id="player" width="100%" height=""
+      src="<?= $music_embed_url ?>"
+      frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+    <button onclick="playVideo()">▶ 再生</button>
+    <button onclick="pauseVideo()">⏸ 停止</button>
+  </div>
 </div>
 
-</body>
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-    function modal_close(){
-        const modal = document.getElementById('modal_outline')
-        modal.style.display = 'none';
-    }
+  let player;
 
-    function play_music(){
-        const music_modal = document.getElementById('music_modal_outline')
-        music_modal.style.display = 'block';
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      events: {
+        'onReady': () => console.log('YouTubeプレイヤー準備完了')
+      }
+    });
+  }
+
+  function play_music() {
+    const music_modal = document.getElementById('music_modal_outline');
+    music_modal.style.display = 'block';
+    if (player && typeof player.playVideo === 'function') {
+      player.playVideo();
+    } else {
+      console.log('プレイヤー未準備。');
     }
+  }
+
+  function music_modal_close() {
+    const modal = document.getElementById('music_modal_outline');
+    modal.style.display = 'none';
+    if (player && typeof player.pauseVideo === 'function') {
+      player.pauseVideo();
+    }
+  }
+
+  function playVideo() {
+    if (player && typeof player.playVideo === 'function') player.playVideo();
+  }
+
+  function pauseVideo() {
+    if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
+  }
+
+  function modal_close(){
+    const modal = document.getElementById('modal_outline');
+    modal.style.display = 'none';
+  }
 </script>
+
+
 </html>

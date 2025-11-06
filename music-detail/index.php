@@ -84,6 +84,9 @@ session_start();
         <div class="basic-form-box">
             <p class="input-name">いいね</span></p>
             <p><?= $good ?></p>
+        <br>
+        <br>
+        <br>
         </div>
         </div>
         </sction>

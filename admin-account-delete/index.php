@@ -32,8 +32,8 @@ $password=$_POST['password'];
                 </a>
             </div>
             <div class="page-header">
-                <h1>登録確認</h1>
-                <p style="text-align:center;">以下の内容で登録します。よろしいですか？</p>
+                <h1>削除確認</h1>
+                <p style="text-align:center;">以下のアカウントを削除します。よろしいですか？</p>
             </div>
             <div class="page-contents">
                 <form action="#"  style="text-align:center;">
@@ -45,13 +45,17 @@ $password=$_POST['password'];
                         <p style="display: inline-block;width: 200px;color: #666;">メールアドレス：<?php echo $email; ?></p>
                     </div><!--basic-form-box-->
 
+                    <div class="basic-form-box">
+                        <p style="display: inline-block;width: 200px;color: #666;">リクエスト数：<?php echo $email; ?></p>
+                    </div><!--basic-form-box-->
+
                 </form><!--basic-form-->
 
                 <form action="../signup-complete/index.php" method="post">
                     <input type="hidden" name="user_name" value="<?=$user_name?>">
                     <input type="hidden" name="email" value="<?=$email?>">
                     <input type="hidden" name="password" value="<?=$password?>">
-                <button class="basic-btn blue-btn">登録完了</a>
+                <button class="basic-btn blue-btn">削除</a>
                 </form>
                 <p></p>
                 <form action="../signup/index.php" method="post">

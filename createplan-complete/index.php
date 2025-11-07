@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -203,7 +204,7 @@ if ($httpCode === 200) {
                 ':trip_overview' => $tripData['trip_overview'],
                 ':trip_start' => $trip_start,
                 ':trip_end' => $trip_end,
-                ':user_id' => 11, // テストユーザーID
+                ':user_id' => $_SESSION['user_id'], // テストユーザーID
                 ':pref_id' => $prefId
             ]);
             
@@ -345,8 +346,8 @@ if ($httpCode === 200) {
                                 <a href="" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
                                     <div class="plan-card-detail">
                                         <div>
-                                            <p>2025/10/10 ~ 2025/10/12</p>
-                                            <h2>北海道旅行</h2>
+                                            <p><?= $trip_start ?> ~ <?= $trip_end ?></p>
+                                            <h2><?= $tripData['tripTitle']?></h2>
                                         </div>
                                     </div>
                                 </a><!--plan-card-->

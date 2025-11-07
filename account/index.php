@@ -7,20 +7,39 @@ error_reporting(E_ALL);
 
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
+        $user_name = $_SESSION['user_name'];
     }
 $pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
             dbname=LAA1682282-sd3d4g;charset=utf8',
                 'LAA1682282',
                 'Passsd3d');
-if(isset($_POST['account_name'])){
-    echo '更新内容を受け取りました';
-    $user_name=$_POST['update_name'];
-    $email=$_POST['update_email'];
-    $password=$_POST['update_password'];
 
-$sql=$pdo->prepare('INSERT INTO user(user_name,email,password)value(?,?,?)');
-$sql->execute([$user_name,$email,$password]);
+    if (isset($_POST['update_name'])) {
+    $user_name = $_POST['update_name'];    // 更新後のユーザー名
+    $email = $_POST['update_email'];       // 更新後のメールアドレス
+    $password = $_POST['update_password']; // 更新後のパスワード
+
+    $sql = $pdo->prepare('UPDATE user SET user_name = ?, email = ?, password = ? WHERE user_id = ?');
+    $sql->execute([$user_name, $email, $password, $user_id]);
+
+    $_SESSION['user_name'] = $user_name;
 }
+
+/*               
+if (isset($_POST['account_name'])) {
+    echo '更新内容を受け取りました';
+
+    $account_email = $_POST['account_name']; // 既存のメールアドレス
+    $user_name = $_POST['update_name'];
+    $email = $_POST['update_email'];
+    $password = $_POST['update_password'];
+
+    $sql = $pdo->prepare('UPDATE user SET user_name = ?, email = ?, password = ? WHERE email = ?');
+    $sql->execute([$user_name, $email, $password, $account_email]);
+}
+*/
+
+
 
 $sql=$pdo->prepare('SELECT * FROM user WHERE user_id=?');
 $sql->execute([$user_id]);
@@ -67,15 +86,15 @@ foreach($sql as $row){
                 <form action="#" class="basic-form" method="POST">
                     <div class="basic-form-box">
                         <p class="input-name">お名前</p>
-                        <input class="basic-form-input" type="text" placeholder="<?= $user_name ?>" name="apdate_name">
+                        <input class="basic-form-input" type="text" placeholder="<?= $user_name ?>" name="update_name" required>
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" type="text" placeholder="<?= $email ?>" name="apdate_email">
+                        <input class="basic-form-input" type="email" placeholder="<?= $email ?>" name="update_email" required>
                     </div><!--basic-form-box-->
                      <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" type="text" name="apdate_password">
+                        <input class="basic-form-input" type="password" name="update_password" required>
                     </div><!--basic-form-box-->
                      <button type="submit" class="basic-btn blue-btn">変更</button>
                 </form><!--basic-form-->

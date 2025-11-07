@@ -244,12 +244,6 @@
 
             </div>
             <div class="page-contents">
-
-               
-
-                
-
-
             </div>
         </sction>
     </main>

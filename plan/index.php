@@ -172,7 +172,7 @@
                                                     <div class='tourist-detail'>
                                                         <p>{$segment_detail}</p>
                                                     </div>
-                                                    <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_location_alt</span></button></form>
+                                                    <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                                 </div>
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@
                                                             <h5 class='point-card-name'>{$segment_name}</h5>
                                                         </div>
                                                     </div>
-                                                <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_location_alt</span></button></form>
+                                                <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                             </div>
                                         </div>
                                     </div><!--point-->
@@ -287,9 +287,11 @@ if (isset($_POST['edit_segment_id'])) {
                 <span class='material-symbols-rounded'>close</span>
             </button>
             <div class='edit-modal-title'>
-                <span class='material-symbols-rounded'>edit_location_alt</span>
-                <h3>選択された箇所の<br>旅程を変更します</h3>
+                <span class='material-symbols-rounded'>edit_note</span>
+                <h3>選択された箇所の<br>メモを編集します</h3>
             </div>
+
+            <h5 class="plan-edit-">選択行程</h5>
 
             <?php foreach ($segment as $parts_tree): 
                 $segment_id = $parts_tree['segment_id'];

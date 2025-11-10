@@ -356,7 +356,17 @@ if ($httpCode === 200) {
                                     </div>
                                 </a><!--plan-card-->
                             </div>
-                            <a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>
+                            <form action="../plan-list/" method="post">
+                                <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture ?>">
+                                <input type="hidden" name="departure_prefecture" value="<?php $$departure_prefecture ?>">
+                                <input type="hidden" name="companion" value="<?php $$companion ?>">
+                                <input type="hidden" name="trip_start" value="<?php $$trip_start ?>">
+                                <input type="hidden" name="trip_end" value="<?php $$trip_end ?>">
+                                <input type="hidden" name="move" value="<?php $$move ?>">
+                                <input type="hidden" name="special_requests" value="<?php $special_requests ?>">
+                                <button class="basic-btn blue-btn">さっそく確認する</button>
+                            </form>
+                            <!--<a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>-->
                         </div>
                     </div>
                 </div>

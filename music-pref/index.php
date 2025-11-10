@@ -16,16 +16,33 @@
             $password,
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
+        }catch(PDOException $e){
+            die("データベース接続エラー： " . htmlspecialchars($e->getMessage(),ENT_QUOTES,'UTF-8'));
+        }
 
-    // goodの多い順で最大50件取得
-    $sql = "SELECT * FROM songs ORDER BY good DESC LIMIT 50";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    $songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //URLからpref_id取得
+        $pref_id = isset($_GET['pref_id']) ? intval($_GET['pref_id']) : null;
+        if ($pref_id === null) exit("県IDが指定されていません");
 
-    }catch(PDOException $e){
-        die("データベース接続エラー： " . htmlspecialchars($e->getMessage(),ENT_QUOTES,'UTF-8'));
-    }
+        //対象県名取得
+        $pref_stmt = $pdo->prepare("SELECT pref_name FROM pref WHERE pref_id=:pref_id");
+        $pref_stmt->bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
+        $pref_stmt->execute();
+        $pref_row = $pref_stmt->fetch();
+        $pref_name = $pref_row ? $pref_row['pref_name'] : "不明な県";
+
+        //曲データ取得
+        $sql = "SELECT * FROM song WHERE pref_id = :pref_id ORDER BY good DESC LIMIT 50";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $pref_song = $stmt->fetchAll();
+    
+        $rank_colors = [
+                1 => "#E6B422",
+                2 => "#b5b5b4ff",
+                3 => "#b87333"
+            ];
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +65,45 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
+
+            <div class="page-header">
+                <a href="index.php?pref_id=<?= $pref_id ?>">戻る</a>
+                <h1><?= htmlspecialchars($pref_name) ?>のランキング</h1>
+            </div>
+            <?php if (empty($pref_song)): ?>
+                <p>表示できる曲がありません。</p>
+            <?php else: ?>
+
+            <div class="page-contents">
+                <?php $rank = 1; foreach ($pref_songs as $song): ?>
+                    <div class="music-card">
+                        <div class="music-info">
+                            <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?? '#000000' ?>;">#<?= $rank ?></p>
+                                <img class="music-img" src="<?= htmlspecialchars($song['image_path']) ?>">
+                            <p><?= htmlspecialchars($song['song_name']) ?></p>
+                        </div>
+                        <div class="music-action-btn">
+                            <a href="<?= htmlspecialchars($song['link']) ?>">
+                                <span class="music-play material-symbols-rounded">play_circle</span>
+                            </a>
+                                <!-- goodボタンの機能は未実装です-->
+                                <span class="music-favorite material-symbols-rounded">favorite</span>
+                        </div>
+                    </div><!--music-card-->
+                <?php $rank++; endforeach; ?>
+            <?php endif; ?>
+            </div>
+
+        </sction>
+    </main>
+    <div class="menu-bar-area">
+        <?php include '../assets/include/menu-bar.php'?>
+    </div>
+</body>
+
+</html>
+
+<!-- 既存コード
             <div class="page-header">
                 <a href="../music-rank/index.php">戻る</a>
                 <h1>○○県のランキング</h1>
@@ -63,7 +119,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: #b5b5b4ff ;">#2</p>
@@ -74,7 +130,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: #b87333 ;">#3</p>
@@ -85,7 +141,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#4</p>
@@ -96,7 +152,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#5</p>
@@ -107,7 +163,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#6</p>
@@ -118,7 +174,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#7</p>
@@ -129,7 +185,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#8</p>
@@ -140,7 +196,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#9</p>
@@ -151,7 +207,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><--music-card--
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: black ;">#10</p>
@@ -162,15 +218,5 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
-                
-
-            </div>
-        </sction>
-    </main>
-    <div class="menu-bar-area">
-        <?php include '../assets/include/menu-bar.php'?>
-    </div>
-</body>
-
-</html>
+                </div>
+-->

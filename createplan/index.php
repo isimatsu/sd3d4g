@@ -125,10 +125,10 @@
                             <option value="沖縄県">沖縄県</option>
                         </select>
 
-                        <div class="popularity-spot">
+                        <form class="popularity-spot" method="GET" action="../createplan-complete/">
                         <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
                         <label class="pref-select-btn">
-                            <input type="submit" value="">
+                            <input type="submit" name="popularity" value="京都" hidden>
                             <div class="pref-icon" style="background-color: #F6F4F2;">
                                 <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
                             </div>
@@ -157,7 +157,7 @@
                                 <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
                             </div>
                         </label><!--pref-select-btn-->
-                        </div>
+                        </form>
                     </div>
                     <div class="question-card">
                         <div class="question-title">

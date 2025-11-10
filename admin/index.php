@@ -29,14 +29,41 @@
         <span>リクエスト数</span>
         <span></span>
       </div>
+<?php
+    // DB接続
+    $pdo=new PDO(
+	    'mysql:host=mysql326.phy.lolipop.lan;
+            dbname=LAA1682282-sd3d4g;charset=utf8',
+              'LAA1682282',
+              'Passsd3d');
 
-      <!-- 繰り返し部分 -->
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
+      $sql = "
+        SELECT 
+            u.user_id,
+            u.user_name,
+            COUNT(t.trip_id) AS trip_count
+        FROM user u
+        LEFT JOIN trip t ON u.user_id = t.user_id
+        GROUP BY u.user_id, u.user_name
+        ORDER BY u.user_id ASC
+        ";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<form action='../admin-account-delete/index.php' method='post'>
+  <?php foreach ($users as $user): ?>
+            <div class="user-row">
+                <span><?= htmlspecialchars($user['user_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                <span><?= (int)$user['trip_count'] ?></span>
+            </div>
+            <button class="basic-btn gray-btn">削除</a>
+        <?php endforeach; ?>
+</form>
+
+<div class="user-row">
         <span>〇〇（アカウント名）</span>
         <span>100</span>
         <a href="#" class="delete">削除</a>

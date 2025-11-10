@@ -58,7 +58,7 @@ $password=$_POST['password'];
                 <button class="basic-btn blue-btn">削除</a>
                 </form>
                 <p></p>
-                <form action="../signup/index.php" method="post">
+                <form action="../admin/index.php" method="post">
                 <button class="basic-btn gray-btn">戻る</a>
                 </form>
                 

@@ -264,6 +264,15 @@
                         </div>
                         <input type="text" name="waypoint" class="basic-form-input" placeholder="地域、名所を入力">
                     </div>
+                    <div class="question-card">
+                        <div class="question-title">
+                            <div class="question-title-logo">
+                                <img class="" src="../assets/img/mappin3d.png">
+                            </div>
+                            <h2>特別なリクエスト</h2>
+                        </div>
+                        <input type="text" name="special_requests" class="basic-form-input" placeholder="地域、名所を入力">
+                    </div>
                     <button class="basic-btn plan-create-btn" onclick="click_load()">この条件で作成</button>
                 </form>
             </div>

@@ -14,6 +14,7 @@ $username = 'LAA1682282';
 $password = 'Passsd3d';
 
 //入力情報受け取り
+
 $destination_prefecture = $_POST['destination_prefecture'];
 $departure_prefecture = $_POST['departure_prefecture'];
 $companion = $_POST['companion'];

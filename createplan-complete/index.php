@@ -14,12 +14,14 @@ $username = 'LAA1682282';
 $password = 'Passsd3d';
 
 //入力情報受け取り
+
 $destination_prefecture = $_POST['destination_prefecture'];
 $departure_prefecture = $_POST['departure_prefecture'];
 $companion = $_POST['companion'];
 $trip_start = $_POST['trip_start'];
 $trip_end = $_POST['trip_end'];
 $move = $_POST['move'];
+$special_requests=$_POST['special_requests'];
 if($_POST['waypoint'] == ''){
     $waypoint = 'なし';
 }else{
@@ -45,6 +47,7 @@ $systemInstruction = <<<'EOT'
 　　song_id は必ず YouTube の URL を挿入してください。
 ・旅程は必ずpoint→move→pointの順、point、moveの比率は1:1が理想（目安）。はじめは（出発地）必ずpointから始めます。出発地は入力項目の「出発地」から（出発地が大雑把な場合その周辺の代表地点を採用すること
 ・入力項目「移動手段」について移動手段は「車」「公共交通」がありますが。あくまでも旅行先での移動手段であって出発地から目的地が離れている場合は飛行機や新幹線の提案を優先してください。
+・特別なリクエストはユーザーが自由に入力できる条件です。その指示に従って提案してください。
 ・おすすめの曲(移動パーツに挿入した曲のタイトルとURL一覧、URLは間違えなく再生できるものだけを掲載してください。大文字、小文字の違いが多いので注意してください。)
 [出力形式(旅程JSON)]
 出力はJSONのみとし、説明文や補足は一切出力しないでください。
@@ -89,7 +92,8 @@ $userInput = "
 ・出発日：$trip_start
 ・終了日：$trip_end
 ・移動手段：$move
-・絶対に経由する場所：$waypoint";
+・絶対に経由する場所：$waypoint
+・特別なリクエスト：$special_requests";
 
 // リクエストボディの作成
 $requestBody = [
@@ -352,7 +356,17 @@ if ($httpCode === 200) {
                                     </div>
                                 </a><!--plan-card-->
                             </div>
-                            <a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>
+                            <form action="../plan-list/" method="post">
+                                <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture ?>">
+                                <input type="hidden" name="departure_prefecture" value="<?php $$departure_prefecture ?>">
+                                <input type="hidden" name="companion" value="<?php $$companion ?>">
+                                <input type="hidden" name="trip_start" value="<?php $$trip_start ?>">
+                                <input type="hidden" name="trip_end" value="<?php $$trip_end ?>">
+                                <input type="hidden" name="move" value="<?php $$move ?>">
+                                <input type="hidden" name="special_requests" value="<?php $special_requests ?>">
+                                <button class="basic-btn blue-btn">さっそく確認する</button>
+                            </form>
+                            <!--<a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>-->
                         </div>
                     </div>
                 </div>

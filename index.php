@@ -23,9 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             echo 'メールアドレスまたはパスワードが違います。';
+            exit;
         }
     } else {
         echo 'メールアドレスとパスワードを入力してください。';
+        exit;
     }
 } else {
     if (!isset($_SESSION['user_id'])) {
@@ -135,14 +137,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </a><!--plan-card-->
                 </div>
                 <div class="new-plan-create-box">
-                    <a class="new-plan-create" href="#">
+                    <a class="new-plan-create" href="createplan/">
                         <span class="material-symbols-rounded">add_circle</span>
                         旅程を作成
                     </a>
-                    <form>
+                    <form action="createplan/" method="post">
                         <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
                         <label class="pref-select-btn">
-                            <input type="submit" value="">
+                            <input type="submit" name="" value="京都">
                             <div class="pref-icon" style="background-color: #F6F4F2;">
                                 <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
                             </div>

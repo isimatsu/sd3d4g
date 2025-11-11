@@ -3,14 +3,15 @@
     display: block;
     flex-shrink: 0;
     height: 250px;
-    margin: 0;
-    background-color: aqua;
+    margin: 10px 0;
+    background-color: #d6d6d6;
     border-radius: 30px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
     scroll-snap-align: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }   
 
 .plan-card-detail{

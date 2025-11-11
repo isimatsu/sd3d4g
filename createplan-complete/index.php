@@ -419,7 +419,17 @@ if ($httpCode === 200) {
                                     </div>
                                 </a>
                             </div>
-                            <a href="../plan-list/?trip_id=<?= $tripId ?>" class="basic-btn blue-btn">さっそく確認する</a>
+                            <form action="../plan/?trip_id=<?= $tripId ?>" method="post">
+                                <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture?>">
+                                <input type="hidden" name="departure_prefecture" value="<?php $departure_prefecture?>">
+                                <input type="hidden" name="companion" value="<?php $companion?>">
+                                <input type="hidden" name="trip_start" value="<?php $trip_start?>">
+                                <input type="hidden" name="trip_end" value="<?php $trip_end?>">
+                                <input type="hidden" name="move" value="<?php $move?>">
+                                <input type="hidden" name="$special_requests" value="<?php $special_requests?>">
+                                <input type="hidden" name="waypoint" value="<?php $waypoint?>">
+                                <button class="basic-btn blue-btn">さっそく確認する</button>
+                            </form>
                             
                             <?php if (!empty($dbSaveResult)): ?>
                             <div style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">

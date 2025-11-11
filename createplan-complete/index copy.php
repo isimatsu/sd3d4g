@@ -3,17 +3,6 @@ session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// タイムアウトを延長
-set_time_limit(300); // 5分
-
-// ログファイルに出力（デバッグ用）
-function debugLog($message) {
-    error_log(date('[Y-m-d H:i:s] ') . $message);
-}
-
-debugLog("=== 処理開始 ===");
-
 // Gemini APIキーを環境変数または直接設定
 $apiKey = 'AIzaSyDAPZGCn6Y5_jWyvb-ceUO4K66DaGltnNE';
 $model = 'gemini-2.5-flash';
@@ -25,15 +14,19 @@ $username = 'LAA1682282';
 $password = 'Passsd3d';
 
 //入力情報受け取り
-$destination_prefecture = $_POST['destination_prefecture'] ?? '';
-$departure_prefecture = $_POST['departure_prefecture'] ?? '';
-$companion = $_POST['companion'] ?? '';
-$trip_start = $_POST['trip_start'] ?? '';
-$trip_end = $_POST['trip_end'] ?? '';
-$move = $_POST['move'] ?? '';
-$special_requests = $_POST['special_requests'] ?? '';
-$waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
 
+$destination_prefecture = $_POST['destination_prefecture'];
+$departure_prefecture = $_POST['departure_prefecture'];
+$companion = $_POST['companion'];
+$trip_start = $_POST['trip_start'];
+$trip_end = $_POST['trip_end'];
+$move = $_POST['move'];
+$special_requests=$_POST['special_requests'];
+if($_POST['waypoint'] == ''){
+    $waypoint = 'なし';
+}else{
+    $waypoint = $_POST['waypoint'];
+}
 
 
 // システムプロンプト
@@ -90,7 +83,7 @@ $systemInstruction = <<<'EOT'
 }
 EOT;
 
-// ユーザー入力
+// ユーザー入力(ここに旅行の条件を入力)
 $userInput = "
 「入力項目」
 ・出発地：$departure_prefecture
@@ -127,8 +120,6 @@ $requestBody = [
     ]
 ];
 
-debugLog("=== API呼び出し開始 ===");
-
 // API エンドポイント
 $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
 
@@ -136,8 +127,6 @@ $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generat
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_TIMEOUT, 120); // 2分のタイムアウト
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30); // 接続タイムアウト30秒
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/json'
 ]);
@@ -145,32 +134,18 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-// cURLエラーチェック
-if (curl_errno($ch)) {
-    $error = curl_error($ch);
-    curl_close($ch);
-    debugLog("cURLエラー: $error");
-    die("通信エラーが発生しました: $error<br><a href='../createplan/'>戻る</a>");
-}
-
 curl_close($ch);
-
-debugLog("API応答受信 (HTTP: $httpCode, サイズ: " . strlen($response) . "bytes)");
 
 // YouTube URLから動画IDを抽出する関数
 function extractYoutubeId($url) {
     if (empty($url)) return null;
-    $parsed = parse_url($url);
-    if (isset($parsed['query'])) {
-        parse_str($parsed['query'], $params);
-        return $params['v'] ?? null;
-    }
-    return null;
+    parse_str(parse_url($url, PHP_URL_QUERY), $params);
+    return $params['v'] ?? null;
 }
 
 // 曲名とアーティスト名を分割する関数
 function parseSongTitle($title) {
+    // "曲名 - アーティスト名" の形式を想定
     $parts = explode(' - ', $title, 2);
     return [
         'song_name' => trim($parts[0] ?? $title),
@@ -181,17 +156,9 @@ function parseSongTitle($title) {
 // レスポンス処理
 $dbSaveResult = '';
 $tripId = null;
-$tripData = null;
 
 if ($httpCode === 200) {
-    debugLog("=== JSON抽出開始 ===");
-    
     $responseData = json_decode($response, true);
-    
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        debugLog("JSONデコードエラー: " . json_last_error_msg());
-        die("APIレスポンスの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
-    }
     
     // テキスト抽出
     $resultText = '';
@@ -203,63 +170,52 @@ if ($httpCode === 200) {
         }
     }
     
-    debugLog("抽出テキスト長: " . strlen($resultText));
-    
     // JSONを抽出
     $jsonText = $resultText;
     if (preg_match('/```json\s*(.*?)\s*```/s', $resultText, $matches)) {
         $jsonText = $matches[1];
-        debugLog("JSONコードブロックを検出");
     } elseif (preg_match('/```\s*(.*?)\s*```/s', $resultText, $matches)) {
         $jsonText = $matches[1];
-        debugLog("コードブロックを検出");
     }
     
     // JSONをパース
     $tripData = json_decode($jsonText, true);
     
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        debugLog("旅程JSONパースエラー: " . json_last_error_msg());
-        debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
-        die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
-    }
-    
-    debugLog("JSON解析成功");
-    
     // データベースに保存
     if ($tripData && isset($tripData['itinerary'])) {
-        debugLog("=== DB保存開始 ===");
-        
         try {
             $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
-            debugLog("DB接続成功");
-            
             // トランザクション開始
             $pdo->beginTransaction();
             
-            // 目的地の都道府県IDを取得
+            // 旅行日数を計算
+            $startDate = new DateTime($tripData['itinerary'][0]['start_time']);
+            $endDate = new DateTime(end($tripData['itinerary'])['end_time']);
+            $tripDays = $endDate->diff($startDate)->days + 1;
+            
+            // 目的地の都道府県IDを取得（ここでは北海道=1と仮定）
             $prefId = 1; // 実際には目的地から動的に取得すべき
             
             // 1. tripテーブルにデータを挿入
-            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_start, trip_end, user_id, pref_id) 
+            $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_start, trip_end,user_id, pref_id) 
                               VALUES (:trip_name, :trip_overview, :trip_start, :trip_end, :user_id, :pref_id)";
             $tripStmt = $pdo->prepare($tripInsertSql);
+            //trip_daysをtrip_start,endに変更したため一旦コメントアウト
             $tripStmt->execute([
                 ':trip_name' => $tripData['tripTitle'],
                 ':trip_overview' => $tripData['trip_overview'],
                 ':trip_start' => $trip_start,
                 ':trip_end' => $trip_end,
-                ':user_id' => $_SESSION['user_id'] ?? 11,
+                ':user_id' => $_SESSION['user_id'], // テストユーザーID
                 ':pref_id' => $prefId
             ]);
             
             $tripId = $pdo->lastInsertId();
-            debugLog("Trip挿入完了 (ID: $tripId)");
             
-            // 2. songテーブルに楽曲を挿入
-            $songMap = [];
+            // 2. songテーブルに楽曲を挿入してIDを取得
+            $songMap = []; // YouTube URL => song_id のマッピング
             
             if (isset($tripData['recommended_songs'])) {
                 $songInsertSql = "INSERT INTO song (song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
@@ -274,46 +230,35 @@ if ($httpCode === 200) {
                         ':song_name' => $parsed['song_name'],
                         ':singer_name' => $parsed['singer_name'],
                         ':link' => $song['url'],
-                        ':user_id' => $_SESSION['user_id'] ?? 11,
+                        ':user_id' => 11,
                         ':trip_id' => $tripId,
                         ':pref_id' => $prefId,
-                        ':song_time' => 0,
-                        ':image_path' => $youtubeId ? "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg" : ''
+                        ':song_time' => 0, // 再生時間は不明なので0
+                        ':image_path' => "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg"
                     ]);
                     
                     $songMap[$song['url']] = $pdo->lastInsertId();
                 }
-                
-                debugLog("楽曲挿入完了 (" . count($songMap) . "件)");
             }
             
-            // 3. ダミー楽曲を確認・作成
-            $dummySongId = null;
-            $checkDummySql = "SELECT song_id FROM song WHERE song_name = '楽曲なし' AND trip_id = :trip_id LIMIT 1";
-            $checkStmt = $pdo->prepare($checkDummySql);
-            $checkStmt->execute([':trip_id' => $tripId]);
-            $dummyResult = $checkStmt->fetch();
+            // 3. まずダミー楽曲を作成（song_id=1にする）
+            $checkDummySql = "SELECT song_id FROM song WHERE song_id = 1";
+            $checkResult = $pdo->query($checkDummySql)->fetch();
             
-            if ($dummyResult) {
-                $dummySongId = $dummyResult['song_id'];
-                debugLog("既存のダミー楽曲を使用 (ID: $dummySongId)");
-            } else {
-                $dummySongSql = "INSERT INTO song (song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
-                                 VALUES ('楽曲なし', '不明', '', :user_id, :trip_id, :pref_id, 0, '')";
+            if (!$checkResult) {
+                $dummySongSql = "INSERT INTO song (song_id, song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
+                                 VALUES (1, '楽曲なし', '不明', '', 11, :trip_id, :pref_id, 0, '')";
                 $dummySongStmt = $pdo->prepare($dummySongSql);
                 $dummySongStmt->execute([
-                    ':user_id' => $_SESSION['user_id'] ?? 11,
                     ':trip_id' => $tripId,
                     ':pref_id' => $prefId
                 ]);
-                $dummySongId = $pdo->lastInsertId();
-                debugLog("ダミー楽曲を作成 (ID: $dummySongId)");
             }
             
             // 4. trip_infoテーブルにセグメントデータを挿入
             $segmentInsertSql = "INSERT INTO trip_info 
-                                 (trip_id, segment_type, segment_info, segment_name, segment_detail, start_time, end_time, song_id) 
-                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :segment_detail, :start_time, :end_time, :song_id)";
+                                 (trip_id, segment_type, segment_info, segment_name, segment_detail,start_time, end_time, song_id) 
+                                 VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :segment_detail,:start_time, :end_time, :song_id)";
             $segmentStmt = $pdo->prepare($segmentInsertSql);
             
             $segmentTypeMap = [
@@ -321,12 +266,12 @@ if ($httpCode === 200) {
                 'point' => 2
             ];
             
-            $segmentCount = 0;
-            foreach ($tripData['itinerary'] as $index => $segment) {
-                $songIdDb = $dummySongId;
+            foreach ($tripData['itinerary'] as $segment) {
+                $songIdDb = 1; // デフォルトはダミー楽曲ID
                 
+                // 移動セグメントで楽曲URLがある場合、対応するsong_idを取得
                 if ($segment['segment_type'] === 'move' && !empty($segment['song_id'])) {
-                    $songIdDb = $songMap[$segment['song_id']] ?? $dummySongId;
+                    $songIdDb = $songMap[$segment['song_id']] ?? 1;
                 }
                 
                 $segmentStmt->execute([
@@ -334,41 +279,31 @@ if ($httpCode === 200) {
                     ':segment_type' => $segmentTypeMap[$segment['segment_type']] ?? 2,
                     ':segment_info' => $segment['segment_info'],
                     ':segment_name' => $segment['segment_name'],
-                    ':segment_detail' => $segment['segment_detail'] ?? null,
+                    ':segment_detail' => $segment['segment_detail'],
                     ':start_time' => date('H:i:s', strtotime($segment['start_time'])),
                     ':end_time' => date('H:i:s', strtotime($segment['end_time'])),
                     ':song_id' => $songIdDb
                 ]);
-                $segmentCount++;
             }
-            
-            debugLog("セグメント挿入完了 ($segmentCount 件)");
             
             // コミット
             $pdo->commit();
-            debugLog("=== DB保存完了 ===");
             
-            $dbSaveResult = "✅ データベースに保存完了！";
+            $dbSaveResult = "✅ データベースに保存完了！ (Trip ID: {$tripId}, セグメント数: " . count($tripData['itinerary']) . ", 楽曲数: " . count($songMap) . ")";
             
         } catch (PDOException $e) {
             if ($pdo->inTransaction()) {
                 $pdo->rollBack();
             }
-            debugLog("DB保存エラー: " . $e->getMessage());
-            debugLog("スタックトレース: " . $e->getTraceAsString());
             $dbSaveResult = "❌ DB保存エラー: " . $e->getMessage();
-            die($dbSaveResult . "<br><a href='../createplan/'>戻る</a>");
         }
     } else {
-        debugLog("旅程データが不正: " . print_r($tripData, true));
         $dbSaveResult = "⚠️ JSONパースに失敗しました";
-        die($dbSaveResult . "<br><a href='../createplan/'>戻る</a>");
     }
-    
-    debugLog("=== HTML出力開始 ===");
     
     // HTML表示
     ?>
+
     <!DOCTYPE html>
     <html lang="ja">
     <head>
@@ -378,6 +313,7 @@ if ($httpCode === 200) {
         <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
         <link rel="stylesheet" type="text/css" href="../assets/css/index.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
@@ -387,15 +323,16 @@ if ($httpCode === 200) {
         .complete{
             display: block;
         }
+
         .complete-card{
             display: flex;
-            justify-content: center;
             text-align: center;
-            margin-bottom: 20px;
         }
+
         .plan-card{
             width: 200px;
         }
+
         .complete-mess{
             font-size: 25px;
             font-weight: bold;
@@ -404,56 +341,45 @@ if ($httpCode === 200) {
     </style>
     <body>
         <main>
-            <section class="sm">
+            <sction class="sm">
                 <div class="page-contents">
                     <div class="page-center-content">
                         <div class="complete">
                             <p class="complete-mess">！旅程が完成しました！</p>
                             <div class="complete-card">
-                                <a href="../plan-list/?trip_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
+                                <a href="" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
                                     <div class="plan-card-detail">
                                         <div>
-                                            <p><?= htmlspecialchars($trip_start) ?> ~ <?= htmlspecialchars($trip_end) ?></p>
-                                            <h2><?= htmlspecialchars($tripData['tripTitle'] ?? 'タイトル未設定') ?></h2>
+                                            <p><?= $trip_start ?> ~ <?= $trip_end ?></p>
+                                            <h2><?= $tripData['tripTitle']?></h2>
                                         </div>
                                     </div>
-                                </a>
+                                </a><!--plan-card-->
                             </div>
-                            <form action="../plan/?trip_id=<?= $tripId ?>" method="post">
-                                <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture?>">
-                                <input type="hidden" name="departure_prefecture" value="<?php $departure_prefecture?>">
-                                <input type="hidden" name="companion" value="<?php $companion?>">
-                                <input type="hidden" name="trip_start" value="<?php $trip_start?>">
-                                <input type="hidden" name="trip_end" value="<?php $trip_end?>">
-                                <input type="hidden" name="move" value="<?php $move?>">
-                                <input type="hidden" name="$special_requests" value="<?php $special_requests?>">
-                                <input type="hidden" name="waypoint" value="<?php $waypoint?>">
+                            <form action="../plan-list/" method="post">
+                                <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture ?>">
+                                <input type="hidden" name="departure_prefecture" value="<?php $departure_prefecture ?>">
+                                <input type="hidden" name="companion" value="<?php $companion ?>">
+                                <input type="hidden" name="trip_start" value="<?php $trip_start ?>">
+                                <input type="hidden" name="trip_end" value="<?php $trip_end ?>">
+                                <input type="hidden" name="move" value="<?php $move ?>">
+                                <input type="hidden" name="special_requests" value="<?php $special_requests ?>">
                                 <button class="basic-btn blue-btn">さっそく確認する</button>
                             </form>
-                            
-                            <?php if (!empty($dbSaveResult)): ?>
-                            <div style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">
-                                <p><?= $dbSaveResult ?></p>
-                            </div>
-                            <?php endif; ?>
+                            <!--<a href="../plan-list/" class="basic-btn blue-btn">さっそく確認する</a>-->
                         </div>
                     </div>
                 </div>
-            </section>
+            </sction>
         </main>
     </body>
     </html>
     <?php
-    debugLog("=== 処理完了 ===");
 } else {
-    debugLog("APIエラー HTTP: $httpCode");
-    debugLog("レスポンス: " . substr($response, 0, 500));
     echo "<!DOCTYPE html><html><body>";
     echo "<h1>エラーが発生しました</h1>";
     echo "<p>HTTPコード: {$httpCode}</p>";
-    echo "<h3>APIからのレスポンス:</h3>";
     echo "<pre>" . htmlspecialchars($response, ENT_QUOTES, 'UTF-8') . "</pre>";
-    echo "<a href='../createplan/' style='display:inline-block; margin-top:20px; padding:10px 20px; background-color:#007bff; color:white; text-decoration:none; border-radius:5px;'>戻る</a>";
     echo "</body></html>";
 }
 ?>

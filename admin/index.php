@@ -53,54 +53,25 @@
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form action='../admin-account-delete/index.php' method='post'>
+
   <?php foreach ($users as $user): ?>
             <div class="user-row">
                 <span><?= htmlspecialchars($user['user_name'], ENT_QUOTES, 'UTF-8') ?></span>
                 <span><?= (int)$user['trip_count'] ?></span>
-            </div>
-            <button class="basic-btn gray-btn">削除</a>
-        <?php endforeach; ?>
-</form>
-
-<div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
+            <form action='../admin-account-delete/index.php' method='post'>
+                <input type="hidden" name="user_id" value="<?=$user['user_id']?>">
+                <input type="hidden" name="trip_count" value="<?= (int)$user['trip_count'] ?>">
+                <button type="submit" class="delete">削除</button>
+            </form>
+        </div>
+  <?php endforeach; ?>
+            
     </div>
-
     <div class="dots">
   <span class="dot"></span>
   <span class="dot"></span>
   <span class="dot"></span>
 </div>
-
 
             </div>
         </sction>

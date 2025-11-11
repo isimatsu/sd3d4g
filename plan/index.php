@@ -254,17 +254,17 @@
                     <form action="#">
                         <div class="feedback-btn-list">
                             <?php $id ?>
-                            <input type="radio" name="feedback" <?php $id="option1"?> class="feedback-radio" style="display: none;">
+                            <input type="radio" name="feedback"  id="option1" <?php $id="option1"?> class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-good" for="option1">
                                 <div><span class='point-icon material-symbols-rounded'>mood</span><p>良い</p></div>
                             </label>
 
-                            <input type="radio" name="feedback" <?php $id="option2"?> class="feedback-radio" style="display: none;">
+                            <input type="radio" name="feedback" id="option2" <?php $id="option2"?> class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-bad" for="option2">
                                 <div><span class='point-icon material-symbols-rounded'>sentiment_dissatisfied</span><p>良くない</p></div>
                             </label>
 
-                            <input type="radio" name="feedback" <?php $id="option3"?> class="feedback-radio" style="display: none;">
+                            <input type="radio" name="feedback" id="option3" <?php $id="option3"?> class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-verybad" for="option3">
                                 <div><span class='point-icon material-symbols-rounded'>sentiment_extremely_dissatisfied</span><p>非常に悪い</p></div>
                             </label>

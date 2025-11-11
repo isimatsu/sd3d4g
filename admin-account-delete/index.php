@@ -61,10 +61,11 @@ $password=$_POST['password'];
                 <form action="../admin/index.php" method="post">
                 <button class="basic-btn gray-btn">戻る</a>
                 </form>
-                
+        
             </div>
         </sction>
     </main>
+
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>

@@ -58,49 +58,16 @@
             <div class="user-row">
                 <span><?= htmlspecialchars($user['user_name'], ENT_QUOTES, 'UTF-8') ?></span>
                 <span><?= (int)$user['trip_count'] ?></span>
+            <button type="submit" class="delete">削除</button>
             </div>
-            <button class="basic-btn gray-btn">削除</a>
         <?php endforeach; ?>
 </form>
-
-<div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
-      <div class="user-row">
-        <span>〇〇（アカウント名）</span>
-        <span>100</span>
-        <a href="#" class="delete">削除</a>
-      </div>
     </div>
-
     <div class="dots">
   <span class="dot"></span>
   <span class="dot"></span>
   <span class="dot"></span>
 </div>
-
 
             </div>
         </sction>

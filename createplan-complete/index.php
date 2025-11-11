@@ -34,22 +34,7 @@ $move = $_POST['move'] ?? '';
 $special_requests = $_POST['special_requests'] ?? '';
 $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
 
-$destination_prefecture = $_POST['destination_prefecture'];
-$departure_prefecture = $_POST['departure_prefecture'];
-$companion = $_POST['companion'];
-$trip_start = $_POST['trip_start'];
-$trip_end = $_POST['trip_end'];
-$move = $_POST['move'];
-if($_POST['waypoint'] == ''){
-    $waypoint = 'なし';
-}else{
-    $waypoint = $_POST['waypoint'];
-}
-if($_POST['special_requests'] == ''){
-    $special_requests = 'なし';
-}else{
-    $special_requests = $_POST['special_requests'];
-}
+
 
 // システムプロンプト
 $systemInstruction = <<<'EOT'

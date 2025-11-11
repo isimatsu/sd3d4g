@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 if(!isset($_SESSION['user_id'])){
-    echo 'ログインしろ';
+    echo 'ログインしてください。';
     exit;
 }
     //DB接続情報

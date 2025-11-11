@@ -36,6 +36,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+//DB接続情報
+$host = 'mysql326.phy.lolipop.lan';
+$dbname = 'LAA1682282-sd3d4g';
+$user = 'LAA1682282';
+$pass = 'Passsd3d';
+try{
+    //DB接続
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass,
+        [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]
+    );
+    //trip_idがNULL or 空でないデータを昇順で取得
+    $sql = "SELECT * FROM trip 
+            WHERE user_id = ? 
+            AND trip_id IS NOT NULL 
+            AND trip_id <> '' 
+            ORDER BY trip_id ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$_SESSION['user_id']]);
+    $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}catch(PDOException $e){
+    die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -85,6 +113,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="page-contents">
                 <div class="hero-plan-list">
+                    <?php
+                        foreach($trips as $row){
+                            $trip_start = $row['trip_start'];
+                            $trip_end = $row['trip_end'];
+                            $trip_name = $row['trip_name'];
+                            echo `
+                            <a href="" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
+                                <div class="plan-card-detail">
+                                    <div>
+                                        <p>{$trip_start} ~ {$trip_end}</p>
+                                        <h2>{$trip_name}</h2>
+                                    </div>
+                                </div>
+                            </a><!--plan-card-->
+                            `;
+                        }
+                    ?>
                     <a href="" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
                         <div class="plan-card-detail">
                             <div>

@@ -53,15 +53,19 @@
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<form action='../admin-account-delete/index.php' method='post'>
+
   <?php foreach ($users as $user): ?>
             <div class="user-row">
                 <span><?= htmlspecialchars($user['user_name'], ENT_QUOTES, 'UTF-8') ?></span>
                 <span><?= (int)$user['trip_count'] ?></span>
-            <button type="submit" class="delete">削除</button>
-            </div>
-        <?php endforeach; ?>
-</form>
+            <form action='../admin-account-delete/index.php' method='post'>
+                <input type="hidden" name="user_id" value="<?=$user['user_id']?>">
+                <input type="hidden" name="trip_count" value="<?= (int)$user['trip_count'] ?>">
+                <button type="submit" class="delete">削除</button>
+            </form>
+        </div>
+  <?php endforeach; ?>
+            
     </div>
     <div class="dots">
   <span class="dot"></span>

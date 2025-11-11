@@ -7,7 +7,7 @@
     $host = 'mysql326.phy.lolipop.lan';
 	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
-    $pass = 'Passsd3d';
+    $password = 'Passsd3d';
 
     try {
         $pdo = new PDO(
@@ -36,7 +36,7 @@
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
         $stmt->execute();
-        $pref_song = $stmt->fetchAll();
+        $pref_songs = $stmt->fetchAll();
     
         $rank_colors = [
                 1 => "#E6B422",
@@ -61,7 +61,7 @@
 </head>
 <body>
     <main>
-        <sction class="sm">
+        <section class="sm">
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
@@ -70,7 +70,7 @@
                 <a href="index.php?pref_id=<?= $pref_id ?>">戻る</a>
                 <h1><?= htmlspecialchars($pref_name) ?>のランキング</h1>
             </div>
-            <?php if (empty($pref_song)): ?>
+            <?php if (empty($pref_songs)): ?>
                 <p>表示できる曲がありません。</p>
             <?php else: ?>
 
@@ -94,7 +94,7 @@
             <?php endif; ?>
             </div>
 
-        </sction>
+        </section>
     </main>
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>

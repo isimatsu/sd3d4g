@@ -7,7 +7,7 @@
     $host = 'mysql326.phy.lolipop.lan';
 	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
-    $pass = 'Passsd3d';
+    $password = 'Passsd3d';
 
     try {
         $pdo = new PDO(
@@ -30,7 +30,7 @@
         //全国ランキング取得
         $national_sql = "SELECT * FROM song ORDER BY good DESC LIMIT 3";
         $national_stmt = $pdo->query($national_sql);
-        $song_national = $stmt_national->fetchAll(PDO::FETCH_ASSOC);
+        $national_songs = $national_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +49,7 @@
 </head>
 <body>
     <main>
-        <sction class="sm">
+        <section class="sm">
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
@@ -77,7 +77,7 @@
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindValue(':pref_id', $pref_id, PDO::PARAM_INT);
                 $stmt->execute();
-                $song_pref = $stmt->fetchAll();
+                $pref_songs = $stmt->fetchAll();
 
                 // 順位カラー
                 $rank_colors = [
@@ -90,7 +90,7 @@
                 <?php if (empty($song_pref)): ?>
                     <p>この県には登録された曲がありません。</p>
                 <?php else: ?>
-                    <?php $rank = 1; foreach ($song_pref as $song): ?>
+                    <?php $rank = 1; foreach ($pref_songs as $song): ?>
                         <div class="music-card">
                             <div class="music-info">
                                 <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?>;">#<?= $rank ?></p>
@@ -171,7 +171,7 @@
             </div>
             <div class="page-contents">
             </div>
-        </sction>
+        </section>
     </main>
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>

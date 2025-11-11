@@ -234,6 +234,17 @@
                         }
                     ?>
                 </div>
+                <?php 
+                //if(isset($_POST['destination_prefecture'])){
+                    $destination_prefecture = $_POST['destination_prefecture'] ?? '';
+                    $departure_prefecture = $_POST['departure_prefecture'] ?? '';
+                    $companion = $_POST['companion'] ?? '';
+                    $trip_start = $_POST['trip_start'] ?? '';
+                    $trip_end = $_POST['trip_end'] ?? '';
+                    $move = $_POST['move'] ?? '';
+                    $special_requests = $_POST['special_requests'] ?? '';
+                    $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                    ?>
                 <div class="plan-feedback">
                     <div class="feedback-title">
                         <h3>提案された旅程はいかがでしたか？</h3>
@@ -242,25 +253,26 @@
                     <form action="#">
                         <div class="feedback-btn-list">
                             <?php $id ?>
-                            <input type="radio" name="feedback" <?$id="option1"?> class="feedback-radio" style="display: none;">
+                            <input type="radio" name="feedback" <?php $id="option1"?> class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-good" for="option1">
                                 <div><span class='point-icon material-symbols-rounded'>mood</span><p>良い</p></div>
                             </label>
 
-                            <input type="radio" name="feedback" <?$id="option2"?> class="feedback-radio" style="display: none;">
+                            <input type="radio" name="feedback" <?php $id="option2"?> class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-bad" for="option2">
                                 <div><span class='point-icon material-symbols-rounded'>sentiment_dissatisfied</span><p>良くない</p></div>
                             </label>
 
-                            <input type="radio" name="feedback" <?$id="option3"?> class="feedback-radio" style="display: none;">
+                            <input type="radio" name="feedback" <?php $id="option3"?> class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-verybad" for="option3">
                                 <div><span class='point-icon material-symbols-rounded'>sentiment_extremely_dissatisfied</span><p>非常に悪い</p></div>
                             </label>
                         </div>
-                        <input type="text" name="" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
+                        <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
                         <button type="submit" class="basic-btn blue-btn">再生成</button>
                     </form>
                 </div>
+                <?php //} ?>
             </div>
         </sction>
 

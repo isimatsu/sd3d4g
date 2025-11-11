@@ -141,38 +141,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <span class="material-symbols-rounded">add_circle</span>
                         旅程を作成
                     </a>
-                    <form action="createplan/" method="post">
-                        <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
-                        <label class="pref-select-btn">
-                            <input type="submit" name="" value="京都">
-                            <div class="pref-icon" style="background-color: #F6F4F2;">
-                                <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
-                            </div>
-                            <div class="pref-detail">
-                                <h5>京都</h5>
-                                <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
-                            </div>
-                        </label><!--pref-select-btn-->
-                        <label class="pref-select-btn">
-                            <input type="submit" value="">
-                            <div class="pref-icon" style="background-color: #F2F6F2;">
-                                <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
-                            </div>
-                            <div class="pref-detail">
-                                <h5>東京</h5>
-                                <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
-                            </div>
-                        </label><!--pref-select-btn-->
-                        <label class="pref-select-btn">
-                            <input type="submit" value="">
-                            <div class="pref-icon" style="background-color: #F2F6F4;">
-                                <span class="material-symbols-rounded" style="color: #94B4AB;"">nature</span>
-                            </div>
-                            <div class="pref-detail">
-                                <h5>北海道</h5>
-                                <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
-                            </div>
-                        </label><!--pref-select-btn-->
+                    <form action="createplan/" method="GET">
+                        <div class="popularity-spot">
+                            <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
+                            <button type="submit" name="popularity" value="京都">
+                                <div class="pref-select-btn" onclick="setDestination('京都府')">
+                                    <div class="pref-icon" style="background-color: #F6F4F2;">
+                                        <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
+                                    </div>
+                                    <div class="pref-detail">
+                                        <h5>京都</h5>
+                                        <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
+                                    </div>
+                                </div><!--pref-select-btn-->
+                            </button>
+                            <button type="submit" name="popularity" value="東京">
+                                <div class="pref-select-btn" onclick="setDestination('東京都')">
+                                    <div class="pref-icon" style="background-color: #F2F6F2;">
+                                        <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
+                                    </div>
+                                    <div class="pref-detail">
+                                        <h5>東京</h5>
+                                        <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
+                                    </div>
+                                </div><!--pref-select-btn-->
+                            </button>
+                            <button type="submit" name="popularity" value="北海道">
+                                <div class="pref-select-btn" onclick="setDestination('北海道')">
+                                    <div class="pref-icon" style="background-color: #F2F6F4;">
+                                        <span class="material-symbols-rounded" style="color: #94B4AB;">nature</span>
+                                    </div>
+                                    <div class="pref-detail">
+                                        <h5>北海道</h5>
+                                        <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
+                                    </div>
+                                </div><!--pref-select-btn-->
+                            </button>
+                        </div>
+
                     </form>
                 </div>
             </div>

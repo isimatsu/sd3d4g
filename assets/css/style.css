@@ -378,6 +378,10 @@ main{
   align-items: center;
 }
 
+.pref-detail{
+  text-align: left;
+}
+
 .pref-detail h5{
   font-size: 20px;
 }

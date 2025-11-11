@@ -34,13 +34,21 @@ $move = $_POST['move'] ?? '';
 $special_requests = $_POST['special_requests'] ?? '';
 $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
 
-debugLog("入力データ取得完了");
-debugLog("目的地: $destination_prefecture, 出発地: $departure_prefecture");
-
-// 必須チェック
-if (empty($destination_prefecture) || empty($departure_prefecture)) {
-    debugLog("必須項目エラー");
-    die("エラー: 必須項目が入力されていません<br><a href='../createplan/'>戻る</a>");
+$destination_prefecture = $_POST['destination_prefecture'];
+$departure_prefecture = $_POST['departure_prefecture'];
+$companion = $_POST['companion'];
+$trip_start = $_POST['trip_start'];
+$trip_end = $_POST['trip_end'];
+$move = $_POST['move'];
+if($_POST['waypoint'] == ''){
+    $waypoint = 'なし';
+}else{
+    $waypoint = $_POST['waypoint'];
+}
+if($_POST['special_requests'] == ''){
+    $special_requests = 'なし';
+}else{
+    $special_requests = $_POST['special_requests'];
 }
 
 // システムプロンプト

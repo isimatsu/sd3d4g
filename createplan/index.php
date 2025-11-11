@@ -271,7 +271,7 @@
                             </div>
                             <h2>特別なリクエスト</h2>
                         </div>
-                        <input type="text" name="special_requests" class="basic-form-input" placeholder="地域、名所を入力">
+                        <input type="text" name="special_requests" class="basic-form-input" placeholder="リクエストを入力">
                     </div>
                     <button class="basic-btn plan-create-btn" onclick="click_load()">この条件で作成</button>
                 </form>

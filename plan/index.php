@@ -234,8 +234,10 @@
                         }
                     ?>
                 </div>
-                <?php 
-                //if(isset($_POST['destination_prefecture'])){
+                
+                <div class="plan-feedback">
+                    <?php 
+                    //if(isset($_POST['destination_prefecture'])){
                     $destination_prefecture = $_POST['destination_prefecture'] ?? '';
                     $departure_prefecture = $_POST['departure_prefecture'] ?? '';
                     $companion = $_POST['companion'] ?? '';
@@ -245,7 +247,6 @@
                     $special_requests = $_POST['special_requests'] ?? '';
                     $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
                     ?>
-                <div class="plan-feedback">
                     <div class="feedback-title">
                         <h3>提案された旅程はいかがでしたか？</h3>
                         <p>「良くない」「非常に悪い」選択すると提案は<br>要望に沿って再生成されます</p>
@@ -271,8 +272,9 @@
                         <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
                         <button type="submit" class="basic-btn blue-btn">再生成</button>
                     </form>
+                    <?php //} ?>
                 </div>
-                <?php //} ?>
+                
             </div>
         </sction>
 

@@ -48,7 +48,6 @@
     align-items: center;
     display: none;
     text-align: center;
-    z-index: 9999;
 }
 
 .load-screen p{
@@ -67,7 +66,7 @@
                 <p>あなたに合った旅程を提案します。旅行先、日程、同行者を教えてください</p>
             </div>
             <div class="page-contents">
-                <form action="../createplan-complete/index.php" method="POST" id="planForm">
+                <form action="../createplan-complete/index.php" method="POST">
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
@@ -75,8 +74,8 @@
                             </div>
                             <h2>行き先は？</h2>
                         </div>
-                        <select class="question-pref select-style" name="destination_prefecture" required>
-                            <option value="">選択してください</option>
+                        <select class="question-pref select-style" name="destination_prefecture">
+                            <option value="" default>選択してください</option>
                             <option value="北海道">北海道</option>
                             <option value="青森県">青森県</option>
                             <option value="岩手県">岩手県</option>
@@ -126,37 +125,39 @@
                             <option value="沖縄県">沖縄県</option>
                         </select>
 
-                        <!-- 入れ子formを削除し、クリックイベントで選択 -->
-                        <div class="popularity-spot">
-                            <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
-                            <label class="pref-select-btn" onclick="setDestination('京都府')">
-                                <div class="pref-icon" style="background-color: #F6F4F2;">
-                                    <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
-                                </div>
-                                <div class="pref-detail">
-                                    <h5>京都</h5>
-                                    <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
-                                </div>
-                            </label><!--pref-select-btn-->
-                            <label class="pref-select-btn" onclick="setDestination('東京都')">
-                                <div class="pref-icon" style="background-color: #F2F6F2;">
-                                    <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
-                                </div>
-                                <div class="pref-detail">
-                                    <h5>東京</h5>
-                                    <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
-                                </div>
-                            </label><!--pref-select-btn-->
-                            <label class="pref-select-btn" onclick="setDestination('北海道')">
-                                <div class="pref-icon" style="background-color: #F2F6F4;">
-                                    <span class="material-symbols-rounded" style="color: #94B4AB;">nature</span>
-                                </div>
-                                <div class="pref-detail">
-                                    <h5>北海道</h5>
-                                    <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
-                                </div>
-                            </label><!--pref-select-btn-->
-                        </div>
+                        <form class="popularity-spot" method="GET" action="../createplan-complete/">
+                        <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
+                        <label class="pref-select-btn">
+                            <input type="submit" name="popularity" value="京都" hidden>
+                            <div class="pref-icon" style="background-color: #F6F4F2;">
+                                <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>京都</h5>
+                                <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F2F6F2;">
+                                <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>東京</h5>
+                                <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        <label class="pref-select-btn">
+                            <input type="submit" value="">
+                            <div class="pref-icon" style="background-color: #F2F6F4;">
+                                <span class="material-symbols-rounded" style="color: #94B4AB;"">nature</span>
+                            </div>
+                            <div class="pref-detail">
+                                <h5>北海道</h5>
+                                <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
+                            </div>
+                        </label><!--pref-select-btn-->
+                        </form>
                     </div>
                     <div class="question-card">
                         <div class="question-title">
@@ -165,8 +166,8 @@
                             </div>
                             <h2>出発地は？</h2>
                         </div>
-                        <select class="question-pref select-style" name="departure_prefecture" required>
-                            <option value="">選択してください</option>
+                        <select class="question-pref select-style" name="departure_prefecture">
+                            <option value="" default>選択してください</option>
                             <option value="北海道">北海道</option>
                             <option value="青森県">青森県</option>
                             <option value="岩手県">岩手県</option>
@@ -236,9 +237,9 @@
                             <h2>滞在期間</h2>
                         </div>
                         <div class="date-input">
-                            <input type="date" name="trip_start" class="date-style" required>
+                            <input type="date" name="trip_start" class="date-style">
                             <span class="material-symbols-rounded">arrow_forward</span>
-                            <input type="date" name="trip_end" class="date-style" required>
+                            <input type="date" name="trip_end" class="date-style">
                         </div>
                     </div>
                     <div class="question-card">
@@ -250,7 +251,7 @@
                             <p style="font-size: 10px; color:#333;">※観光地での移動手段</p>
                         </div>
                         <select class="select-style" name="move">
-                            <option value="公共交通">公共交通</option>
+                            <option value="公共交通">交通交通</option>
                             <option value="車">車</option>
                         </select>
                     </div>
@@ -272,7 +273,7 @@
                         </div>
                         <input type="text" name="special_requests" class="basic-form-input" placeholder="リクエストを入力">
                     </div>
-                    <button type="button" class="basic-btn plan-create-btn" onclick="submitForm()">この条件で作成</button>
+                    <button class="basic-btn plan-create-btn" onclick="click_load()">この条件で作成</button>
                 </form>
             </div>
         </sction>
@@ -283,82 +284,12 @@
     <div class="load-screen" id="load_screen">
         <div style="text-align: center;">
             <img src="../assets/img/load.gif" width="80%">
-            <p>あなたにぴったりの<br>旅程を作成しています！</p>
+            <p>あなたにぴったりの</nav><br>旅程を作成しています！</p>
         </div>
     </div>
 </body>
 <script>
-// デバッグ用: コンソールログ出力
-console.log('=== スクリプト読み込み完了 ===');
 
-// 人気の旅行先を選択する関数
-function setDestination(prefecture) {
-    console.log('選択された都道府県:', prefecture);
-    const select = document.querySelector('select[name="destination_prefecture"]');
-    select.value = prefecture;
-    // 選択後にハイライト表示
-    select.style.backgroundColor = '#e8f5e9';
-    setTimeout(() => {
-        select.style.backgroundColor = '';
-    }, 1000);
-}
-
-// フォーム送信関数
-function submitForm() {
-    console.log('=== フォーム送信開始 ===');
-    
-    const form = document.getElementById('planForm');
-    
-    // 入力値を取得
-    const destination = form.querySelector('[name="destination_prefecture"]').value;
-    const departure = form.querySelector('[name="departure_prefecture"]').value;
-    const tripStart = form.querySelector('[name="trip_start"]').value;
-    const tripEnd = form.querySelector('[name="trip_end"]').value;
-    
-    console.log('入力値:', {
-        destination: destination,
-        departure: departure,
-        tripStart: tripStart,
-        tripEnd: tripEnd
-    });
-    
-    // バリデーション
-    if (!destination) {
-        alert('行き先を選択してください');
-        console.log('バリデーションエラー: 行き先未選択');
-        return;
-    }
-    if (!departure) {
-        alert('出発地を選択してください');
-        console.log('バリデーションエラー: 出発地未選択');
-        return;
-    }
-    if (!tripStart || !tripEnd) {
-        alert('滞在期間を入力してください');
-        console.log('バリデーションエラー: 日付未入力');
-        return;
-    }
-    
-    // 日付の妥当性チェック
-    if (new Date(tripStart) >= new Date(tripEnd)) {
-        alert('出発日は帰着日より前の日付を選択してください');
-        console.log('バリデーションエラー: 日付が不正');
-        return;
-    }
-    
-    console.log('バリデーション通過');
-    
-    // ローディング画面を表示
-    const loadScreen = document.getElementById('load_screen');
-    loadScreen.style.display = 'flex';
-    console.log('ローディング画面表示');
-    
-    // フォーム送信
-    console.log('フォーム送信実行');
-    form.submit();
-}
-
-// フェードインアニメーション
 const fadeInElements = document.querySelectorAll('.question-card');
 
 const observer = new IntersectionObserver((entries) => {
@@ -378,7 +309,11 @@ fadeInElements.forEach(element => {
     observer.observe(element);
 });
 
-console.log('=== イベントリスナー登録完了 ===');
+function click_load(){
+   const load_screen = document.getElementById('load_screen');
+   load_screen.style.display = 'flex'
+}
+
 </script>
 
 </html>

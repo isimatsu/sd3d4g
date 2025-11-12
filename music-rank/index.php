@@ -28,8 +28,14 @@
         $pref_stmt = $pdo->query($pref_sql);
         $prefs = $pref_stmt->fetchAll(PDO::FETCH_ASSOC);
         //全国ランキング取得
-        $national_sql = "SELECT * FROM song ORDER BY good DESC LIMIT 3";
-        $national_stmt = $pdo->query($national_sql);
+        $national_sql = "SELECT s.*,
+                        (SELECT COUNT(*) FROM likes WHERE song_id = s.song_id) AS like_count,
+                        EXISTS(SELECT 1 FROM likes WHERE song_id = s.song_id 
+                        AND user_id = :userid) AS is_liked
+                        FROM song s ORDER BY like_count DESC LIMIT 3";
+        $national_stmt = $pdo->prepare($national_sql);
+        $national_stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
+        $national_stmt -> execute();
         $national_songs = $national_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -73,9 +79,14 @@
             
                 <?php
                 // 曲データ取得
-                $sql = "SELECT * FROM song WHERE pref_id = :pref_id ORDER BY good DESC LIMIT 3";
+                $sql = "SELECT s.*, 
+                        (SELECT COUNT(*) FROM likes WHERE song_id = s.song_id) AS like_count,
+                        EXISTS(SELECT 1 FROM likes WHERE song_id = s.song_id 
+                        AND user_id = :userid) AS is_liked
+                        FROM song s WHERE s.pref_id = :pref_id 
+                        ORDER BY like_count DESC LIMIT 3";
                 $stmt = $pdo->prepare($sql);
-                $stmt->bindValue(':pref_id', $pref_id, PDO::PARAM_INT);
+                $stmt->bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
                 $stmt->execute();
                 $pref_songs = $stmt->fetchAll();
 
@@ -101,8 +112,16 @@
                                 <a href="<?= htmlspecialchars($song['link']) ?>">
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
-                                    <!-- goodボタンの機能は未実装です-->
-                                    <span class="music-favorite material-symbols-rounded">favorite</span>
+                                <!-- goodボタンの機能は未実装です-->
+                                <div class="good-area">
+                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
+                                        data-song-id="<?= $song['song_id'] ?>">
+                                            favorite
+                                    </span>
+                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                        <?= $song['good_count'] ?>
+                                    </span>
+                                </div>
                             </div>
                         </div><!--music-card-->
                     <?php $rank++; endforeach; ?>
@@ -125,7 +144,15 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                     <!-- goodボタンの機能は未実装です-->
-                                    <span class="music-favorite material-symbols-rounded">favorite</span>
+                                    <div class="good-area">
+                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
+                                        data-song-id="<?= $song['song_id'] ?>">
+                                            favorite
+                                    </span>
+                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                        <?= $song['good_count'] ?>
+                                    </span>
+                                </div>
                             </div>
                         </div><!--music-card-->
                     <?php $rank++; endforeach; ?>
@@ -176,6 +203,38 @@
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>
+
+    <!-- goods.phpにリクエストを送信するjs -->
+    <script>
+        document.querySelectorAll(".music-favorite").forEach(btn => {
+            btn.addEventListener("click", function() {
+                let songId = this.dataset.songId;
+
+                fetch("../ajax/goods.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "song_id=" + songId
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    if(data.status === "gooded") {
+                        this.classList.add("gooded");
+                    } else {
+                        this.classList.remove("ungooded");
+                    }
+
+                    //good数を更新
+                    if (data.good_count !== undefined) {
+                        const countSpan = document.getElementById("good-count-" + songId);
+                        countSpan.textContent = data.good_count;
+                    }
+                });
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>

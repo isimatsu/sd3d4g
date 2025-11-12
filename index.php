@@ -123,6 +123,9 @@ try{
 
                             $print_count = $print_count + 1;
                             // ヒアドキュメントで出力
+                            if($print_count == 0){
+                                echo '旅程がありません';
+                            }
                             if($print_count <= 3){
                                 if($print_count == 2){
                                 echo <<<EOT

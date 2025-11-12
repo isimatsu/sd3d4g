@@ -61,7 +61,7 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/1.jpg);">
+            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/<?=$trip_info['pref_id']?>.png);">
                 <div class="trip-title">
                     <!-- <div class="for-user">
                         <p><?= $user_name ?>さんにぴったりの旅程を作成しました。</p>

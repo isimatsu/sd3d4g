@@ -245,6 +245,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         // ========================================
         // 「良い」が選択された場合 → 保存処理
         // ========================================
+        
+        $update_sql = "UPDATE trip SET feedback = 1 WHERE trip_id = ?";
+        $stmt = $pdo->prepare($update_sql);
+        $stmt->execute([$plan_id]);
 
         
         header("Location: ../plan-list/index.php");
@@ -254,8 +258,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         // ========================================
         // 「良くない」「非常に悪い」が選択された場合 → 再生成処理
         // ========================================
-        
-        header("Location: ../createplan-complete/index.php");
+        //echo '<form action="../createplan-complete/index.php" method="POST" id="planForm">';
+        echo '<form id="planForm" action="../createplan-complete/index.php" method="POST">';
+        echo '<input type="hidden" name="destination_prefecture" value="' . htmlspecialchars($destination_prefecture) . '">';
+        echo '<input type="hidden" name="departure_prefecture" value="' . htmlspecialchars($departure_prefecture) . '">';
+        echo '<input type="hidden" name="companion" value="' . htmlspecialchars($companion) . '">';
+        echo '<input type="hidden" name="trip_start" value="' . htmlspecialchars($trip_start) . '">';
+        echo '<input type="hidden" name="trip_end" value="' . htmlspecialchars($trip_end) . '">';
+        echo '<input type="hidden" name="move" value="' . htmlspecialchars($move) . '">';
+        echo '<input type="hidden" name="special_requests" value="' . htmlspecialchars($special_requests) . '">';
+        echo '</form>';
+        echo '<script>document.getElementById("planForm").submit();</script>';
         exit;
         
     }

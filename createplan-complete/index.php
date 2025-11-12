@@ -414,7 +414,7 @@ if ($httpCode === 200) {
                 <div class="page-contents">
                     <div class="page-center-content">
                         <div class="complete">
-                            <p class="complete-mess">！旅程が完成しました！</p>
+                            <p class="complete-mess">旅程が完成しました</p>
                             <div class="complete-card">
                                 <a href="../plan-list/?trip_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
                                     <div class="plan-card-detail">
@@ -437,11 +437,7 @@ if ($httpCode === 200) {
                                 <button class="basic-btn blue-btn">さっそく確認する</button>
                             </form>
                             
-                            <?php if (!empty($dbSaveResult)): ?>
-                            <div style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">
-                                <p><?= $dbSaveResult ?></p>
-                            </div>
-                            <?php endif; ?>
+
                         </div>
                     </div>
                 </div>

@@ -69,6 +69,7 @@
                     <div>
                         <h1><?=$trip_info['trip_name']?></h1>
                         <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
+                        <p><?=$trip_info['trip_overview']?></p>
                     </div>
                 </div>
             </div>
@@ -501,9 +502,19 @@ if (strpos($music_url, 'watch?v=') !== false) {
       <span class='material-symbols-rounded'>close</span>
     </button>
 
-    <iframe id="player" width="100%" height=""
+    <iframe class="player" id="player" width="" height=""
       src="<?= $music_embed_url ?>"
       frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+    <div class="player-content">
+        <div class="music-img">
+            
+        </div>
+        <div class="music-info">
+            <p>楽曲名</p>
+            <p>アーティスト名</p>
+        </div>
+    </div>
 
     <button onclick="playVideo()">▶ 再生</button>
     <button onclick="pauseVideo()">⏸ 停止</button>

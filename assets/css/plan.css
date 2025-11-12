@@ -1,6 +1,6 @@
 .plan-hero{
     width: 100%;
-    height: 400px;
+    height: 530px;
     max-width: 500px;
     position: absolute;
     top: 0;
@@ -17,11 +17,11 @@
     padding: 0 20px;
     max-width: 500px;
     position: absolute;
-    height: 180px;
+    height: 300px;
     bottom: 0;
     display: flex;
     align-items: flex-end;
-    background-image: linear-gradient(transparent, #cce8ff 60% 100%);
+    background-image: linear-gradient(transparent, #dcefff 60% 100%);
 }
 
 .trip-title h1{
@@ -31,10 +31,15 @@
 
 .trip-title h5{
     color: #666;
+    padding: 5px 0;
+}
+
+.trip-title p{
+    line-height: 1.5;
 }
 
 .page-contents{
-    margin-top: 400px;
+    margin-top: 500px;
 }
 
 .tree-move{
@@ -301,7 +306,7 @@
     z-index: 500;
     width: 100%;
     height: 100svh;
-    background-color: #888888cf;
+    /* background-color: #888888cf; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -328,7 +333,7 @@
 
 .model-close-btn{
     position: absolute;
-    top: 20px;
+    top: 40px;
     right: 20px;
 }
 
@@ -340,10 +345,14 @@
     position: fixed;
     width: 100%;
     height: 90%;
-    background-color: #fff;
     border-radius: 40px 40px 0 0;
     bottom: 0;
     padding: 50px 20px;
+      background: #ffffffad; 
+  backdrop-filter: blur(10px);           
+  -webkit-backdrop-filter: blur(10px);             
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  box-shadow: 0 4px 30px rgba(0, 55, 255, 0.1); 
 }
 
 .music-play-youtube{
@@ -352,4 +361,14 @@
 
 .plan-edit-b{
     font-size: 20px;
+}
+
+.player{
+    display: none;
+}
+
+.music-img{
+    width: 100%;
+    height: ;
+    background-color: #d9d9d9;
 }

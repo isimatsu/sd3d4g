@@ -241,7 +241,9 @@
                             <h2>誰と行きますか?</h2>
                             <select class="select-style" name="companion">
                                 <option value="1人">1人</option>
-                                <option value="2人">2人</option>
+                                <option value="家族">家族</option>
+                                <option value="友人">友人</option>
+                                <option value="恋人">恋人</option>
                             </select>
                         </div>
                     </div>

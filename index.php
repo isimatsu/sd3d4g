@@ -114,46 +114,45 @@ try{
             <div class="page-contents">
                 <div class="hero-plan-list">
                     <?php
+                        $print_count = 0;
                         foreach($trips as $row){
+                            $trip_id = $row['trip_id'];
                             $trip_start = $row['trip_start'];
                             $trip_end = $row['trip_end'];
                             $trip_name = $row['trip_name'];
-                            echo `
-                            <a href="" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
-                                <div class="plan-card-detail">
-                                    <div>
-                                        <p>{$trip_start} ~ {$trip_end}</p>
-                                        <h2>{$trip_name}</h2>
+
+                            $print_count = $print_count + 1;
+                            // ヒアドキュメントで出力
+                            if($print_count <= 3){
+                                if($print_count == 2){
+                                echo <<<EOT
+                                <a href="plan/?plan_id={$trip_id}" class="plan-card main-card" style="background-image: url(assets/img/spot_img/1.jpg);">
+                                    <div class="plan-card-detail">
+                                        <div>
+                                            <p>{$trip_start} ~ {$trip_end}</p>
+                                            <h2>{$trip_name}</h2>
+                                        </div>
                                     </div>
-                                </div>
-                            </a><!--plan-card-->
-                            `;
+                                </a><!--plan-card-->
+                                EOT;
+                                }else{
+                                echo <<<EOT
+                                <a href="plan/?plan_id={$trip_id}" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
+                                    <div class="plan-card-detail">
+                                        <div>
+                                            <p>{$trip_start} ~ {$trip_end}</p>
+                                            <h2>{$trip_name}</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                                EOT;
+                                }
+                            }
+
+
                         }
                     ?>
-                    <a href="" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
-                        <div class="plan-card-detail">
-                            <div>
-                                <p>2025/10/10 ~ 2025/10/12</p>
-                                <h2>福岡旅行</h2>
-                            </div>
-                        </div>
-                    </a><!--plan-card-->
-                    <a href="" class="plan-card main-card" style="background-image: url(assets/img/spot_img/1.jpg);">
-                        <div class="plan-card-detail">
-                            <div>
-                                <p>2025/10/10 ~ 2025/10/12</p>
-                                <h2>北海道旅行</h2>
-                            </div>
-                        </div>
-                    </a><!--plan-card-->
-                    <a href="" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
-                        <div class="plan-card-detail">
-                            <div>
-                                <p>2025/10/10 ~ 2025/10/12</p>
-                                <h2>福岡旅行</h2>
-                            </div>
-                        </div>
-                    </a><!--plan-card-->
+
                 </div>
                 <div class="hero-music-list">
                     <a href="" class="hero-music-card main-card" style="background-image: url(assets/img/music_img/1.jpg);">

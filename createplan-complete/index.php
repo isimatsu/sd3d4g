@@ -240,7 +240,13 @@ if ($httpCode === 200) {
             $pdo->beginTransaction();
             
             // 目的地の都道府県IDを取得
-            $prefId = 1; // 実際には目的地から動的に取得すべき
+            $prefstmt=$pdo->prepare("SELECT pref_id FROM pref WHERE pref_name=?");
+            $prefstmt->execute([$destination_prefecture]);
+            $row=$prefstmt->fetch();
+            if($row){
+                $pref_id=$row['pref_id'];
+            }
+           // $pref_id = 1; // 実際には目的地から動的に取得すべき
             
             // 1. tripテーブルにデータを挿入
             $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_start, trip_end, user_id, pref_id) 
@@ -252,7 +258,7 @@ if ($httpCode === 200) {
                 ':trip_start' => $trip_start,
                 ':trip_end' => $trip_end,
                 ':user_id' => $_SESSION['user_id'] ?? 11,
-                ':pref_id' => $prefId
+                ':pref_id' => $pref_id
             ]);
             
             $tripId = $pdo->lastInsertId();
@@ -276,7 +282,7 @@ if ($httpCode === 200) {
                         ':link' => $song['url'],
                         ':user_id' => $_SESSION['user_id'] ?? 11,
                         ':trip_id' => $tripId,
-                        ':pref_id' => $prefId,
+                        ':pref_id' => $pref_id,
                         ':song_time' => 0,
                         ':image_path' => $youtubeId ? "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg" : ''
                     ]);
@@ -304,7 +310,7 @@ if ($httpCode === 200) {
                 $dummySongStmt->execute([
                     ':user_id' => $_SESSION['user_id'] ?? 11,
                     ':trip_id' => $tripId,
-                    ':pref_id' => $prefId
+                    ':pref_id' => $pref_id
                 ]);
                 $dummySongId = $pdo->lastInsertId();
                 debugLog("ダミー楽曲を作成 (ID: $dummySongId)");

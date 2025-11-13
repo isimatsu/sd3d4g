@@ -373,3 +373,17 @@
     height: ;
     background-color: #d9d9d9;
 }
+
+.good-area{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.music-favorite.gooded {
+    color: black;
+}
+
+.good-count {
+    font-size: 14px;
+}

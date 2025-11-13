@@ -18,6 +18,52 @@
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
+    $feedback_value = $_POST['feedback'];
+    $special_requests = $_POST['special_requests'] ?? '';
+    
+    if ($feedback_value == '1') {
+        // ========================================
+        // 「良い」が選択された場合 → 保存処理
+        // ========================================
+        
+        $update_sql = "UPDATE trip SET feedback = 1 WHERE trip_id = ?";
+        $stmt = $pdo->prepare($update_sql);
+        $stmt->execute([$plan_id]);
+
+        
+        header("Location: ./plan/index.php");
+        exit;
+        
+    } elseif ($feedback_value == '2' || $feedback_value == '3') {
+        // ========================================
+        // 「良くない」「非常に悪い」が選択された場合 → 再生成処理
+        // ========================================
+        $destination_prefecture = $_POST['destination_prefecture'] ?? '';
+                    $departure_prefecture = $_POST['departure_prefecture'] ?? '';
+                    $companion = $_POST['companion'] ?? '';
+                    $trip_start = $_POST['trip_start'] ?? '';
+                    $trip_end = $_POST['trip_end'] ?? '';
+                    $move = $_POST['move'] ?? '';
+                    $special_requests = $_POST['special_requests'] ?? '';
+                    $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                    echo '<form id="planForm" action="../createplan-complete/index.php" method="POST">';
+                echo '<input type="hidden" name="destination_prefecture" value="<?= htmlspecialchars($destination_prefecture, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="departure_prefecture" value="<?= htmlspecialchars($departure_prefecture, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="companion" value="<?= htmlspecialchars($companion, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="trip_start" value="<?= htmlspecialchars($trip_start, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="trip_end" value="<?= htmlspecialchars($trip_end, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="move" value="<?= htmlspecialchars($move, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="waypoint" value="<?= htmlspecialchars($waypoint, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="special_requests" value="<?= htmlspecialchars($special_requests, ENT_QUOTES, "UTF-8") ?>">';
+                echo '<input type="hidden" name="feedback_value" value="<?= htmlspecialchars($feedback_value, ENT_QUOTES, "UTF-8") ?>">';
+            echo '</form>';
+            echo '<script>document.getElementById("planForm").submit();</script>';
+        exit;
+        
+    }
+}
+
         $sql = "SELECT * FROM `trip` WHERE `trip_id` = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$plan_id]);
@@ -238,60 +284,27 @@
                 </div>
                 <?php
 // フィードバック処理
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
-    $feedback_value = $_POST['feedback'];
-    $special_requests = $_POST['special_requests'] ?? '';
-    
-    if ($feedback_value == '1') {
-        // ========================================
-        // 「良い」が選択された場合 → 保存処理
-        // ========================================
-        
-        $update_sql = "UPDATE trip SET feedback = 1 WHERE trip_id = ?";
-        $stmt = $pdo->prepare($update_sql);
-        $stmt->execute([$plan_id]);
 
-        
-        header("Location: ./plan/index.php");
-        exit;
-        
-    } elseif ($feedback_value == '2' || $feedback_value == '3') {
-        // ========================================
-        // 「良くない」「非常に悪い」が選択された場合 → 再生成処理
-        // ========================================
-        //echo '<form action="../createplan-complete/index.php" method="POST" id="planForm">';
-        echo '<form id="planForm" action="../createplan-complete/index.php" method="POST">';
-        echo '<input type="hidden" name="destination_prefecture" value="' . htmlspecialchars($destination_prefecture) . '">';
-        echo '<input type="hidden" name="departure_prefecture" value="' . htmlspecialchars($departure_prefecture) . '">';
-        echo '<input type="hidden" name="companion" value="' . htmlspecialchars($companion) . '">';
-        echo '<input type="hidden" name="trip_start" value="' . htmlspecialchars($trip_start) . '">';
-        echo '<input type="hidden" name="trip_end" value="' . htmlspecialchars($trip_end) . '">';
-        echo '<input type="hidden" name="move" value="' . htmlspecialchars($move) . '">';
-        echo '<input type="hidden" name="special_requests" value="' . htmlspecialchars($special_requests) . '">';
-        echo '<script>document.getElementById("planForm").submit();</script>';
-        echo '</form>';
-        exit;
-        
-    }
-}
 ?>
                 <div class="plan-feedback">
                     <?php 
                     if(isset($_POST['destination_prefecture'])){
-                    $destination_prefecture = $_POST['destination_prefecture'] ?? '';
-                    $departure_prefecture = $_POST['departure_prefecture'] ?? '';
-                    $companion = $_POST['companion'] ?? '';
-                    $trip_start = $_POST['trip_start'] ?? '';
-                    $trip_end = $_POST['trip_end'] ?? '';
-                    $move = $_POST['move'] ?? '';
-                    $special_requests = $_POST['special_requests'] ?? '';
-                    $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                    
                     ?>
                     <div class="feedback-title">
                         <h3>提案された旅程はいかがでしたか？</h3>
                         <p>「良くない」「非常に悪い」選択すると提案は<br>要望に沿って再生成されます</p>
                     </div>
-                    <form action="#">
+                     <form action="index.php?plan_id=<?=$plan_id?>" method="POST">
+                        <!-- 隠しフィールドで元のデータを保持 -->
+                        <input type="hidden" name="destination_prefecture" value="<?=htmlspecialchars($destination_prefecture)?>">
+                        <input type="hidden" name="departure_prefecture" value="<?=htmlspecialchars($departure_prefecture)?>">
+                        <input type="hidden" name="companion" value="<?=htmlspecialchars($companion)?>">
+                        <input type="hidden" name="trip_start" value="<?=htmlspecialchars($trip_start)?>">
+                        <input type="hidden" name="trip_end" value="<?=htmlspecialchars($trip_end)?>">
+                        <input type="hidden" name="move" value="<?=htmlspecialchars($move)?>">
+                        <input type="hidden" name="special_requests" value="<?=htmlspecialchars($special_requests)?>">
+                        <input type="hidden" name="waypoint" value="<?=htmlspecialchars($waypoint)?>">
                         <div class="feedback-btn-list">
                             <input type="radio" name="feedback"  id="option1" value="1" class="feedback-radio" style="display: none;">
                             <label class="feedback-level level-good" for="option1">

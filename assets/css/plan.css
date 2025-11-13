@@ -373,3 +373,15 @@
     height: ;
     background-color: #d9d9d9;
 }
+
+.music-info{
+
+}
+
+.music-info h2{
+    font-size: 20px;
+}
+
+.music-info h3{
+    font-size: 15px;
+}

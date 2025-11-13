@@ -416,7 +416,7 @@ if ($httpCode === 200) {
                         <div class="complete">
                             <p class="complete-mess">旅程が完成しました</p>
                             <div class="complete-card">
-                                <a href="../plan-list/?trip_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/<?= $pref_id ?>.png);">
+                                <a href="../plan-list/?plan_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/<?= $pref_id ?>.png);">
                                     <div class="plan-card-detail">
                                         <div>
                                             <p><?= htmlspecialchars($trip_start) ?> ~ <?= htmlspecialchars($trip_end) ?></p>

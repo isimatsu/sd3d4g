@@ -513,8 +513,8 @@ if (strpos($music_url, 'watch?v=') !== false) {
             
         </div>
         <div class="music-info">
-            <p>楽曲名</p>
-            <p>アーティスト名</p>
+            <h2>楽曲名</h2>
+            <h3>アーティスト名</h3>
         </div>
     </div>
 

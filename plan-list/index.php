@@ -29,7 +29,7 @@ if(!isset($_SESSION['user_id'])){
                 WHERE user_id = ? 
                 AND trip_id IS NOT NULL 
                 AND trip_id <> '' 
-                ORDER BY trip_id ASC";
+                ORDER BY trip_id DESC";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_SESSION['user_id']]);

@@ -42,7 +42,7 @@ $systemInstruction = <<<'EOT'
 【出力フォーマット】
 [出力項目]
 ・旅行のタイトル(旅程に沿ったタイトル,10文字程度)
-・旅行の概要(旅行の見どころ、条件に基づき工夫した点を含める:200文字程度)
+・旅行の概要(旅行の見どころ、条件に基づき工夫した点を含める:70文字程度)
 ・旅程JSON(itinerary)
 　→itinerary について
 	segment_type は「move」か「point」
@@ -416,7 +416,7 @@ if ($httpCode === 200) {
                         <div class="complete">
                             <p class="complete-mess">旅程が完成しました</p>
                             <div class="complete-card">
-                                <a href="../plan-list/?trip_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/1.jpg);">
+                                <a href="../plan-list/?trip_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/<?= $pref_id ?>.png);">
                                     <div class="plan-card-detail">
                                         <div>
                                             <p><?= htmlspecialchars($trip_start) ?> ~ <?= htmlspecialchars($trip_end) ?></p>

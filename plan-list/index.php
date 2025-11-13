@@ -85,7 +85,7 @@ if(!isset($_SESSION['user_id'])){
                     <!-- リンクが決まり次第加筆してください -->
                     <a href="../plan?plan_id=<?= htmlspecialchars($trip['trip_id'])?>"
                         class="plan-card main-card" 
-                        style="background-image: url(../assets/img/spot_img/<?=$trip_info['pref_id']?>.png);">
+                        style="background-image: url(../assets/img/spot_img/<?=$trip['pref_id']?>.png);">
 
                         <div class="plan-card-detail">
                             <h2><?= htmlspecialchars($trip['trip_name']) ?></h2>

@@ -497,7 +497,7 @@ if (strpos($music_url, 'watch?v=') !== false) {
 ?>
 
 
-<div class='modal-outline music-play' id='music_modal_outline'>
+<div class='modal-outline' id='music_modal_outline'>
   <div class='modal-area music-modal-area'>
     <button onClick='music_modal_close()' class='model-close-btn play-model-close-btn'>
       <span class='material-symbols-rounded'>close</span>
@@ -512,8 +512,8 @@ if (strpos($music_url, 'watch?v=') !== false) {
             
         </div>
         <div class="music-info">
-            <h2>楽曲名</h2>
-            <h3>アーティスト名</h3>
+            <h2>Pretender</h2>
+            <h3>Official髭男dism</h3>
         </div>
     </div>
 

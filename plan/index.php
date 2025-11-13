@@ -252,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         $stmt->execute([$plan_id]);
 
         
-        header("Location: ../plan-list/index.php");
+        header("Location: ./plan/index.php");
         exit;
         
     } elseif ($feedback_value == '2' || $feedback_value == '3') {
@@ -268,8 +268,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         echo '<input type="hidden" name="trip_end" value="' . htmlspecialchars($trip_end) . '">';
         echo '<input type="hidden" name="move" value="' . htmlspecialchars($move) . '">';
         echo '<input type="hidden" name="special_requests" value="' . htmlspecialchars($special_requests) . '">';
-        echo '</form>';
         echo '<script>document.getElementById("planForm").submit();</script>';
+        echo '</form>';
         exit;
         
     }
@@ -286,7 +286,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
                     $move = $_POST['move'] ?? '';
                     $special_requests = $_POST['special_requests'] ?? '';
                     $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
-                    }
                     ?>
                     <div class="feedback-title">
                         <h3>提案された旅程はいかがでしたか？</h3>
@@ -312,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
                         <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
                         <button type="submit" class="basic-btn blue-btn" id="submitBtn">再生成</button>
                     </form>
-                    <?php //} ?>
+                    <?php } ?>
                 </div>
     <script>
         // フィードバック選択時の処理

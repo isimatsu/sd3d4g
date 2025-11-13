@@ -497,7 +497,7 @@ if (strpos($music_url, 'watch?v=') !== false) {
 ?>
 
 
-<div class='modal-outline' id='music_modal_outline'>
+<div class='modal-outline music-play' id='music_modal_outline'>
   <div class='modal-area music-modal-area'>
     <button onClick='music_modal_close()' class='model-close-btn play-model-close-btn'>
       <span class='material-symbols-rounded'>close</span>

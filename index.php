@@ -120,6 +120,7 @@ try{
                             $trip_start = $row['trip_start'];
                             $trip_end = $row['trip_end'];
                             $trip_name = $row['trip_name'];
+                            $pref_id = $row['pref_id'];
 
                             $print_count = $print_count + 1;
                             // ヒアドキュメントで出力
@@ -129,7 +130,7 @@ try{
                             if($print_count <= 3){
                                 if($print_count == 2){
                                 echo <<<EOT
-                                <a href="plan/?plan_id={$trip_id}" class="plan-card main-card" style="background-image: url(assets/img/spot_img/1.jpg);">
+                                <a href="plan/?plan_id={$trip_id}" class="plan-card main-card" style="background-image: url(assets/img/spot_img/{$pref_id}.png);">
                                     <div class="plan-card-detail">
                                         <div>
                                             <p>{$trip_start} ~ {$trip_end}</p>
@@ -140,7 +141,7 @@ try{
                                 EOT;
                                 }else{
                                 echo <<<EOT
-                                <a href="plan/?plan_id={$trip_id}" class="plan-card side-card" style="background-image: url(assets/img/spot_img/40.jpg);">
+                                <a href="plan/?plan_id={$trip_id}" class="plan-card side-card" style="background-image: url(assets/img/spot_img/{$pref_id}.png);">
                                     <div class="plan-card-detail">
                                         <div>
                                             <p>{$trip_start} ~ {$trip_end}</p>

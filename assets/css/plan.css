@@ -387,10 +387,13 @@
 .musicplayer-content{
     width: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     height: ;
     background-color: #d9d9d9;
 }
 =======
+=======
+>>>>>>> 97ae3ae40dfdbc076844e2238428dc68c543ed19
     height: 100%;
 }
 
@@ -404,5 +407,9 @@
 
 .music-info h3{
     font-size: 15px;
+<<<<<<< HEAD
+}
+>>>>>>> 97ae3ae40dfdbc076844e2238428dc68c543ed19
+=======
 }
 >>>>>>> 97ae3ae40dfdbc076844e2238428dc68c543ed19

@@ -508,8 +508,8 @@ if (strpos($music_url, 'watch?v=') !== false) {
       src="<?= $music_embed_url ?>"
       frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-    <div class="player-content">
-        <div class="music-img">
+    <div class="musicplayer-content">
+        <div class="musicplayer-img">
             
         </div>
         <div class="music-info">

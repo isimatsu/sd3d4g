@@ -425,7 +425,7 @@ if ($httpCode === 200) {
                                     </div>
                                 </a>
                             </div>
-                            <form action="../plan/?trip_id=<?= $tripId ?>" method="post">
+                            <form action="../plan/?plan_id=<?= $tripId ?>" method="post">
                                 <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture?>">
                                 <input type="hidden" name="departure_prefecture" value="<?php $departure_prefecture?>">
                                 <input type="hidden" name="companion" value="<?php $companion?>">

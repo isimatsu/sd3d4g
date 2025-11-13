@@ -334,8 +334,15 @@
 
 .model-close-btn{
     position: absolute;
-    top: 40px;
+    top: 20px;
     right: 20px;
+    background-color: #fff;
+    border-radius: 60px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .music-play{
@@ -368,10 +375,15 @@
     display: none;
 }
 
-.music-img{
+.music-img {
+  width: auto; 
+  aspect-ratio: 1 / 1; 
+  background-color: #696969;
+}
+
+.player-content{
     width: 100%;
-    height: ;
-    background-color: #d9d9d9;
+    height: 100%;
 }
 
 .music-info{

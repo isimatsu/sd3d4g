@@ -34,8 +34,9 @@
 
     
     foreach($trips as $trip_info){
-        
+
     }
+    
 
     
 ?>
@@ -276,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
 ?>
                 <div class="plan-feedback">
                     <?php 
-                    //if(isset($_POST['destination_prefecture'])){
+                    if(isset($_POST['destination_prefecture'])){
                     $destination_prefecture = $_POST['destination_prefecture'] ?? '';
                     $departure_prefecture = $_POST['departure_prefecture'] ?? '';
                     $companion = $_POST['companion'] ?? '';
@@ -285,6 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
                     $move = $_POST['move'] ?? '';
                     $special_requests = $_POST['special_requests'] ?? '';
                     $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                    }
                     ?>
                     <div class="feedback-title">
                         <h3>提案された旅程はいかがでしたか？</h3>

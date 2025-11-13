@@ -416,7 +416,7 @@ if ($httpCode === 200) {
                         <div class="complete">
                             <p class="complete-mess">旅程が完成しました</p>
                             <div class="complete-card">
-                                <a href="../plan-list/?trip_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/<?= $pref_id ?>.png);">
+                                <a href="../plan-list/?plan_id=<?= $tripId ?>" class="plan-card main-card" style="background-image: url(../assets/img/spot_img/<?= $pref_id ?>.png);">
                                     <div class="plan-card-detail">
                                         <div>
                                             <p><?= htmlspecialchars($trip_start) ?> ~ <?= htmlspecialchars($trip_end) ?></p>
@@ -425,7 +425,7 @@ if ($httpCode === 200) {
                                     </div>
                                 </a>
                             </div>
-                            <form action="../plan/?trip_id=<?= $tripId ?>" method="post">
+                            <form action="../plan/?plan_id=<?= $tripId ?>" method="post">
                                 <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture?>">
                                 <input type="hidden" name="departure_prefecture" value="<?php $departure_prefecture?>">
                                 <input type="hidden" name="companion" value="<?php $companion?>">

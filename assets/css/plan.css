@@ -334,8 +334,16 @@
 
 .model-close-btn{
     position: absolute;
-    top: 40px;
+    top: 20px;
     right: 20px;
+    border-radius: 60px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .music-play{
@@ -348,12 +356,12 @@
     height: 90%;
     border-radius: 40px 40px 0 0;
     bottom: 0;
-    padding: 50px 20px;
-      background: #ffffffad; 
-  backdrop-filter: blur(10px);           
-  -webkit-backdrop-filter: blur(10px);             
-  border: 1px solid rgba(255, 255, 255, 0.3); 
-  box-shadow: 0 4px 30px rgba(0, 55, 255, 0.1); 
+    padding: 70px 20px;
+    background: #ffffffad; 
+    backdrop-filter: blur(10px);           
+    -webkit-backdrop-filter: blur(10px);             
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    box-shadow: 0 4px 30px rgba(0, 55, 255, 0.1); 
 }
 
 .music-play-youtube{
@@ -368,22 +376,33 @@
     display: none;
 }
 
-.music-img{
+.musicplayer-img {
+  width: auto; 
+  aspect-ratio: 1 / 1; 
+  margin: 0 10px;
+  background-color: #696969;
+  border-radius: 25px;
+}
+
+.musicplayer-content{
     width: 100%;
+<<<<<<< HEAD
     height: ;
     background-color: #d9d9d9;
 }
-
-.good-area{
-    display: flex;
-    align-items: center;
-    gap: 4px;
+=======
+    height: 100%;
 }
 
-.music-favorite.gooded {
-    color: black;
+.music-info{
+
 }
 
-.good-count {
-    font-size: 14px;
+.music-info h2{
+    font-size: 20px;
 }
+
+.music-info h3{
+    font-size: 15px;
+}
+>>>>>>> 97ae3ae40dfdbc076844e2238428dc68c543ed19

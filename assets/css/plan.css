@@ -348,6 +348,7 @@
 
 .music-play{
     display: none;
+    color: #333;
 }
 
 .music-modal-area{
@@ -361,7 +362,8 @@
     backdrop-filter: blur(10px);           
     -webkit-backdrop-filter: blur(10px);             
     border: 1px solid rgba(255, 255, 255, 0.3); 
-    box-shadow: 0 4px 30px rgba(0, 55, 255, 0.1); 
+    
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
 .music-play-youtube{
@@ -380,26 +382,26 @@
   width: auto; 
   aspect-ratio: 1 / 1; 
   margin: 0 10px;
-  background-color: #696969;
+  background-color: #d9d9d9;
   border-radius: 25px;
 }
 
 .musicplayer-content{
     width: 100%;
-    height: ;
-    background-color: #d9d9d9;
 }
 
 .music-info{
-
+    padding: 10px 15px;
 }
 
 .music-info h2{
-    font-size: 20px;
+    font-size: 30px;
 }
 
 .music-info h3{
     font-size: 15px;
+    color: #666;
+    padding-top: 5px;
 }
 
 .good-area{

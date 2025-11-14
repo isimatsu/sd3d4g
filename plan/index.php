@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         $stmt->execute([$plan_id]);
 
         
-        header("Location: ./index.php?plan_id=',$plan_id'");
-        exit;
+        // header("Location: ./index.php?plan_id=',$plan_id'");
+        //exit;
         
     } elseif ($feedback_value == '2' || $feedback_value == '3') {
         // ========================================

@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         $stmt->execute([$plan_id]);
 
         
-        header("Location: ./plan/index.php");
+        header("Location: ./index.php?plan_id=',$plan_id'");
         exit;
         
     } elseif ($feedback_value == '2' || $feedback_value == '3') {
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
                     $move = $_POST['move'] ?? '';
                     $special_requests = $_POST['special_requests'] ?? '';
                     $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
-                    echo '<form id="planForm" action="../createplan-complete/index.php" method="POST">';
+                    echo '<form id="planForm" action="../createplan-complete/index.php?plan_id=',$plan_id,'" method="POST">';
                 echo '<input type="hidden" name="destination_prefecture" value="<?= htmlspecialchars($destination_prefecture, ENT_QUOTES, "UTF-8") ?>">';
                 echo '<input type="hidden" name="departure_prefecture" value="<?= htmlspecialchars($departure_prefecture, ENT_QUOTES, "UTF-8") ?>">';
                 echo '<input type="hidden" name="companion" value="<?= htmlspecialchars($companion, ENT_QUOTES, "UTF-8") ?>">';
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
             </div>
             <div class="page-contents">
                 <div class="plan-tree">
-
+                
                     <!-- <div class="tree-move">
                         <div class="move-line"></div>
                         <div class="move-info">

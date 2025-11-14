@@ -403,17 +403,3 @@
     color: #666;
     padding-top: 5px;
 }
-
-.good-area{
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.music-favorite.gooded {
-    color: black;
-}
-
-.good-count {
-    font-size: 14px;
-}

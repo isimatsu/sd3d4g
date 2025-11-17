@@ -233,9 +233,53 @@ main{
   color: #f03700;
 }
 
-.music-favorite{
-  color: #ffbeb1;
-  
+.music-favorite {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #ff6d5a;
+
+  color: #ff6d5a;
+  font-size: 26px;
+
+  transition: 0.2s;
+  user-select: none;
+
+  outline: none;
+  padding: 0;
+  margin: 0;
+  border-width: 2px;
+}
+
+.music-favorite span {
+    font-size: 24px;
+}
+
+.good-area{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.music-favorite:hover {
+  background: #ffe7e3;
+}
+
+.music-favorite.gooded {  /* いいね済みの状態*/
+    background: #ff6d5a;
+    border-color: #ff6d5a;
+    color: #fff !important;
+}
+
+.good-count {
+  font-size: 14px;
+  color: #333;
 }
 
 .music-img{

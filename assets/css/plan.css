@@ -405,7 +405,9 @@
 }
 
 .musicplayer-control{
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .musicplayer-btn{

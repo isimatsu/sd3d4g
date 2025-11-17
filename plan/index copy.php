@@ -1,23 +1,16 @@
 <?php
-    session_start(); 
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);   
+    session_start();    
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
         $user_name = $_SESSION['user_name'];
     }
 
-    // plan_idのチェック
-    if (!isset($_GET['plan_id']) || empty($_GET['plan_id'])) {
-        die("旅程IDが指定されていません。");
-    }
-
+    //plan_idでDBから引っ張る
     $plan_id = $_GET['plan_id'];
 
     //DB接続情報
     $host = 'mysql326.phy.lolipop.lan';
-    $dbname = 'LAA1682282-sd3d4g';
+	$dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
     $pass = 'Passsd3d';
 
@@ -25,21 +18,11 @@
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // 旅程データ取得
         $sql = "SELECT * FROM `trip` WHERE `trip_id` = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$plan_id]);
         $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // データが存在するかチェック
-        if (empty($trips)) {
-            die("旅程データの解析に失敗しました。指定された旅程が見つかりません。(ID: " . htmlspecialchars($plan_id) . ")");
-        }
-
-        // 最初の要素を取得（trip_idで検索するので通常1件）
-        $trip_info = $trips[0];
-
-        // 旅程詳細データ取得
         $parts_sql = "SELECT * FROM `trip_info` WHERE `trip_id` = ? ORDER BY `trip_info`.`segment_id` ASC";
         $stmt = $pdo->prepare($parts_sql);
         $stmt->execute([$plan_id]);
@@ -48,6 +31,14 @@
     } catch (PDOException $e) {
         die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
     }
+
+    
+    foreach($trips as $trip_info){
+
+    }
+    
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -71,20 +62,45 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/<?=htmlspecialchars($trip_info['pref_id'])?>.png);">
+            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/<?=$trip_info['pref_id']?>.png);">
                 <div class="trip-title">
                     <!-- <div class="for-user">
-                        <p><?= htmlspecialchars($user_name) ?>さんにぴったりの旅程を作成しました。</p>
+                        <p><?= $user_name ?>さんにぴったりの旅程を作成しました。</p>
                     </div> -->
                     <div>
-                        <h1><?=htmlspecialchars($trip_info['trip_name'])?></h1>
-                        <h5><?=htmlspecialchars($trip_info['trip_start'])?>～<?=htmlspecialchars($trip_info['trip_end'])?></h5>
-                        <p><?=htmlspecialchars($trip_info['trip_overview'])?></p>
+                        <h1><?=$trip_info['trip_name']?></h1>
+                        <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
+                        <p><?=$trip_info['trip_overview']?></p>
                     </div>
                 </div>
             </div>
             <div class="page-contents">
                 <div class="plan-tree">
+                
+                    <!-- <div class="tree-move">
+                        <div class="move-line"></div>
+                        <div class="move-info">
+                            <div class="move-detail">
+                                <span class="move-icon material-symbols-rounded">travel</span>
+                                <p>移動名</p>
+                            </div>
+                        </div>
+                    </div>move -->
+                    <!-- <div class="tree-point">
+                        <div class="point-card">
+                            <div class="point-info">
+                                <div class="point-detail">
+                                    <span class="move-icon material-symbols-rounded">distance</span>
+                                    <div class="point-name">
+                                        <h5>time</h5>
+                                        <h5>aaaa</h5>
+                                        <p>dsdadadsada</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>point -->
                     <?php
                         foreach($parts as $parts_tree){
                             $segment_id = $parts_tree['segment_id'];
@@ -94,6 +110,8 @@
                             $start_time = date("H:i", strtotime($time));
                             $segment_info = $parts_tree['segment_info'];
                         
+
+                    
                             if($segment_type == 1){
                                 //移動アイコン
                                 switch($parts_tree['segment_info']):
@@ -113,7 +131,7 @@
                                         <div class='move-info'>
                                             <div class='move-detail'>
                                                 <span class='move-icon material-symbols-rounded'>{$segment_icon_name}</span>
-                                                <p>" . htmlspecialchars($segment_name) . "</p>
+                                                <p>{$segment_name}</p>
                                             </div>
                                             <button class='move-music-btn' onClick='play_music()'><span class='material-symbols-rounded'>music_note</span><p>音楽を再生</p></button>
                                         </div>
@@ -149,12 +167,12 @@
                                                         <div class='tourist-img'><span class='material-symbols-rounded'>image</span></div>
                                                         <div class='tourist-name'>
                                                             <h5 class='point-card-time'>{$start_time}</h5>
-                                                            <h4 class='point-card-name-tourist'>" . htmlspecialchars($segment_name) . "</h4>
+                                                            <h4 class='point-card-name-tourist'>{$segment_name}</h4>
                                                             
                                                         </div>
                                                     </div>
                                                     <div class='tourist-detail'>
-                                                        <p>" . htmlspecialchars($segment_detail) . "</p>
+                                                        <p>{$segment_detail}</p>
                                                     </div>
                                                     <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                                 </div>
@@ -172,7 +190,7 @@
                                                         <span class='point-icon material-symbols-rounded' style='color:#666;'>{$segment_icon_name}</span>
                                                         <div class='point-name'>
                                                             <h5 class='point-card-time' style='margin: 0 10px;'>{$start_time} </h5>
-                                                            <h5 class='point-card-name'>" . htmlspecialchars($segment_name) . "</h5>
+                                                            <h5 class='point-card-name'>{$segment_name}</h5>
                                                         </div>
                                                     </div>
                                                 <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
@@ -189,7 +207,7 @@
                 <div class="planpage-music-list">
                     <div class="planpage-music-list-title">
                         <span class='point-icon material-symbols-rounded'>queue_music</span>
-                        <p><?=htmlspecialchars($trip_info['trip_name'])?>のプレイリスト</p>
+                        <p><?=$trip_info['trip_name']?>のプレイリスト</p>
                     </div>
                     <?php
                         $sql = "SELECT * FROM `song` WHERE `trip_id` = ? ORDER BY `trip_id` DESC";
@@ -198,9 +216,9 @@
                         $music = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         foreach($music as $row){
-                            $singer_name = htmlspecialchars($row['singer_name']);
-                            $song_name = htmlspecialchars($row['song_name']);
-                            $music_url = htmlspecialchars($row['link']);
+                            $singer_name = $row['singer_name'];
+                            $song_name = $row['song_name'];
+                            $music_url = $row['link'];
                             echo <<<HTML
                                 <div class="planpage-music-list-card">
                                     <div>
@@ -218,6 +236,10 @@
                         }
                     ?>
                 </div>
+                <?php
+// フィードバック処理
+
+?>
                 <div class="plan-feedback">
                     <?php 
                     if(isset($_POST['destination_prefecture'])){?>
@@ -278,13 +300,13 @@
                 specialRequests.disabled = true;
                 specialRequests.placeholder = '保存するため入力は不要です';
                 specialRequests.style.backgroundColor = '#f0f0f0';
-                feedback_form.action = "index.php?plan_id=<?= htmlspecialchars($plan_id) ?>";
+                feedback_form.action = "index.php?plan_id=<?= $plan_id ?>"; // ← 修正
             } else {
                 submitBtn.textContent = '再生成';
                 specialRequests.disabled = false;
                 specialRequests.placeholder = '改善してほしい箇所、要望を具体的に入力してください';
                 specialRequests.style.backgroundColor = '#fff';
-                feedback_form.action = "../createplan-complete";
+                feedback_form.action = "../createplan-complete"; // ← 修正
             }
         });
     });
@@ -306,10 +328,9 @@ if (isset($_POST['edit_segment_id'])) {
     $stmt->execute([$edit_segment_id, $plan_id]);
     $segment = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (empty($segment)) {
-        echo "<!-- 編集対象のセグメントが見つかりません -->";
-    } else {
-        $edit_segment_name = $segment[0]['segment_name'];
+    foreach ($segment as $row) {
+        $edit_segment_name = $row['segment_name'];
+    }
     ?>
     <!-- HTML部分ここから -->
     <div class='modal-outline' id='modal_outline'>
@@ -435,7 +456,6 @@ if (isset($_POST['edit_segment_id'])) {
         </div>
     </div>
 <?php
-    }
 }
 ?>
 
@@ -459,7 +479,7 @@ if (strpos($music_url, 'watch?v=') !== false) {
     </button>
 
     <iframe class="player" id="player" width="" height=""
-      src="<?= htmlspecialchars($music_embed_url) ?>"
+      src="<?= $music_embed_url ?>"
       frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
     <div class="musicplayer-content">

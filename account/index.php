@@ -98,7 +98,7 @@ foreach($sql as $row){
                     </div><!--basic-form-box-->
                      <button type="submit" class="basic-btn blue-btn">変更</button>
                 </form><!--basic-form-->
-                <a href="" class="basic-btn gray-btn">ログアウト</a>
+                <a href="../signin/index.php" class="basic-btn gray-btn">ログアウト</a>
 
                 
 

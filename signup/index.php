@@ -25,15 +25,15 @@
                 <form action="../signup-check/index.php" class="basic-form" method="post">
                     <div class="basic-form-box">
                         <p class="input-name">お名前</p>
-                        <input class="basic-form-input" name="user_name" type="text" placeholder="例：田中太郎">
+                        <input class="basic-form-input" name="user_name" type="text" placeholder="例：田中太郎" required>
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">メールアドレス</p>
-                        <input class="basic-form-input" name="email" type="text" placeholder="例：abc@abc.com">
+                        <input class="basic-form-input" name="email" type="text" placeholder="例：abc@abc.com" required>
                     </div><!--basic-form-box-->
                     <div class="basic-form-box">
                         <p class="input-name">パスワード</p>
-                        <input class="basic-form-input" name="password" type="password" placeholder="例：8文字以上">
+                        <input class="basic-form-input" name="password" type="password" placeholder="例：8文字以上" required>
                     </div><!--basic-form-box-->
                      <button class="basic-btn blue-btn">新規登録</button>
                 </form><!--basic-form-->
@@ -42,8 +42,5 @@
             </div>
         </sction>
     </main>
-    <div class="menu-bar-area">
-        <?php include '../assets/include/menu-bar.php'?>
-    </div>
 </body>
 </html>

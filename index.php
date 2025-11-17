@@ -23,10 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             echo 'メールアドレスまたはパスワードが違います。';
+            echo '<a href="./signin/index.php">戻る</a>';
             exit;
         }
     } else {
         echo 'メールアドレスとパスワードを入力してください。';
+        echo '<a href="./signin/index.php">戻る</a>';
         exit;
     }
 } else {

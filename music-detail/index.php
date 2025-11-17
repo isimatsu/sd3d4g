@@ -30,15 +30,30 @@ session_start();
                         'LAA1682282',
                         'Passsd3d');
 
+
             // 2. データベースから画像パスを取得
             $sql = "SELECT song_name, singer_name, pref_id, link, good, image_path  FROM song WHERE song_id = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':id', 194, PDO::PARAM_INT); // 例: id=1の画像を取得
+            $stmt->bindValue(':id', 195, PDO::PARAM_INT); // 例: id=1の画像を取得
             $stmt->execute();
             $song = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            if (!empty($imagePath)) {
+            // URLか相対パスかを判定
+            if (preg_match('/^https?:\/\//', $imagePath)) {
+                // 外部URLの場合
+                $imageSrc = $imagePath;
+            } else {
+                // 内部パスの場合（例: ../uploads/image.jpg）
+                // サーバー構成に応じてベースパスを調整
+                $imageSrc = '../' . ltrim($imagePath, '/');
+            }
+            } else {
+            $imageSrc = null;
+            }
+
             // 3. パスを変数に格納
-            $imagePath = $song['image_path'];
+            $imagePath = $song['image_path'] ?? '';
             $songName    = htmlspecialchars($song['song_name'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
             $singerName  = htmlspecialchars($song['singer_name'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
             $pref_id     =(int)($song['pref_id'] ?? 0);
@@ -58,7 +73,7 @@ session_start();
 
             ?>
         <div class="music-detail-box">
-        <?php if (!empty($imagePath)): ?>
+        <?php if ($imagePath): ?>
             <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" alt="画像">
         <?php else: ?>
             <p>画像が見つかりませんでした。</p>

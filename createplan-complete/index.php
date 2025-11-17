@@ -4,6 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+echo $_POST['destination_prefecture'];
+
 // タイムアウトを延長
 set_time_limit(300); // 5分
 

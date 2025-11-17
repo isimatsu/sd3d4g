@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         $stmt->execute([$plan_id]);
 
         
-        header("Location: ./plan/index.php");
-        exit;
+        // header("Location: ./index.php?plan_id=',$plan_id'");
+        //exit;
         
     } elseif ($feedback_value == '2' || $feedback_value == '3') {
         // ========================================
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
                     $move = $_POST['move'] ?? '';
                     $special_requests = $_POST['special_requests'] ?? '';
                     $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
-                    echo '<form id="planForm" action="../createplan-complete/index.php" method="POST">';
+                    echo '<form id="planForm" action="../createplan-complete/index.php?plan_id=',$plan_id,'" method="POST">';
                 echo '<input type="hidden" name="destination_prefecture" value="<?= htmlspecialchars($destination_prefecture, ENT_QUOTES, "UTF-8") ?>">';
                 echo '<input type="hidden" name="departure_prefecture" value="<?= htmlspecialchars($departure_prefecture, ENT_QUOTES, "UTF-8") ?>">';
                 echo '<input type="hidden" name="companion" value="<?= htmlspecialchars($companion, ENT_QUOTES, "UTF-8") ?>">';
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
             </div>
             <div class="page-contents">
                 <div class="plan-tree">
-
+                
                     <!-- <div class="tree-move">
                         <div class="move-line"></div>
                         <div class="move-info">
@@ -288,42 +288,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
 ?>
                 <div class="plan-feedback">
                     <?php 
-                    if(isset($_POST['destination_prefecture'])){
-                    
-                    ?>
-                    <div class="feedback-title">
-                        <h3>提案された旅程はいかがでしたか？</h3>
-                        <p>「良くない」「非常に悪い」選択すると提案は<br>要望に沿って再生成されます</p>
-                    </div>
-                     <form action="index.php?plan_id=<?=$plan_id?>" method="POST">
-                        <!-- 隠しフィールドで元のデータを保持 -->
-                        <input type="hidden" name="destination_prefecture" value="<?=htmlspecialchars($destination_prefecture)?>">
-                        <input type="hidden" name="departure_prefecture" value="<?=htmlspecialchars($departure_prefecture)?>">
-                        <input type="hidden" name="companion" value="<?=htmlspecialchars($companion)?>">
-                        <input type="hidden" name="trip_start" value="<?=htmlspecialchars($trip_start)?>">
-                        <input type="hidden" name="trip_end" value="<?=htmlspecialchars($trip_end)?>">
-                        <input type="hidden" name="move" value="<?=htmlspecialchars($move)?>">
-                        <input type="hidden" name="special_requests" value="<?=htmlspecialchars($special_requests)?>">
-                        <input type="hidden" name="waypoint" value="<?=htmlspecialchars($waypoint)?>">
-                        <div class="feedback-btn-list">
-                            <input type="radio" name="feedback"  id="option1" value="1" class="feedback-radio" style="display: none;">
-                            <label class="feedback-level level-good" for="option1">
-                                <div><span class='point-icon material-symbols-rounded'>mood</span><p>良い</p></div>
-                            </label>
-
-                            <input type="radio" name="feedback" id="option2" value="2" class="feedback-radio" style="display: none;">
-                            <label class="feedback-level level-bad" for="option2">
-                                <div><span class='point-icon material-symbols-rounded'>sentiment_dissatisfied</span><p>良くない</p></div>
-                            </label>
-
-                            <input type="radio" name="feedback" id="option3" value="3" class="feedback-radio" style="display: none;">
-                            <label class="feedback-level level-verybad" for="option3">
-                                <div><span class='point-icon material-symbols-rounded'>sentiment_extremely_dissatisfied</span><p>非常に悪い</p></div>
-                            </label>
+                    if(isset($_POST['destination_prefecture'])){?>
+                        <div class="feedback-title">
+                            <h3>提案された旅程はいかがでしたか？</h3>
+                            <p>「良くない」「非常に悪い」選択すると提案は<br>要望に沿って再生成されます</p>
                         </div>
-                        <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
-                        <button type="submit" class="basic-btn blue-btn" id="submitBtn">再生成</button>
-                    </form>
+                        <form id="feedback_form"  method="POST">
+                            <!-- 隠しフィールドで元のデータを保持 -->
+                            <input type="hidden" name="destination_prefecture" value="<?=htmlspecialchars($destination_prefecture)?>">
+                            <input type="hidden" name="departure_prefecture" value="<?=htmlspecialchars($departure_prefecture)?>">
+                            <input type="hidden" name="companion" value="<?=htmlspecialchars($companion)?>">
+                            <input type="hidden" name="trip_start" value="<?=htmlspecialchars($trip_start)?>">
+                            <input type="hidden" name="trip_end" value="<?=htmlspecialchars($trip_end)?>">
+                            <input type="hidden" name="move" value="<?=htmlspecialchars($move)?>">
+                            <input type="hidden" name="special_requests" value="<?=htmlspecialchars($special_requests)?>">
+                            <input type="hidden" name="waypoint" value="<?=htmlspecialchars($waypoint)?>">
+                            <div class="feedback-btn-list">
+                                <input type="radio" name="feedback"  id="option1" value="1" class="feedback-radio" style="display: none;">
+                                <label class="feedback-level level-good" for="option1">
+                                    <div><span class='point-icon material-symbols-rounded'>mood</span><p>良い</p></div>
+                                </label>
+
+                                <input type="radio" name="feedback" id="option2" value="2" class="feedback-radio" style="display: none;">
+                                <label class="feedback-level level-bad" for="option2">
+                                    <div><span class='point-icon material-symbols-rounded'>sentiment_dissatisfied</span><p>良くない</p></div>
+                                </label>
+
+                                <input type="radio" name="feedback" id="option3" value="3" class="feedback-radio" style="display: none;">
+                                <label class="feedback-level level-verybad" for="option3">
+                                    <div><span class='point-icon material-symbols-rounded'>sentiment_extremely_dissatisfied</span><p>非常に悪い</p></div>
+                                </label>
+                            </div>
+                            <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください">
+                            <button type="submit" class="basic-btn blue-btn" id="submitBtn">再生成</button>
+                        </form>
                     <?php } ?>
                 </div>
     <script>
@@ -331,21 +329,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['feedback'])) {
         const feedbackRadios = document.querySelectorAll('.feedback-radio');
         const submitBtn = document.getElementById('submitBtn');
         const specialRequests = document.getElementById('specialRequests');
+        const feedback_form = document.getElementById('feedback_form');
         
         feedbackRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 if (this.value == '1') {
                     // 「良い」の場合 → ボタンを「保存」に変更
-                    submitBtn.textContent = '保存';
+                    submitBtn.innerText = '保存';
                     specialRequests.disabled = true;
                     specialRequests.placeholder = '保存するため入力は不要です';
                     specialRequests.style.backgroundColor = '#f0f0f0';
+                    form.action = "index.php?plan_id=<?=$plan_id?>";
                 } else {
                     // 「良くない」「非常に悪い」の場合 → ボタンを「再生成」に変更
                     submitBtn.textContent = '再生成';
                     specialRequests.disabled = false;
                     specialRequests.placeholder = '改善してほしい箇所、要望を具体的に入力してください';
                     specialRequests.style.backgroundColor = '#fff';
+                    form.action = "../createplan-complete";
                 }
             });
         });
@@ -529,9 +530,11 @@ if (strpos($music_url, 'watch?v=') !== false) {
             <h3>Official髭男dism</h3>
         </div>
     </div>
+    <div class="musicplayer-control">
+        <button class="musicplayer-btn" onclick="playVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
+        <button onclick="pauseVideo()">⏸ 停止</button>
+    </div>
 
-    <button onclick="playVideo()">▶ 再生</button>
-    <button onclick="pauseVideo()">⏸ 停止</button>
   </div>
 </div>
 

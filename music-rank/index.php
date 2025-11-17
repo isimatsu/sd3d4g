@@ -63,7 +63,6 @@
             <!-- ▼ 県選択ドロップダウン（タイトル位置に配置） -->
             <div class="page-header">
                 <h1>
-                    <label>県を選択：</label>
                     <select name="pref_id" onchange="location.href='?pref_id=' + this.value">
                         <option value="">選択してください</option>
                     <?php foreach($prefs as $pref): ?>
@@ -73,6 +72,7 @@
                         </option>
                     <?php endforeach; ?>
                     </select>
+                    <label>のランキング</label>
                 </h1>
 
                 <?php if ($pref_id !== null): ?>
@@ -143,12 +143,11 @@
                                 <a href="<?= htmlspecialchars($song['link']) ?>">
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
-                                    <!-- goodボタンの機能は未実装です-->
-                                    <div class="good-area">
-                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
+                                <div class="good-area">
+                                    <button class="music-favorite <?= $song['is_good'] ? "gooded" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
-                                            favorite
-                                    </span>
+                                        <span class="material-symbols-rounded">favorite</span>
+                                    </button>
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                         <?= $song['good_count'] ?>
                                     </span>
@@ -210,7 +209,7 @@
             btn.addEventListener("click", function() {
                 let songId = this.dataset.songId;
 
-                fetch("../ajax/goods.php", {
+                fetch("../good/goods.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: "song_id=" + songId

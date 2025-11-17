@@ -46,8 +46,5 @@ $sql->execute([$user_name,$email,$password]);
             </div>
         </sction>
     </main>
-    <div class="menu-bar-area">
-        <?php include '../assets/include/menu-bar.php'?>
-    </div>
 </body>
 </html>

@@ -1,3 +1,9 @@
+<?php 
+if(isset($_POST['out'])){
+    session_start();
+    session_destroy();
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -49,9 +55,7 @@
             </div>
         </sction>
     </main>
-    <div class="menu-bar-area">
-        <?php include '../assets/include/menu-bar.php'?>
-    </div>
+    
 </body>
 
 </html>

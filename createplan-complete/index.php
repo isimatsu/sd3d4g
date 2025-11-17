@@ -4,7 +4,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-echo $_POST['destination_prefecture'];
 
 // タイムアウトを延長
 set_time_limit(300); // 5分
@@ -220,11 +219,11 @@ if ($httpCode === 200) {
     // JSONをパース
     $tripData = json_decode($jsonText, true);
     
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        debugLog("旅程JSONパースエラー: " . json_last_error_msg());
-        debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
-        die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
-    }
+    // if (json_last_error() !== JSON_ERROR_NONE) {
+    //     debugLog("旅程JSONパースエラー: " . json_last_error_msg());
+    //     debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
+    //     die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
+    // }
     
     debugLog("JSON解析成功");
     
@@ -240,15 +239,23 @@ if ($httpCode === 200) {
             
             // トランザクション開始
             $pdo->beginTransaction();
+
             
-            // 目的地の都道府県IDを取得
             $prefstmt=$pdo->prepare("SELECT pref_id FROM pref WHERE pref_name=?");
             $prefstmt->execute([$destination_prefecture]);
-            $row=$prefstmt->fetch();
-            if($row){
-                $pref_id=$row['pref_id'];
+            $row=$prefstmt->fetch(PDO::FETCH_ASSOC);
+
+            echo "DEBUG row = ";
+            var_dump($row);
+            echo "<br>";
+
+            if ($row && isset($row['pref_id'])) {
+                $pref_id = $row['pref_id'];
+            } else {
+                echo"❌ エラー: 都道府県 '{$destination_prefecture}' が pref テーブルに存在しません。";
+                exit;
             }
-           // $pref_id = 1; // 実際には目的地から動的に取得すべき
+
             
             // 1. tripテーブルにデータを挿入
             $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_start, trip_end, user_id, pref_id) 
@@ -259,7 +266,7 @@ if ($httpCode === 200) {
                 ':trip_overview' => $tripData['trip_overview'],
                 ':trip_start' => $trip_start,
                 ':trip_end' => $trip_end,
-                ':user_id' => $_SESSION['user_id'] ?? 11,
+                ':user_id' => $_SESSION['user_id'],
                 ':pref_id' => $pref_id
             ]);
             

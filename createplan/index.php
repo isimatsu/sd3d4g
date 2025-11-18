@@ -276,6 +276,26 @@
                     <div class="question-card">
                         <div class="question-title">
                             <div class="question-title-logo">
+                                <img class="" src="../assets/img/dol.png">
+                            </div>
+                            <h2>予算</h2>
+                            <select class="select-style" name="companion">
+                                <option value="1~2万円">1~2万円</option>
+                                <option value="~3万円">~3万円</option>
+                                <option value="~4万円">~4万円</option>
+                                <option value="~5万円" selected>~5万円</option>
+                                <option value="~6万円">~6万円</option>
+                                <option value="~7万円">~7万円</option>
+                                <option value="~10万円">~10万円</option>
+                                <option value="~15万円">~15万円</option>
+                                <option value="~20万円">~20万円</option>
+                                <option value="上限なし">上限なし</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-title">
+                            <div class="question-title-logo">
                                 <img class="" src="../assets/img/mappin3d.png">
                             </div>
                             <h2>経由したい場所</h2>

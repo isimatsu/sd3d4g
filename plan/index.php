@@ -473,7 +473,7 @@ if (strpos($music_url, 'watch?v=') !== false) {
     </div>
     <div class="musicplayer-control">
         <button class="musicplayer-btn" onclick="playVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
-        <button onclick="pauseVideo()">⏸ 停止</button>
+        <button class="musicplayer-btn" onclick="pauseVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
     </div>
 
   </div>

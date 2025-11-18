@@ -233,33 +233,29 @@ main{
   color: #f03700;
 }
 
-.music-favorite {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #ff6d5a;
-
-  color: #ff6d5a;
-  font-size: 26px;
-
-  transition: 0.2s;
-  user-select: none;
-
-  outline: none;
-  padding: 0;
-  margin: 0;
-  border-width: 2px;
+.good-btn {
+    background: none;        /* 背景消す */
+    border: none;            /* 枠線消す */
+    padding: 0;              /* 余白なし */
+    margin: 0;
+    cursor: pointer;         /* クリック可能に */
+    outline: none;           /* フォーカス時の枠線消す */
 }
 
-.music-favorite span {
-    font-size: 24px;
+.good-btn:focus {
+    outline: none;
 }
+
+.good-btn .material-symbols-rounded {
+    font-size: 28px; /* お好みで調整 */
+    color: #ccc;
+    transition: 0.2s;
+}
+
+.good-btn.gooded .material-symbols-rounded {
+    color: red; /* いいね済みの色 */
+}
+
 
 .good-area{
     display: flex;
@@ -269,12 +265,6 @@ main{
 
 .music-favorite:hover {
   background: #ffe7e3;
-}
-
-.music-favorite.gooded {  /* いいね済みの状態*/
-    background: #ff6d5a;
-    border-color: #ff6d5a;
-    color: #fff !important;
 }
 
 .good-count {

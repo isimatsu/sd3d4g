@@ -428,10 +428,7 @@ if (isset($_POST['edit_segment_id'])) {
                 <?php endif; ?>
             <?php endforeach; ?>
 
-            <form action='#' method='POST'>
-                <input type='text' name='update_segment_prompt' class='feedback-text' placeholder='改善してほしい箇所、要望を具体的に入力してください'>
-                <button type='submit' class='basic-btn blue-btn'>再生成</button>
-            </form>
+
         </div>
     </div>
 <?php

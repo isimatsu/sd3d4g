@@ -438,14 +438,14 @@ if ($httpCode === 200) {
                                 </a>
                             </div>
                             <form action="../plan/?plan_id=<?= $tripId ?>" method="post">
-                                <input type="hidden" name="destination_prefecture" value="<?php $destination_prefecture?>">
-                                <input type="hidden" name="departure_prefecture" value="<?php $departure_prefecture?>">
-                                <input type="hidden" name="companion" value="<?php $companion?>">
-                                <input type="hidden" name="trip_start" value="<?php $trip_start?>">
-                                <input type="hidden" name="trip_end" value="<?php $trip_end?>">
-                                <input type="hidden" name="move" value="<?php $move?>">
-                                <input type="hidden" name="$special_requests" value="<?php $special_requests?>">
-                                <input type="hidden" name="waypoint" value="<?php $waypoint?>">
+                                <input type="hidden" name="destination_prefecture" value="<?= $destination_prefecture?>">
+                                <input type="hidden" name="departure_prefecture" value="<?= $departure_prefecture?>">
+                                <input type="hidden" name="companion" value="<?= $companion?>">
+                                <input type="hidden" name="trip_start" value="<?= $trip_start?>">
+                                <input type="hidden" name="trip_end" value="<?= $trip_end?>">
+                                <input type="hidden" name="move" value="<?= $move?>">
+                                <input type="hidden" name="special_requests" value="<?= $special_requests?>">
+                                <input type="hidden" name="waypoint" value="<?= $waypoint?>">
                                 <button class="basic-btn blue-btn">さっそく確認する</button>
                             </form>
                             

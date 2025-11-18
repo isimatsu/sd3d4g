@@ -435,23 +435,45 @@ main{
 }
 
 .seiti-jyunrei{
+  position: relative;
   width: 100%;
+  height: 150px;
   padding: 15px;
   margin-top: 20px;
   border-radius: 20px;
-  background-color: #0084FF;
+  background: radial-gradient(circle at top left, rgba(255, 107, 129, 0.3), transparent 60%),
+                        radial-gradient(circle at top right, rgba(255, 214, 10, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(78, 205, 196, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom right, rgba(255, 159, 67, 0.3), transparent 60%),
+                        white;
+}
+
+#seiti{
+    background: radial-gradient(circle at top left, rgba(255, 107, 129, 0.3), transparent 60%),
+                        radial-gradient(circle at top right, rgba(255, 214, 10, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(78, 205, 196, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom right, rgba(255, 159, 67, 0.3), transparent 60%),
+                        white;
 }
 
 .seiti-jyunrei p{
   font-size: 10px;
-  padding: 10px 0;
-  color: #999;
+  padding: 5px 0;
+  color: #606060;
 }
 
 .seiti-jyunrei h5{
-  font-size: 15px;
+  font-size: 20px;
+  color: #515151 ;
 }
 
 .seiti-jyunrei button{
-  right: 0;
+  position: absolute;
+  padding: 10px 15px;
+  border-radius: 15px;
+  margin-top: 10px;
+  background-color: #5d4037;
+  color: #EDEDED;
+  right: 15px;
+  bottom: 10px;
 }

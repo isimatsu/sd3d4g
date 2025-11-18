@@ -26,6 +26,11 @@ $username = 'LAA1682282';
 $password = 'Passsd3d';
 
 //入力情報受け取り
+if(isset($_POST['seiti'])){
+    $seiti = $_POST['seiti'] ?? '';
+    echo $seiti;
+}
+
 $destination_prefecture = $_POST['destination_prefecture'] ?? '';
 $departure_prefecture = $_POST['departure_prefecture'] ?? '';
 $companion = $_POST['companion'] ?? '';
@@ -222,11 +227,11 @@ if ($httpCode === 200) {
     // JSONをパース
     $tripData = json_decode($jsonText, true);
     
-    // if (json_last_error() !== JSON_ERROR_NONE) {
-    //     debugLog("旅程JSONパースエラー: " . json_last_error_msg());
-    //     debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
-    //     die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
-    // }
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        debugLog("旅程JSONパースエラー: " . json_last_error_msg());
+        debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
+        die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
+    }
     
     debugLog("JSON解析成功");
     

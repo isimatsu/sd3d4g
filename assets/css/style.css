@@ -234,33 +234,42 @@ main{
 }
 
 .good-btn {
-    background: none;        /* 背景消す */
-    border: none;            /* 枠線消す */
-    padding: 0;              /* 余白なし */
-    margin: 0;
-    cursor: pointer;         /* クリック可能に */
-    outline: none;           /* フォーカス時の枠線消す */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
 }
 
 .good-btn:focus {
-    outline: none;
+  outline: none;
 }
 
 .good-btn .material-symbols-rounded {
-    font-size: 28px; /* お好みで調整 */
-    color: #ccc;
-    transition: 0.2s;
+  font-size: 28px;
+  color: #ccc;
+  transition: 0.2s;
 }
 
 .good-btn.gooded .material-symbols-rounded {
-    color: red; /* いいね済みの色 */
+  color: red; /* いいね済みの色 */
 }
 
+.good-btn:hover .material-symbols-rounded {
+  transform: scale(1.2);
+  color: #999;
+}
+
+.good-btn.gooded:hover .material-symbols-rounded {
+  transform: scale(1.2);
+  color: #ff7070;
+}
 
 .good-area{
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .music-favorite:hover {

@@ -445,3 +445,9 @@ main{
   padding: 20px;
   border-radius: 10px;
 }
+
+.seiti-jyunrei{
+  width: 100%;
+  height: auto;
+  background-color: #0084FF;
+}

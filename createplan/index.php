@@ -173,6 +173,12 @@
                                     <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
                                 </div>
                             </label><!--pref-select-btn-->
+                            <div class="seiti-jyunrei">
+                                <p>聖地巡礼</p>
+                                <p>作品の舞台となった場所を巡る聖地巡礼プランを提供します。実在のロケ地を組み合わせ、
+                                    作品の世界観を楽しみながら旅できる行先オプションとして利用できます。</p>
+                                <button>機能を使う</button>
+                            </div>
                         </div>
                     </div>
                     <div class="question-card">

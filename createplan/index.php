@@ -174,11 +174,33 @@
                                 </div>
                             </label><!--pref-select-btn-->
                             <div class="seiti-jyunrei">
-                                <p>聖地巡礼</p>
+                                <h5>聖地巡礼</h5>
                                 <p>作品の舞台となった場所を巡る聖地巡礼プランを提供します。実在のロケ地を組み合わせ、
                                     作品の世界観を楽しみながら旅できる行先オプションとして利用できます。</p>
                                 <button>機能を使う</button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-title">
+                            <div class="question-title-logo">
+                                <img class="" src="../assets/img/hand.png">
+                            </div>
+                            <h2>作品を選択してください</h2>
+                            <select class="select-style" name="companion">
+                                <optgroup label="アニメ">
+                                    <option value="スラムダンク">スラムダンク</option>
+                                    <option value="君の名は。">君の名は。</option>
+                                    <option value="あの日見た花の名前を僕たちはまだ知らない。">あの日見た花の名前を僕たちはまだ知らない。</option>
+                                    <option value="スタジオジブリ作品">スタジオジブリ作品</option>
+                                </optgroup>
+                                <optgroup label="映画">
+                                    <option value="スラムダンク">スラムダンク</option>
+                                    <option value="君の名は。">君の名は。</option>
+                                    <option value="あの日見た花の名前を僕たちはまだ知らない。">あの日見た花の名前を僕たちはまだ知らない。</option>
+                                    <option value="スタジオジブリ作品">スタジオジブリ作品</option>
+                                </optgroup>
+                            </select>
                         </div>
                     </div>
                     <div class="question-card">

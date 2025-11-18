@@ -118,6 +118,9 @@
                                         data-song-id="<?= $song['song_id'] ?>">
                                             favorite
                                     </span>
+                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                        <?= $song['good_count'] ?>
+                                    </span>
                                 </div>
                             </div>
                         </div><!--music-card-->
@@ -144,6 +147,9 @@
                                     <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
                                             favorite
+                                    </span>
+                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                        <?= $song['good_count'] ?>
                                     </span>
                                 </div>
                             </div>

@@ -93,92 +93,115 @@
                             </div>
                             <h2>行き先は?</h2>
                         </div>
-                        <select class="question-pref select-style" name="destination_prefecture" required>
-                            <option value="">選択してください</option>
-                            <option value="北海道" <?php echo ($destination_value == '北海道') ? 'selected' : ''; ?>>北海道</option>
-                            <option value="青森県" <?php echo ($destination_value == '青森県') ? 'selected' : ''; ?>>青森県</option>
-                            <option value="岩手県" <?php echo ($destination_value == '岩手県') ? 'selected' : ''; ?>>岩手県</option>
-                            <option value="宮城県" <?php echo ($destination_value == '宮城県') ? 'selected' : ''; ?>>宮城県</option>
-                            <option value="秋田県" <?php echo ($destination_value == '秋田県') ? 'selected' : ''; ?>>秋田県</option>
-                            <option value="山形県" <?php echo ($destination_value == '山形県') ? 'selected' : ''; ?>>山形県</option>
-                            <option value="福島県" <?php echo ($destination_value == '福島県') ? 'selected' : ''; ?>>福島県</option>
-                            <option value="茨城県" <?php echo ($destination_value == '茨城県') ? 'selected' : ''; ?>>茨城県</option>
-                            <option value="栃木県" <?php echo ($destination_value == '栃木県') ? 'selected' : ''; ?>>栃木県</option>
-                            <option value="群馬県" <?php echo ($destination_value == '群馬県') ? 'selected' : ''; ?>>群馬県</option>
-                            <option value="埼玉県" <?php echo ($destination_value == '埼玉県') ? 'selected' : ''; ?>>埼玉県</option>
-                            <option value="千葉県" <?php echo ($destination_value == '千葉県') ? 'selected' : ''; ?>>千葉県</option>
-                            <option value="東京都" <?php echo ($destination_value == '東京都') ? 'selected' : ''; ?>>東京都</option>
-                            <option value="神奈川県" <?php echo ($destination_value == '神奈川県') ? 'selected' : ''; ?>>神奈川県</option>
-                            <option value="新潟県" <?php echo ($destination_value == '新潟県') ? 'selected' : ''; ?>>新潟県</option>
-                            <option value="富山県" <?php echo ($destination_value == '富山県') ? 'selected' : ''; ?>>富山県</option>
-                            <option value="石川県" <?php echo ($destination_value == '石川県') ? 'selected' : ''; ?>>石川県</option>
-                            <option value="福井県" <?php echo ($destination_value == '福井県') ? 'selected' : ''; ?>>福井県</option>
-                            <option value="山梨県" <?php echo ($destination_value == '山梨県') ? 'selected' : ''; ?>>山梨県</option>
-                            <option value="長野県" <?php echo ($destination_value == '長野県') ? 'selected' : ''; ?>>長野県</option>
-                            <option value="岐阜県" <?php echo ($destination_value == '岐阜県') ? 'selected' : ''; ?>>岐阜県</option>
-                            <option value="静岡県" <?php echo ($destination_value == '静岡県') ? 'selected' : ''; ?>>静岡県</option>
-                            <option value="愛知県" <?php echo ($destination_value == '愛知県') ? 'selected' : ''; ?>>愛知県</option>
-                            <option value="三重県" <?php echo ($destination_value == '三重県') ? 'selected' : ''; ?>>三重県</option>
-                            <option value="滋賀県" <?php echo ($destination_value == '滋賀県') ? 'selected' : ''; ?>>滋賀県</option>
-                            <option value="京都府" <?php echo ($destination_value == '京都府') ? 'selected' : ''; ?>>京都府</option>
-                            <option value="大阪府" <?php echo ($destination_value == '大阪府') ? 'selected' : ''; ?>>大阪府</option>
-                            <option value="兵庫県" <?php echo ($destination_value == '兵庫県') ? 'selected' : ''; ?>>兵庫県</option>
-                            <option value="奈良県" <?php echo ($destination_value == '奈良県') ? 'selected' : ''; ?>>奈良県</option>
-                            <option value="和歌山県" <?php echo ($destination_value == '和歌山県') ? 'selected' : ''; ?>>和歌山県</option>
-                            <option value="鳥取県" <?php echo ($destination_value == '鳥取県') ? 'selected' : ''; ?>>鳥取県</option>
-                            <option value="島根県" <?php echo ($destination_value == '島根県') ? 'selected' : ''; ?>>島根県</option>
-                            <option value="岡山県" <?php echo ($destination_value == '岡山県') ? 'selected' : ''; ?>>岡山県</option>
-                            <option value="広島県" <?php echo ($destination_value == '広島県') ? 'selected' : ''; ?>>広島県</option>
-                            <option value="山口県" <?php echo ($destination_value == '山口県') ? 'selected' : ''; ?>>山口県</option>
-                            <option value="徳島県" <?php echo ($destination_value == '徳島県') ? 'selected' : ''; ?>>徳島県</option>
-                            <option value="香川県" <?php echo ($destination_value == '香川県') ? 'selected' : ''; ?>>香川県</option>
-                            <option value="愛媛県" <?php echo ($destination_value == '愛媛県') ? 'selected' : ''; ?>>愛媛県</option>
-                            <option value="高知県" <?php echo ($destination_value == '高知県') ? 'selected' : ''; ?>>高知県</option>
-                            <option value="福岡県" <?php echo ($destination_value == '福岡県') ? 'selected' : ''; ?>>福岡県</option>
-                            <option value="佐賀県" <?php echo ($destination_value == '佐賀県') ? 'selected' : ''; ?>>佐賀県</option>
-                            <option value="長崎県" <?php echo ($destination_value == '長崎県') ? 'selected' : ''; ?>>長崎県</option>
-                            <option value="熊本県" <?php echo ($destination_value == '熊本県') ? 'selected' : ''; ?>>熊本県</option>
-                            <option value="大分県" <?php echo ($destination_value == '大分県') ? 'selected' : ''; ?>>大分県</option>
-                            <option value="宮崎県" <?php echo ($destination_value == '宮崎県') ? 'selected' : ''; ?>>宮崎県</option>
-                            <option value="鹿児島県" <?php echo ($destination_value == '鹿児島県') ? 'selected' : ''; ?>>鹿児島県</option>
-                            <option value="沖縄県" <?php echo ($destination_value == '沖縄県') ? 'selected' : ''; ?>>沖縄県</option>
-                        </select>
-
-                        <div class="popularity-spot">
-                            <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
-                            <label class="pref-select-btn" onclick="setDestination('京都府')">
-                                <div class="pref-icon" style="background-color: #F6F4F2;">
-                                    <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
-                                </div>
-                                <div class="pref-detail">
-                                    <h5>京都</h5>
-                                    <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
-                                </div>
-                            </label><!--pref-select-btn-->
-                            <label class="pref-select-btn" onclick="setDestination('東京都')">
-                                <div class="pref-icon" style="background-color: #F2F6F2;">
-                                    <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
-                                </div>
-                                <div class="pref-detail">
-                                    <h5>東京</h5>
-                                    <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
-                                </div>
-                            </label><!--pref-select-btn-->
-                            <label class="pref-select-btn" onclick="setDestination('北海道')">
-                                <div class="pref-icon" style="background-color: #F2F6F4;">
-                                    <span class="material-symbols-rounded" style="color: #94B4AB;">nature</span>
-                                </div>
-                                <div class="pref-detail">
-                                    <h5>北海道</h5>
-                                    <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
-                                </div>
-                            </label><!--pref-select-btn-->
-                            <div class="seiti-jyunrei">
-                                <p>聖地巡礼</p>
+                        <div id="pref_select_area">
+                            <select class="question-pref select-style" name="destination_prefecture" required>
+                                <option value="">選択してください</option>
+                                <option value="北海道" <?php echo ($destination_value == '北海道') ? 'selected' : ''; ?>>北海道</option>
+                                <option value="青森県" <?php echo ($destination_value == '青森県') ? 'selected' : ''; ?>>青森県</option>
+                                <option value="岩手県" <?php echo ($destination_value == '岩手県') ? 'selected' : ''; ?>>岩手県</option>
+                                <option value="宮城県" <?php echo ($destination_value == '宮城県') ? 'selected' : ''; ?>>宮城県</option>
+                                <option value="秋田県" <?php echo ($destination_value == '秋田県') ? 'selected' : ''; ?>>秋田県</option>
+                                <option value="山形県" <?php echo ($destination_value == '山形県') ? 'selected' : ''; ?>>山形県</option>
+                                <option value="福島県" <?php echo ($destination_value == '福島県') ? 'selected' : ''; ?>>福島県</option>
+                                <option value="茨城県" <?php echo ($destination_value == '茨城県') ? 'selected' : ''; ?>>茨城県</option>
+                                <option value="栃木県" <?php echo ($destination_value == '栃木県') ? 'selected' : ''; ?>>栃木県</option>
+                                <option value="群馬県" <?php echo ($destination_value == '群馬県') ? 'selected' : ''; ?>>群馬県</option>
+                                <option value="埼玉県" <?php echo ($destination_value == '埼玉県') ? 'selected' : ''; ?>>埼玉県</option>
+                                <option value="千葉県" <?php echo ($destination_value == '千葉県') ? 'selected' : ''; ?>>千葉県</option>
+                                <option value="東京都" <?php echo ($destination_value == '東京都') ? 'selected' : ''; ?>>東京都</option>
+                                <option value="神奈川県" <?php echo ($destination_value == '神奈川県') ? 'selected' : ''; ?>>神奈川県</option>
+                                <option value="新潟県" <?php echo ($destination_value == '新潟県') ? 'selected' : ''; ?>>新潟県</option>
+                                <option value="富山県" <?php echo ($destination_value == '富山県') ? 'selected' : ''; ?>>富山県</option>
+                                <option value="石川県" <?php echo ($destination_value == '石川県') ? 'selected' : ''; ?>>石川県</option>
+                                <option value="福井県" <?php echo ($destination_value == '福井県') ? 'selected' : ''; ?>>福井県</option>
+                                <option value="山梨県" <?php echo ($destination_value == '山梨県') ? 'selected' : ''; ?>>山梨県</option>
+                                <option value="長野県" <?php echo ($destination_value == '長野県') ? 'selected' : ''; ?>>長野県</option>
+                                <option value="岐阜県" <?php echo ($destination_value == '岐阜県') ? 'selected' : ''; ?>>岐阜県</option>
+                                <option value="静岡県" <?php echo ($destination_value == '静岡県') ? 'selected' : ''; ?>>静岡県</option>
+                                <option value="愛知県" <?php echo ($destination_value == '愛知県') ? 'selected' : ''; ?>>愛知県</option>
+                                <option value="三重県" <?php echo ($destination_value == '三重県') ? 'selected' : ''; ?>>三重県</option>
+                                <option value="滋賀県" <?php echo ($destination_value == '滋賀県') ? 'selected' : ''; ?>>滋賀県</option>
+                                <option value="京都府" <?php echo ($destination_value == '京都府') ? 'selected' : ''; ?>>京都府</option>
+                                <option value="大阪府" <?php echo ($destination_value == '大阪府') ? 'selected' : ''; ?>>大阪府</option>
+                                <option value="兵庫県" <?php echo ($destination_value == '兵庫県') ? 'selected' : ''; ?>>兵庫県</option>
+                                <option value="奈良県" <?php echo ($destination_value == '奈良県') ? 'selected' : ''; ?>>奈良県</option>
+                                <option value="和歌山県" <?php echo ($destination_value == '和歌山県') ? 'selected' : ''; ?>>和歌山県</option>
+                                <option value="鳥取県" <?php echo ($destination_value == '鳥取県') ? 'selected' : ''; ?>>鳥取県</option>
+                                <option value="島根県" <?php echo ($destination_value == '島根県') ? 'selected' : ''; ?>>島根県</option>
+                                <option value="岡山県" <?php echo ($destination_value == '岡山県') ? 'selected' : ''; ?>>岡山県</option>
+                                <option value="広島県" <?php echo ($destination_value == '広島県') ? 'selected' : ''; ?>>広島県</option>
+                                <option value="山口県" <?php echo ($destination_value == '山口県') ? 'selected' : ''; ?>>山口県</option>
+                                <option value="徳島県" <?php echo ($destination_value == '徳島県') ? 'selected' : ''; ?>>徳島県</option>
+                                <option value="香川県" <?php echo ($destination_value == '香川県') ? 'selected' : ''; ?>>香川県</option>
+                                <option value="愛媛県" <?php echo ($destination_value == '愛媛県') ? 'selected' : ''; ?>>愛媛県</option>
+                                <option value="高知県" <?php echo ($destination_value == '高知県') ? 'selected' : ''; ?>>高知県</option>
+                                <option value="福岡県" <?php echo ($destination_value == '福岡県') ? 'selected' : ''; ?>>福岡県</option>
+                                <option value="佐賀県" <?php echo ($destination_value == '佐賀県') ? 'selected' : ''; ?>>佐賀県</option>
+                                <option value="長崎県" <?php echo ($destination_value == '長崎県') ? 'selected' : ''; ?>>長崎県</option>
+                                <option value="熊本県" <?php echo ($destination_value == '熊本県') ? 'selected' : ''; ?>>熊本県</option>
+                                <option value="大分県" <?php echo ($destination_value == '大分県') ? 'selected' : ''; ?>>大分県</option>
+                                <option value="宮崎県" <?php echo ($destination_value == '宮崎県') ? 'selected' : ''; ?>>宮崎県</option>
+                                <option value="鹿児島県" <?php echo ($destination_value == '鹿児島県') ? 'selected' : ''; ?>>鹿児島県</option>
+                                <option value="沖縄県" <?php echo ($destination_value == '沖縄県') ? 'selected' : ''; ?>>沖縄県</option>
+                            </select>
+                            <div class="popularity-spot">
+                                <p style="font-size: 12px; color: #666666; padding: 10px 0;">人気の旅行先からはじめる</p>
+                                <label class="pref-select-btn" onclick="setDestination('京都府')">
+                                    <div class="pref-icon" style="background-color: #F6F4F2;">
+                                        <span class="material-symbols-rounded" style="color: #B49994;">landscape_2</span>
+                                    </div>
+                                    <div class="pref-detail">
+                                        <h5>京都</h5>
+                                        <p style="font-size: 12px; color: #333;">千年の歴史が息づく、雅の都</p>
+                                    </div>
+                                </label><!--pref-select-btn-->
+                                <label class="pref-select-btn" onclick="setDestination('東京都')">
+                                    <div class="pref-icon" style="background-color: #F2F6F2;">
+                                        <span class="material-symbols-rounded" style="color: #94A5B4;">apartment</span>
+                                    </div>
+                                    <div class="pref-detail">
+                                        <h5>東京</h5>
+                                        <p style="font-size: 12px; color: #333;">世界が集う最先端と伝統の都市</p>
+                                    </div>
+                                </label><!--pref-select-btn-->
+                                <label class="pref-select-btn" onclick="setDestination('北海道')">
+                                    <div class="pref-icon" style="background-color: #F2F6F4;">
+                                        <span class="material-symbols-rounded" style="color: #94B4AB;">nature</span>
+                                    </div>
+                                    <div class="pref-detail">
+                                        <h5>北海道</h5>
+                                        <p style="font-size: 12px; color: #333;">大自然と食の宝庫、四季の楽園</p>
+                                    </div>
+                                </label><!--pref-select-btn-->
+                            </div>
+                        </div>
+                        <div class="seiti-jyunrei">
+                            <div id="seiti_ok">
+                                <h5>聖地巡礼</h5>
                                 <p>作品の舞台となった場所を巡る聖地巡礼プランを提供します。実在のロケ地を組み合わせ、
                                     作品の世界観を楽しみながら旅できる行先オプションとして利用できます。</p>
-                                <button>機能を使う</button>
+                                <button type="button" onclick="seiti_open()">機能を使う</button>
                             </div>
+                            <p class="seiti-error" id="seiti_error" style="display: none; color: red;font-size: 20px;">都道府県を選択した状態から「聖地巡礼」機能は使用できません</p>
+                        </div>
+                    </div>
+                    <div class="question-card" id="seiti" style="display: none;">
+                        <div class="question-title">
+                            <div class="question-title-logo">
+                                <img class="" src="../assets/img/video.png">
+                            </div>
+                            <h2>作品を選択してください</h2>
+                            <select class="select-style" name="seiti">
+                                <option selected>選択してください</option>
+                                <optgroup label="アニメ">
+                                    <option value="スラムダンク（神奈川）">スラムダンク（神奈川）</option>
+                                    <option value="君の名は。（岐阜）">君の名は。（岐阜）</option>
+                                    <option value="あの日見た花の名前を僕たちはまだ知らない。（埼玉）">あの日見た花の名前を僕たちはまだ知らない。（埼玉）</option>
+                                </optgroup>
+                                <optgroup label="映画">
+
+                                </optgroup>
+                            </select>
                         </div>
                     </div>
                     <div class="question-card">
@@ -333,11 +356,95 @@
     </div>
 </body>
 <script>
+const seiti = document.getElementById('seiti');
+const pref_select_area = document.getElementById('pref_select_area');
+const special_requests = document.querySelector('input[name="special_requests"]');
+
+//聖地から都道府県同時送信
+// 聖地巡礼の作品選択時に都道府県を自動設定する関数
+function updateDestinationFromSeiti() {
+    const seitiSelect = document.querySelector('select[name="seiti"]');
+    const destinationSelect = document.querySelector('select[name="destination_prefecture"]');
+    
+    // 作品名から都道府県を抽出する関数
+    function extractPrefecture(value) {
+        // "作品名（都道府県）" の形式から都道府県を抽出
+        const match = value.match(/（(.+?)）/);
+        if (match) {
+            const pref = match[1];
+            // 都道府県名を正規化（「神奈川」→「神奈川県」など）
+            if (pref === '北海道') {
+                return '北海道';
+            } else if (pref === '東京') {
+                return '東京都';
+            } else if (pref === '京都') {
+                return '京都府';
+            } else if (pref === '大阪') {
+                return '大阪府';
+            } else {
+                // その他は「県」を付ける
+                return pref + '県';
+            }
+        }
+        return '';
+    }
+    
+    // changeイベントを設定
+    seitiSelect.addEventListener('change', function() {
+        const selectedValue = this.value;
+        console.log('選択された作品:', selectedValue);
+        
+        const prefecture = extractPrefecture(selectedValue);
+        console.log('抽出された都道府県:', prefecture);
+        
+        if (prefecture) {
+            // 都道府県を自動設定
+            destinationSelect.value = prefecture;
+            
+            // 視覚的フィードバック（選択されたことを示す）
+            destinationSelect.style.backgroundColor = '#e8f5e9';
+            setTimeout(() => {
+                destinationSelect.style.backgroundColor = '';
+            }, 1000);
+            
+            console.log('destination_prefectureに設定:', prefecture);
+        }
+    });
+}
+
+// seiti_open関数を修正（既存の関数を置き換える）
+function seiti_open() {
+    const seiti = document.getElementById('seiti');
+    const pref_select_area = document.getElementById('pref_select_area');
+    const special_requests = document.querySelector('input[name="special_requests"]');
+    
+    pref_select_area.style.display = 'none';
+    seiti.style.display = 'block';
+    special_requests.value = '指定された作品（destination_prefecture）の聖地を巡礼するルートを作成してください';
+    
+    // 聖地巡礼の選択イベントを初期化
+    updateDestinationFromSeiti();
+}
+
+// ページ読み込み時に初期化（聖地巡礼が既に表示されている場合に備えて）
+document.addEventListener('DOMContentLoaded', function() {
+    const seitiSelect = document.querySelector('select[name="seiti"]');
+    if (seitiSelect && document.getElementById('seiti').style.display !== 'none') {
+        updateDestinationFromSeiti();
+    }
+});
+
+
+
 console.log('=== スクリプト読み込み完了 ===');
 
 // PHPから受け取った初期値
 const initialDestination = '<?php echo $destination_value; ?>';
 if (initialDestination) {
+    const seiti_error = document.getElementById('seiti_error');
+    seiti_error.style.display = 'block';
+    const seiti_ok = document.getElementById('seiti_ok');
+    seiti_ok.style.display = 'none';
     console.log('初期値設定:', initialDestination);
     // ページ読み込み時にハイライト表示
     const select = document.querySelector('select[name="destination_prefecture"]');
@@ -379,11 +486,11 @@ function submitForm() {
     });
     
     // バリデーション
-    if (!destination) {
-        alert('行き先を選択してください');
-        console.log('バリデーションエラー: 行き先未選択');
-        return;
-    }
+    // if (!destination) {
+    //     alert('行き先を選択してください');
+    //     console.log('バリデーションエラー: 行き先未選択');
+    //     return;
+    // }
     if (!departure) {
         alert('出発地を選択してください');
         console.log('バリデーションエラー: 出発地未選択');

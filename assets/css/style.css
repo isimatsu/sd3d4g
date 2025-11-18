@@ -233,52 +233,40 @@ main{
   color: #f03700;
 }
 
-.good-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
+.music-favorite {
+  all: unset;
+  font-family: "Material Symbols Rounded";
+  font-size: 30px;
+  color: #ffbeb1;
+  padding: 0 !important;
+  margin: 0 !important;
   cursor: pointer;
-  outline: none;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+
+  transition: 0.2s ease;
 }
 
-.good-btn:focus {
-  outline: none;
+.music-favorite:hover {
+  transform: scale(1.15);
+  color: #ff9d8f;
 }
 
-.good-btn .material-symbols-rounded {
-  font-size: 28px;
-  color: #ccc;
-  transition: 0.2s;
+/* いいね済み */
+.music-favorite.gooded {
+  color: #ff4f4f;
 }
 
-.good-btn.gooded .material-symbols-rounded {
-  color: red; /* いいね済みの色 */
-}
-
-.good-btn:hover .material-symbols-rounded {
-  transform: scale(1.2);
-  color: #999;
-}
-
-.good-btn.gooded:hover .material-symbols-rounded {
-  transform: scale(1.2);
-  color: #ff7070;
+.music-favorite.gooded:hover {
+  transform: scale(1.15);
+  color: #ff7a7a;
 }
 
 .good-area{
   display: flex;
   align-items: center;
   gap: 4px;
-}
-
-.music-favorite:hover {
-  background: #ffe7e3;
-}
-
-.good-count {
-  font-size: 14px;
-  color: #333;
 }
 
 .music-img{
@@ -447,7 +435,45 @@ main{
 }
 
 .seiti-jyunrei{
+  position: relative;
   width: 100%;
-  height: auto;
-  background-color: #0084FF;
+  height: 150px;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 20px;
+  background: radial-gradient(circle at top left, rgba(255, 107, 129, 0.3), transparent 60%),
+                        radial-gradient(circle at top right, rgba(255, 214, 10, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(78, 205, 196, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom right, rgba(255, 159, 67, 0.3), transparent 60%),
+                        white;
+}
+
+#seiti{
+    background: radial-gradient(circle at top left, rgba(255, 107, 129, 0.3), transparent 60%),
+                        radial-gradient(circle at top right, rgba(255, 214, 10, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(78, 205, 196, 0.3), transparent 60%),
+                        radial-gradient(circle at bottom right, rgba(255, 159, 67, 0.3), transparent 60%),
+                        white;
+}
+
+.seiti-jyunrei p{
+  font-size: 10px;
+  padding: 5px 0;
+  color: #606060;
+}
+
+.seiti-jyunrei h5{
+  font-size: 20px;
+  color: #515151 ;
+}
+
+.seiti-jyunrei button{
+  position: absolute;
+  padding: 10px 15px;
+  border-radius: 15px;
+  margin-top: 10px;
+  background-color: #5d4037;
+  color: #EDEDED;
+  right: 15px;
+  bottom: 10px;
 }

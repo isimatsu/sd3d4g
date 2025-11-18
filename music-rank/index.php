@@ -114,12 +114,9 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <button class="good-btn <?= $song['is_good'] ? "gooded" : "" ?>"
+                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
-                                        <span class="material-symbols-rounded">favorite</span>
-                                    </button>
-                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
-                                        <?= $song['good_count'] ?>
+                                            favorite
                                     </span>
                                 </div>
                             </div>
@@ -144,12 +141,9 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <button class="good-btn <?= $song['is_good'] ? "gooded" : "" ?>"
+                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
-                                        <span class="material-symbols-rounded">favorite</span>
-                                    </button>
-                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
-                                        <?= $song['good_count'] ?>
+                                            favorite
                                     </span>
                                 </div>
                             </div>
@@ -221,14 +215,6 @@
                         this.classList.add("gooded");
                     } else {
                         this.classList.remove("gooded");
-                    }
-
-                    //good数を更新
-                    if (data.good_count !== undefined) {
-                        const countSpan = document.getElementById("good-count-" + songId);
-                        if (countSpan) {
-                            countSpan.textContent = data.good_count;
-                        }
                     }
                 });
             });

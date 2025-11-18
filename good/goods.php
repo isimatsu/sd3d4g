@@ -63,6 +63,5 @@
 
         echo json_encode([
             "status" => $status,
-            "good_count" => $good_count
         ]);
 ?>

@@ -114,7 +114,7 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <button class="music-favorite <?= $song['is_good'] ? "gooded" : "" ?>"
+                                    <button class="good-btn <?= $song['is_good'] ? "gooded" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
                                         <span class="material-symbols-rounded">favorite</span>
                                     </button>
@@ -144,7 +144,7 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <button class="music-favorite <?= $song['is_good'] ? "gooded" : "" ?>"
+                                    <button class="good-btn <?= $song['is_good'] ? "gooded" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
                                         <span class="material-symbols-rounded">favorite</span>
                                     </button>

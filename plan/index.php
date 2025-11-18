@@ -263,7 +263,11 @@
                             <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください" value="<?= htmlspecialchars($special_requests) ?>">
                             <button type="submit" class="basic-btn blue-btn" id="submitBtn">再生成</button>
                         </form>
-                    <?php } ?>
+                    <?php }elseif(isset($_POST['test'])){
+                        echo "エラー";
+                    }else{
+                        echo "フィードバック済";
+                    } ?>
                 </div>
 <script>
     const feedbackRadios = document.querySelectorAll('.feedback-radio');

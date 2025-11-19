@@ -4,7 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include "manifest.php";
+include __DIR__ . '/../manifest.php';
+
 // タイムアウトを延長
 set_time_limit(300); // 5分
 

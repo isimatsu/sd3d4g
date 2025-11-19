@@ -34,7 +34,7 @@ session_start();
             // 2. データベースから画像パスを取得
             $sql = "SELECT song_name, singer_name, pref_id, link, good, image_path  FROM song WHERE song_id = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':id', 195, PDO::PARAM_INT); // 例: id=1の画像を取得
+            $stmt->bindValue(':id', 477, PDO::PARAM_INT); // 例: id=1の画像を取得
             $stmt->execute();
             $song = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -11,6 +11,9 @@
             case '京都':
                 $destination_value = '京都府';
                 break;
+            case '大阪':
+                $destination_value = '大阪府';
+                break;
             case '東京':
                 $destination_value = '東京都';
                 break;

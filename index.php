@@ -65,6 +65,13 @@ try{
     die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
 }
 
+    // songテーブルからデータを保存順に取得
+    $sql2 = "SELECT s.song_id, s.song_name, s.singer_name, s.image_path, s.pref_id
+             FROM song s
+             ORDER BY s.song_id DESC";
+    $stmt2 = $pdo->prepare($sql2);
+    $stmt2->execute();
+    $songs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -117,9 +124,7 @@ try{
                 <div class="hero-plan-list">
                     <?php
                         $print_count = 0;
-                        if($print_count == 0){
-                            echo '結果なし';
-                        }
+                        
                         foreach($trips as $row){
                             $trip_id = $row['trip_id'];
                             $trip_start = $row['trip_start'];
@@ -155,38 +160,124 @@ try{
                                 EOT;
                                 }
                             }
-
-
+                            
                         }
+                        if($print_count == 0){
+                            echo '<h2>おすすめの旅行地！</h2>';
+                            //echo '結果なし';
+                            for($i=0;$i<3;$i++){
+                            $number=mt_rand(1,47);
+                            $sql3="SELECT * FROM pref WHERE pref_id=?";
+                            $stmt3=$pdo->prepare($sql3);
+                            $stmt3->execute([$number]);
+                            foreach($stmt3 as $row){
+                                $pref_name=$row['pref_name'];
+                            }
+                            echo <<<EOT
+                            <a href="createplan/?popularity={$pref_name}" class="plan-card main-card" style="background-image: url(assets/img/spot_img/{$number}.png);">
+                                    <div class="plan-card-detail">
+                                        <div>
+                                            <h2>{$pref_name}</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                            EOT;
+                        }
+                    }
+
                     ?>
 
                 </div>
+
+                <!--音楽スライド機能-->
+                <?php
+                // helper: URLが有効で画像であるかを確認
+                function is_valid_image_url(string $url, int $timeout = 3): bool {
+                    if (!filter_var($url, FILTER_VALIDATE_URL)) return false;
+
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_NOBODY, true);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_exec($ch);
+
+                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+                    curl_close($ch);
+
+                    if ($httpCode < 200 || $httpCode >= 400) return false;
+                    return (stripos($contentType, 'image/') === 0);
+                }
+
+                $genericImg = "/assets/img/music_img/汎用画像.jpg";   // ← 汎用画像
+
+                ?>
+            <div class="hero-music-list-wrapper">
                 <div class="hero-music-list">
-                    <a href="" class="hero-music-card main-card" style="background-image: url(assets/img/music_img/1.jpg);">
+                <?php foreach ($songs as $song): ?>
+                    <?php
+                    $imgPath = '';
+
+                    // --- 1) 外部URL画像が有効かチェック ---
+                    if (!empty($song['image_url'])) {
+                        $url = trim($song['image_url']);
+                        if (is_valid_image_url($url)) {
+                            $imgPath = $url;
+                        }
+                    }
+
+                    // --- 2) ローカルの music_img をチェック ---
+                    if (empty($imgPath) && !empty($song['image_path'])) {
+
+                        // 保存されているパス（例: song_abc.png）
+                        $rel = "/assets/img/music_img/" . ltrim($song['image_path'], '/');
+
+                        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) {
+                            $imgPath = $rel;
+                        }
+                    }
+
+                    // --- 3) pref_id に紐づく spot_img をチェック ---
+                    if (empty($imgPath)) {
+                        $prefId = (int)($song['pref_id'] ?? 0);
+                        $spot = "/assets/img/spot_img/" . $prefId . ".jpg";
+
+                        if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
+                            $imgPath = $spot;
+                        }
+                    }
+
+                    // --- 4) 全て不正 → 汎用画像 ---
+                    if (empty($imgPath)) {
+                        $imgPath = $genericImg;
+                    }
+                    ?>
+                    <a href="#" class="hero-music-card" 
+                       style="background-image: url('<?= $song['image_path'] ?>');">
                         <div class="music-card-detail">
                             <div>
-                                <h2>花、真っ白</h2>
-                                <p>藤井風</p>
+                                <h2><?= $song['song_name'] ?></h2>
+                                <p><?= $song['singer_name'] ?></p>
                             </div>
                         </div>
-                    </a><!--plan-card-->
-                    <a href="" class="hero-music-card side-card" style="background-image: url(assets/img/music_img/1.jpg);">
+                    </a>
+                <?php endforeach; ?>
+
+                <!-- 🔁 無限ループ用に複製をもう一回 -->
+                <?php foreach ($songs as $song): ?>
+                    <a href="#" class="hero-music-card" 
+                       style="background-image: url('<?= $song['image_path'] ?>');">
                         <div class="music-card-detail">
                             <div>
-                                <h2>花、真っ白</h2>
-                                <p>藤井風</p>
+                                <h2><?= $song['song_name'] ?></h2>
+                                <p><?= $song['singer_name'] ?></p>
                             </div>
                         </div>
-                    </a><!--plan-card-->
-                    <a href="" class="hero-music-card main-card" style="background-image: url(assets/img/music_img/1.jpg);">
-                        <div class="music-card-detail">
-                            <div>
-                                <h2>花、真っ白</h2>
-                                <p>藤井風</p>
-                            </div>
-                        </div>
-                    </a><!--plan-card-->
+                    </a>
+                <?php endforeach; ?>
                 </div>
+            </div>
                 <div class="new-plan-create-box">
                     <a class="new-plan-create" href="createplan/">
                         <span class="material-symbols-rounded">add_circle</span>

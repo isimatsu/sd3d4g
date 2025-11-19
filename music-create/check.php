@@ -38,8 +38,8 @@ try {
             exit('対応していないファイル形式です。<a href="index.php">戻る</a>');
         }
 
-         // アップロード先（music-createの1つ上にあるuploadsフォルダ）
-        $upload_dir = __DIR__ . '/../uploads/';
+         // アップロード先
+        $upload_dir = __DIR__ . '/../assets/img/music_img/';
 
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755, true);
@@ -52,7 +52,7 @@ try {
         // ファイル移動
         if (move_uploaded_file($tmp_name, $upload_file)) {
             // DBには相対パスで保存（Web公開用）
-            $image_path = '../uploads/' .$new_filename;
+            $image_path = '../assets/img/music_img/' .$new_filename;
         } else {
             exit('❌ 画像のアップロードに失敗しました。');
         }

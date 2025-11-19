@@ -61,16 +61,30 @@
     transform: rotate(357deg);
 }
 
+.hero-music-list-wrapper {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
 
 .hero-music-list{
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 200px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
+    gap: 16px;
+    animation: scroll 20s linear infinite;
+}
+
+/* ホバー時に止まる */
+.hero-music-list:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .hero-music-card{

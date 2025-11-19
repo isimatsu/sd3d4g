@@ -440,99 +440,122 @@ if (isset($_POST['edit_segment_id'])) {
 }
 ?>
 
-<?php
-$music_url = 'https://www.youtube.com/watch?v=TQ8WlA2GXbk' ?? ''; 
-
-if (strpos($music_url, 'watch?v=') !== false) {
-    $music_embed_url = str_replace('watch?v=', 'embed/', $music_url) . '?enablejsapi=1';
-} elseif (strpos($music_url, 'youtu.be/') !== false) {
-    $music_embed_url = str_replace('youtu.be/', 'www.youtube.com/embed/', $music_url) . '?enablejsapi=1';
-} else {
-    $music_embed_url = $music_url;
-}
-?>
-
-
-<div class='modal-outline music-play' id='music_modal_outline'>
+<!-- モーダル -->
+<div class='modal-outline music-play' id='music_modal_outline' style="display:none;">
   <div class='modal-area music-modal-area'>
     <button onClick='music_modal_close()' class='model-close-btn play-model-close-btn'>
       <span class='material-symbols-rounded'>close</span>
     </button>
 
-    <iframe class="player" id="player" width="" height=""
-      src="<?= htmlspecialchars($music_embed_url) ?>"
-      frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <iframe class="player" id="player" width="560" height="315"
+      src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
     <div class="musicplayer-content">
-        <div class="musicplayer-img">
-            
-        </div>
+        <div class="musicplayer-img"></div>
         <div class="music-info">
-            <h2>Pretender</h2>
-            <h3>Official髭男dism</h3>
+            <h2></h2>s
+            <h3></h3>
         </div>
-        <?php 
-            foreach($music as $row){
-
-                
-            }
-        ?>
     </div>
     <div class="musicplayer-control">
-        <button class="musicplayer-btn" onclick="playVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
-        <button class="musicplayer-btn" onclick="pauseVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
+        <button class="musicplayer-btn" onclick="playVideo()">
+            <span class='material-symbols-rounded'>play_arrow</span>
+        </button>
+        <button class="musicplayer-btn" onclick="pauseVideo()">
+            <span class='material-symbols-rounded'>pause</span>
+        </button>
     </div>
-
   </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-  let player;
+let player; // グローバル変数として宣言
 
-  function onYouTubeIframeAPIReady() {
+function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-      events: {
-        'onReady': () => console.log('YouTubeプレイヤー準備完了')
-      }
+        height: '315',
+        width: '560',
+        events: {
+            'onReady': () => console.log('YouTubeプレイヤー準備完了')
+        }
     });
-  }
+}
 
-  function play_music() {
-    <?php
-        $musicCount = count($music);
-        $number = rand(1, $musicCount);
-    ?>
+// PHP の $music 配列を JS に渡す
+const musicList = <?= json_encode($music, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+
+function play_music() {
+    // ランダム曲を選択
+    const number = Math.floor(Math.random() * musicList.length);
+    const song = musicList[number];
+    
+    // モーダル表示
     const music_modal = document.getElementById('music_modal_outline');
     music_modal.style.display = 'block';
-    if (player && typeof player.playVideo === 'function') {
-      player.playVideo();
+    
+    // 曲情報更新
+    const musicImg = document.querySelector('.musicplayer-img');
+    // 画像がある場合は表示、ない場合はプレースホルダー
+    if (song.image_path && song.image_path !== '') {
+        musicImg.innerHTML = `<img src="${song.image_path}" alt="${song.song_name}">`;
     } else {
-      console.log('プレイヤー未準備。');
+        // 画像がない場合はアイコンを表示
+        musicImg.innerHTML = `<span class='material-symbols-rounded'>music_note</span>`;
     }
-  }
+    document.querySelector('.music-info h2').textContent = song.song_name || '';
+    document.querySelector('.music-info h3').textContent = song.singer_name || '';
+    
+    // YouTube URLを埋め込み形式に変換
+    let embedUrl = song.link;
+    
+    if (song.link.includes('watch?v=')) {
+        // 通常のYouTube URL (例: https://www.youtube.com/watch?v=VIDEO_ID)
+        const videoId = song.link.split('watch?v=')[1].split('&')[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+    } else if (song.link.includes('youtu.be/')) {
+        // 短縮URL (例: https://youtu.be/VIDEO_ID)
+        const videoId = song.link.split('youtu.be/')[1].split('?')[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+    } else if (!song.link.includes('enablejsapi=1')) {
+        // すでに埋め込み形式だがAPIパラメータがない場合
+        embedUrl = song.link + (song.link.includes('?') ? '&' : '?') + 'enablejsapi=1';
+    }
+    
+    // iframeのsrcを設定
+    const iframe = document.getElementById('player');
+    iframe.src = embedUrl;
+}
 
-  function music_modal_close() {
-    const modal = document.getElementById('music_modal_outline');
-    modal.style.display = 'none';
+function music_modal_close() {
+    const music_modal = document.getElementById('music_modal_outline');
+    music_modal.style.display = 'none';
+    
+    // 動画を停止してiframeをクリア
+    if (player && typeof player.stopVideo === 'function') {
+        player.stopVideo();
+    }
+    
+    const iframe = document.getElementById('player');
+    iframe.src = '';
+}
+
+function playVideo() {
+    if (player && typeof player.playVideo === 'function') {
+        player.playVideo();
+    }
+}
+
+function pauseVideo() {
     if (player && typeof player.pauseVideo === 'function') {
-      player.pauseVideo();
+        player.pauseVideo();
     }
-  }
+}
 
-  function playVideo() {
-    if (player && typeof player.playVideo === 'function') player.playVideo();
-  }
-
-  function pauseVideo() {
-    if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
-  }
-
-  function modal_close(){
+function modal_close(){
     const modal = document.getElementById('modal_outline');
     modal.style.display = 'none';
-  }
+}
 </script>
-
 
 </html>

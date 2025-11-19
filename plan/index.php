@@ -471,6 +471,12 @@ if (strpos($music_url, 'watch?v=') !== false) {
             <h2>Pretender</h2>
             <h3>Official髭男dism</h3>
         </div>
+        <?php 
+            foreach($music as $row){
+
+                
+            }
+        ?>
     </div>
     <div class="musicplayer-control">
         <button class="musicplayer-btn" onclick="playVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
@@ -493,6 +499,10 @@ if (strpos($music_url, 'watch?v=') !== false) {
   }
 
   function play_music() {
+    <?php
+        $musicCount = count($music);
+        $number = rand(1, $musicCount);
+    ?>
     const music_modal = document.getElementById('music_modal_outline');
     music_modal.style.display = 'block';
     if (player && typeof player.playVideo === 'function') {

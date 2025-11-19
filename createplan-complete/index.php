@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+include __DIR__ . '/../manifest.php';
 
 // タイムアウトを延長
 set_time_limit(300); // 5分
@@ -16,7 +17,7 @@ function debugLog($message) {
 debugLog("=== 処理開始 ===");
 
 // Gemini APIキーを環境変数または直接設定
-$apiKey = 'AIzaSyDAPZGCn6Y5_jWyvb-ceUO4K66DaGltnNE';
+$apiKey = $gemini_api_key;
 $model = 'gemini-2.5-flash';
 
 // データベース接続設定
@@ -26,11 +27,6 @@ $username = 'LAA1682282';
 $password = 'Passsd3d';
 
 //入力情報受け取り
-if(isset($_POST['seiti'])){
-    $seiti = $_POST['seiti'] ?? '';
-    echo $seiti;
-}
-
 $destination_prefecture = $_POST['destination_prefecture'] ?? '';
 $departure_prefecture = $_POST['departure_prefecture'] ?? '';
 $companion = $_POST['companion'] ?? '';
@@ -228,10 +224,12 @@ if ($httpCode === 200) {
     $tripData = json_decode($jsonText, true);
     
     if (json_last_error() !== JSON_ERROR_NONE) {
-        debugLog("旅程JSONパースエラー: " . json_last_error_msg());
-        debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
-        die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
-    }
+    $error_msg = json_last_error_msg();
+    debugLog("旅程JSONパースエラー: " . $error_msg);
+    debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
+    $dbSaveResult = "❌ 旅程データの解析に失敗しました: {$error_msg}";
+    die($dbSaveResult . "<br><a href='../createplan/'>戻る</a>");
+}
     
     debugLog("JSON解析成功");
     
@@ -442,19 +440,18 @@ if ($httpCode === 200) {
                                     </div>
                                 </a>
                             </div>
-                            <form action="../plan/?plan_id=<?= $tripId ?>" method="post">
-                                <input type="hidden" name="test" value="<?php $tripId?>">
-                                <input type="hidden" name="destination_prefecture" value="<?= $destination_prefecture?>">
-                                <input type="hidden" name="departure_prefecture" value="<?= $departure_prefecture?>">
-                                <input type="hidden" name="companion" value="<?= $companion?>">
-                                <input type="hidden" name="trip_start" value="<?= $trip_start?>">
-                                <input type="hidden" name="trip_end" value="<?= $trip_end?>">
-                                <input type="hidden" name="move" value="<?= $move?>">
-                                <input type="hidden" name="special_requests" value="<?= $special_requests?>">
-                                <input type="hidden" name="waypoint" value="<?= $waypoint?>">
+                            <form action="../plan/?plan_id=<?= htmlspecialchars($tripId) ?>" method="post">
+                                <input type="hidden" name="test" value="<?= htmlspecialchars($tripId)?>">
+                                <input type="hidden" name="destination_prefecture" value="<?= htmlspecialchars($destination_prefecture)?>">
+                                <input type="hidden" name="departure_prefecture" value="<?= htmlspecialchars($departure_prefecture)?>">
+                                <input type="hidden" name="companion" value="<?= htmlspecialchars($companion)?>">
+                                <input type="hidden" name="trip_start" value="<?= htmlspecialchars($trip_start)?>">
+                                <input type="hidden" name="trip_end" value="<?= htmlspecialchars($trip_end)?>">
+                                <input type="hidden" name="move" value="<?= htmlspecialchars($move)?>">
+                                <input type="hidden" name="special_requests" value="<?= htmlspecialchars($special_requests)?>">
+                                <input type="hidden" name="waypoint" value="<?= htmlspecialchars($waypoint)?>">
                                 <button class="basic-btn blue-btn">さっそく確認する</button>
                             </form>
-                            
 
                         </div>
                     </div>

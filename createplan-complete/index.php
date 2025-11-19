@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
+include "manifest.php";
 // タイムアウトを延長
 set_time_limit(300); // 5分
 
@@ -16,7 +16,7 @@ function debugLog($message) {
 debugLog("=== 処理開始 ===");
 
 // Gemini APIキーを環境変数または直接設定
-$apiKey = 'AIzaSyDAPZGCn6Y5_jWyvb-ceUO4K66DaGltnNE';
+$apiKey = $gemini_api_key;
 $model = 'gemini-2.5-flash';
 
 // データベース接続設定

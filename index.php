@@ -68,7 +68,7 @@ try{
     // songテーブルからデータを保存順に取得
     $sql2 = "SELECT s.song_id, s.song_name, s.singer_name, s.image_path, s.pref_id
              FROM song s
-             ORDER BY s.created_at DESC";
+             ORDER BY s.song_id DESC";
     $stmt2 = $pdo->prepare($sql2);
     $stmt2->execute();
     $songs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
@@ -124,9 +124,7 @@ try{
                 <div class="hero-plan-list">
                     <?php
                         $print_count = 0;
-                        if($print_count == 0){
-                            echo '結果なし';
-                        }
+                        
                         foreach($trips as $row){
                             $trip_id = $row['trip_id'];
                             $trip_start = $row['trip_start'];
@@ -162,9 +160,31 @@ try{
                                 EOT;
                                 }
                             }
-
-
+                            
                         }
+                        if($print_count == 0){
+                            echo '<h2>おすすめの旅行地！</h2>';
+                            //echo '結果なし';
+                            for($i=0;$i<3;$i++){
+                            $number=mt_rand(1,47);
+                            $sql3="SELECT * FROM pref WHERE pref_id=?";
+                            $stmt3=$pdo->prepare($sql3);
+                            $stmt3->execute([$number]);
+                            foreach($stmt3 as $row){
+                                $pref_name=$row['pref_name'];
+                            }
+                            echo <<<EOT
+                            <a href="createplan/?popularity={$pref_name}" class="plan-card main-card" style="background-image: url(assets/img/spot_img/{$number}.png);">
+                                    <div class="plan-card-detail">
+                                        <div>
+                                            <h2>{$pref_name}</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                            EOT;
+                        }
+                    }
+
                     ?>
 
                 </div>

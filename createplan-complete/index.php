@@ -223,11 +223,13 @@ if ($httpCode === 200) {
     // JSONをパース
     $tripData = json_decode($jsonText, true);
     
-    // if (json_last_error() !== JSON_ERROR_NONE) {
-    //     debugLog("旅程JSONパースエラー: " . json_last_error_msg());
-    //     debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
-    //     die("旅程データの解析に失敗しました<br><a href='../createplan/'>戻る</a>");
-    // }
+    if (json_last_error() !== JSON_ERROR_NONE) {
+    $error_msg = json_last_error_msg();
+    debugLog("旅程JSONパースエラー: " . $error_msg);
+    debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
+    $dbSaveResult = "❌ 旅程データの解析に失敗しました: {$error_msg}";
+    die($dbSaveResult . "<br><a href='../createplan/'>戻る</a>");
+}
     
     debugLog("JSON解析成功");
     
@@ -438,19 +440,18 @@ if ($httpCode === 200) {
                                     </div>
                                 </a>
                             </div>
-                            <form action="../plan/?plan_id=<?= $tripId ?>" method="post">
-                                <input type="hidden" name="test" value="<?php $tripId?>">
-                                <input type="hidden" name="destination_prefecture" value="<?= $destination_prefecture?>">
-                                <input type="hidden" name="departure_prefecture" value="<?= $departure_prefecture?>">
-                                <input type="hidden" name="companion" value="<?= $companion?>">
-                                <input type="hidden" name="trip_start" value="<?= $trip_start?>">
-                                <input type="hidden" name="trip_end" value="<?= $trip_end?>">
-                                <input type="hidden" name="move" value="<?= $move?>">
-                                <input type="hidden" name="special_requests" value="<?= $special_requests?>">
-                                <input type="hidden" name="waypoint" value="<?= $waypoint?>">
+                            <form action="../plan/?plan_id=<?= htmlspecialchars($tripId) ?>" method="post">
+                                <input type="hidden" name="test" value="<?= htmlspecialchars($tripId)?>">
+                                <input type="hidden" name="destination_prefecture" value="<?= htmlspecialchars($destination_prefecture)?>">
+                                <input type="hidden" name="departure_prefecture" value="<?= htmlspecialchars($departure_prefecture)?>">
+                                <input type="hidden" name="companion" value="<?= htmlspecialchars($companion)?>">
+                                <input type="hidden" name="trip_start" value="<?= htmlspecialchars($trip_start)?>">
+                                <input type="hidden" name="trip_end" value="<?= htmlspecialchars($trip_end)?>">
+                                <input type="hidden" name="move" value="<?= htmlspecialchars($move)?>">
+                                <input type="hidden" name="special_requests" value="<?= htmlspecialchars($special_requests)?>">
+                                <input type="hidden" name="waypoint" value="<?= htmlspecialchars($waypoint)?>">
                                 <button class="basic-btn blue-btn">さっそく確認する</button>
                             </form>
-                            
 
                         </div>
                     </div>

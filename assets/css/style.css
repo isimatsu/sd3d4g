@@ -254,7 +254,7 @@ main{
 
 /* いいね済み */
 .music-favorite.gooded {
-  
+  color: #ff4f4f;
 }
 
 .music-favorite.gooded:hover {

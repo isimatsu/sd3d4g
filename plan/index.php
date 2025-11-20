@@ -316,7 +316,7 @@ if (isset($_POST['edit_segment_id'])) {
         $edit_segment_name = $segment[0]['segment_name'];
     ?>
     <!-- HTML部分ここから -->
-    <div class='modal-outline' id='modal_outline'>
+    <div class='modal-outline memo-modal' id='modal_outline'>
         <div class='modal-area'>
             <button onClick='modal_close()' class='model-close-btn'>
                 <span class='material-symbols-rounded'>close</span>
@@ -432,7 +432,10 @@ if (isset($_POST['edit_segment_id'])) {
                 <?php endif; ?>
             <?php endforeach; ?>
 
-
+            <form action="index.php?plan_id=<?= $plan_id ?>" method="POST">
+                <input type="text" name="memo_add" class="memo-add-form" placeholder="メモを入力">
+                <button class="memo-add-btn" type="submit">追加</button>
+            </form>
         </div>
     </div>
 <?php

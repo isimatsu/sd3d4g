@@ -289,7 +289,7 @@
                 specialRequests.disabled = false;
                 specialRequests.placeholder = '改善してほしい箇所、要望を具体的に入力してください';
                 specialRequests.style.backgroundColor = '#fff';
-                feedback_form.action = "../createplan-complete";
+                feedback_form.action = "../createplan-complete/";
             }
         });
     });

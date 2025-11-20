@@ -179,6 +179,15 @@
 
 .point-info{
     position: relative;
+    border-radius: 25px;
+    background-color: #ffffff;
+}
+
+.segment-memo{
+    padding: 10px 25px;
+    border-radius: 0 0 25px 25px;
+    background-color: #3d9bff;
+    color: #fff;
 }
 
 .planpage-music-list{

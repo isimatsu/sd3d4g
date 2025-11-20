@@ -234,7 +234,6 @@ main{
 }
 
 .music-favorite {
-  all: unset;
   font-family: "Material Symbols Rounded";
   font-size: 30px;
   color: #ffbeb1;

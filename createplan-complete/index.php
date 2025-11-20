@@ -36,6 +36,15 @@ $move = $_POST['move'] ?? '';
 $budget = $_POST['budget'] ?? '上限なし';
 $special_requests = $_POST['special_requests'] ?? '';
 $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+if(isset($_POST['feedback'])){
+    $trip_id=$_POST['plan_id'];
+    $feedback=$_POST['feedback'];
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    if($feedback==2 || $feedback==3){
+         $feedbackset=$pdo->prepare("INSERT INTO trip(feedback) VALUES ?");
+         $feedbackset->execute($feedback);
+    }
+}
 
 
 

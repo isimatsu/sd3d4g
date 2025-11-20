@@ -32,10 +32,16 @@
         $pref_name = $pref_row ? $pref_row['pref_name'] : "不明な県";
 
         //曲データ取得
-        $sql = "SELECT * FROM song WHERE pref_id = :pref_id ORDER BY good DESC LIMIT 50";
+        $sql = "SELECT s.*, 
+                (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
+                EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
+                AND user_id = :userid) AS is_good
+                FROM song s WHERE s.pref_id = :pref_id 
+                ORDER BY good_count DESC LIMIT 50";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
-        $stmt->execute();
+        $stmt->bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt -> bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
+        $stmt -> execute();
         $pref_songs = $stmt->fetchAll();
     
         $rank_colors = [
@@ -86,8 +92,15 @@
                             <a href="<?= htmlspecialchars($song['link']) ?>">
                                 <span class="music-play material-symbols-rounded">play_circle</span>
                             </a>
-                                <!-- goodボタンの機能は未実装です-->
-                                <span class="music-favorite material-symbols-rounded">favorite</span>
+                            <div class="good-area">
+                                <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
+                                    data-song-id="<?= $song['song_id'] ?>">
+                                        favorite
+                                </span>
+                                <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                    <?= $song['good_count'] ?>
+                                </span>
+                            </div>
                         </div>
                     </div><!--music-card-->
                 <?php $rank++; endforeach; ?>
@@ -99,6 +112,30 @@
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>
+
+    <!-- goods.phpにリクエストを送信するjs -->
+    <script>
+        document.querySelectorAll(".music-favorite").forEach(btn => {
+            btn.addEventListener("click", function() {
+                let songId = this.dataset.songId;
+
+                fetch("../good/goods.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "song_id=" + songId
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    if(data.status === "gooded") {
+                        this.classList.add("gooded");
+                    } else {
+                        this.classList.remove("gooded");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

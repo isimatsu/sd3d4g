@@ -14,6 +14,14 @@ if(!isset($_SESSION['user_id'])){
     $user = 'LAA1682282';
     $pass = 'Passsd3d';
 
+    if($_POST['plan_id']){
+        $plan_id=$_POST['plan_id'];
+        $feedback=$_POST['feedback'];
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+        $feedbackset=$pdo->prepare("INSERT INTO trip(feedback) VALUES ?");
+        $feedbackset->execute($feedback);
+    }
+
     try{
         //DB接続
         $pdo = new PDO(

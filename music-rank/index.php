@@ -127,9 +127,9 @@
                     <?php $rank++; endforeach; ?>
                 <?php endif; ?>
                 <?php endif; ?>
-            
-                <!--music-card-->
-                <a class="all" href="../music-pref/index.php">すべて表示</a>
+                <a class="all" href="../music-pref/index.php?pref_id=<?= htmlspecialchars($pref_id) ?>">
+                    すべて表示
+                </a>
                 
                 <h1>全国のランキング</h1>
                     <?php $rank = 1; foreach ($national_songs as $song): ?>

@@ -245,6 +245,7 @@
                             <input type="hidden" name="trip_end" value="<?=htmlspecialchars($trip_end)?>">
                             <input type="hidden" name="move" value="<?=htmlspecialchars($move)?>">
                             <input type="hidden" name="waypoint" value="<?=htmlspecialchars($waypoint)?>">
+                            <input type="hidden" name="plan_id" value="<?=htmlspecialchars($plan_id)?>">
                             <div class="feedback-btn-list">
                                 <input type="radio" name="feedback"  id="option1" value="1" class="feedback-radio" style="display: none;">
                                 <label class="feedback-level level-good" for="option1">
@@ -283,7 +284,7 @@
                 specialRequests.disabled = true;
                 specialRequests.placeholder = '保存するため入力は不要です';
                 specialRequests.style.backgroundColor = '#f0f0f0';
-                feedback_form.action = "index.php?plan_id=<?= htmlspecialchars($plan_id) ?>";
+                feedback_form.action = "../plan-list/";
             } else {
                 submitBtn.textContent = '再生成';
                 specialRequests.disabled = false;

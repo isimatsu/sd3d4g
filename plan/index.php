@@ -236,6 +236,7 @@
                             $move = $_POST['move'] ?? '';
                             $special_requests = $_POST['special_requests'] ?? '';
                             $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                            echo "テスト都道府県$destination_prefecture";
                             ?>
                             <input type="hidden" name="destination_prefecture" value="<?=htmlspecialchars($destination_prefecture)?>">
                             <input type="hidden" name="departure_prefecture" value="<?=htmlspecialchars($departure_prefecture)?>">

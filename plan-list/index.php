@@ -14,6 +14,14 @@ if(!isset($_SESSION['user_id'])){
     $user = 'LAA1682282';
     $pass = 'Passsd3d';
 
+    if(isset($_POST['plan_id'])){
+        $plan_id=$_POST['plan_id'];
+        $feedback=$_POST['feedback'];
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        $feedbackset=$pdo->prepare("UPDATE trip SET feedback = ? WHERE trip_id = ?");
+        $feedbackset->execute([$feedback,$plan_id]);
+    }
+
     try{
         //DB接続
         $pdo = new PDO(

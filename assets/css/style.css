@@ -234,7 +234,6 @@ main{
 }
 
 .music-favorite {
-  all: unset;
   font-family: "Material Symbols Rounded";
   font-size: 30px;
   color: #ffbeb1;
@@ -246,6 +245,7 @@ main{
   vertical-align: middle;
 
   transition: 0.2s ease;
+  outline: none;
 }
 
 .music-favorite:hover {

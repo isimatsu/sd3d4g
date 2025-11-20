@@ -51,7 +51,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
-    <title>pagename -旅行提案アプリ-</title>
+    <title>音楽ホーム -旅行提案アプリ-</title>
 </head>
 <body>
     <main>
@@ -127,9 +127,9 @@
                     <?php $rank++; endforeach; ?>
                 <?php endif; ?>
                 <?php endif; ?>
-            
-                <!--music-card-->
-                <a class="all" href="../music-pref/index.php">すべて表示</a>
+                <a class="all" href="../music-pref/index.php?pref_id=<?= htmlspecialchars($pref_id) ?>">
+                    すべて表示
+                </a>
                 
                 <h1>全国のランキング</h1>
                     <?php $rank = 1; foreach ($national_songs as $song): ?>

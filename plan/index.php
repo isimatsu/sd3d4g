@@ -13,6 +13,7 @@
         die("旅程IDが指定されていません。");
     }
 
+
     $plan_id = $_GET['plan_id'];
 
     //DB接続情報
@@ -47,6 +48,21 @@
 
     } catch (PDOException $e) {
         die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
+    }
+
+        //memoが送られているかどうか
+    if (isset($_POST['memo_add'])) {
+        $memo = $_POST['memo_add'];
+        $sql_segment_id = $_POST['segment_id'];
+
+        $memo_sql = "UPDATE trip_info SET memo = :memo WHERE segment_id = $sql_segment_id";
+        $stmt = $pdo->prepare($memo_sql);
+        $stmt->bindValue(':memo', $memo, PDO::PARAM_STR);
+        $stmt->execute();
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+        
     }
 ?>
 <!DOCTYPE html>
@@ -93,6 +109,7 @@
                             $time = $parts_tree['start_time'];
                             $start_time = date("H:i", strtotime($time));
                             $segment_info = $parts_tree['segment_info'];
+                            $memo = $parts_tree['memo'];
                         
                             if($segment_type == 1){
                                 //移動アイコン
@@ -156,8 +173,18 @@
                                                     <div class='tourist-detail'>
                                                         <p>" . htmlspecialchars($segment_detail) . "</p>
                                                     </div>
+                                                    <p>{$memo}</p>
                                                     <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                                 </div>
+                                                                                            ";
+                                                    if(isset($memo)){
+                                                        echo"
+                                                        <div class='segment-memo'>
+                                                            <p>メモ：{$memo}</p>
+                                                        </div>
+                                                        ";
+                                                    }
+                                echo "
                                             </div>
                                         </div>
                                     </div><!--point-->
@@ -177,6 +204,15 @@
                                                     </div>
                                                 <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                             </div>
+                                            ";
+                                                    if(isset($memo)){
+                                                        echo"
+                                                        <div class='segment-memo'>
+                                                            <p>メモ：{$memo}</p>
+                                                        </div>
+                                                        ";
+                                                    }
+                                echo "
                                         </div>
                                     </div><!--point-->
                                     "; 
@@ -236,6 +272,7 @@
                             $move = $_POST['move'] ?? '';
                             $special_requests = $_POST['special_requests'] ?? '';
                             $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                            echo "テスト都道府県$destination_prefecture";
                             ?>
                             <input type="hidden" name="destination_prefecture" value="<?=htmlspecialchars($destination_prefecture)?>">
                             <input type="hidden" name="departure_prefecture" value="<?=htmlspecialchars($departure_prefecture)?>">
@@ -244,6 +281,7 @@
                             <input type="hidden" name="trip_end" value="<?=htmlspecialchars($trip_end)?>">
                             <input type="hidden" name="move" value="<?=htmlspecialchars($move)?>">
                             <input type="hidden" name="waypoint" value="<?=htmlspecialchars($waypoint)?>">
+                            <input type="hidden" name="plan_id" value="<?=htmlspecialchars($plan_id)?>">
                             <div class="feedback-btn-list">
                                 <input type="radio" name="feedback"  id="option1" value="1" class="feedback-radio" style="display: none;">
                                 <label class="feedback-level level-good" for="option1">
@@ -282,13 +320,13 @@
                 specialRequests.disabled = true;
                 specialRequests.placeholder = '保存するため入力は不要です';
                 specialRequests.style.backgroundColor = '#f0f0f0';
-                feedback_form.action = "index.php?plan_id=<?= htmlspecialchars($plan_id) ?>";
+                feedback_form.action = "../plan-list/";
             } else {
                 submitBtn.textContent = '再生成';
                 specialRequests.disabled = false;
                 specialRequests.placeholder = '改善してほしい箇所、要望を具体的に入力してください';
                 specialRequests.style.backgroundColor = '#fff';
-                feedback_form.action = "../createplan-complete";
+                feedback_form.action = "../createplan-complete/";
             }
         });
     });
@@ -316,7 +354,7 @@ if (isset($_POST['edit_segment_id'])) {
         $edit_segment_name = $segment[0]['segment_name'];
     ?>
     <!-- HTML部分ここから -->
-    <div class='modal-outline' id='modal_outline'>
+    <div class='modal-outline memo-modal' id='modal_outline'>
         <div class='modal-area'>
             <button onClick='modal_close()' class='model-close-btn'>
                 <span class='material-symbols-rounded'>close</span>
@@ -432,7 +470,11 @@ if (isset($_POST['edit_segment_id'])) {
                 <?php endif; ?>
             <?php endforeach; ?>
 
-
+            <form action="index.php?plan_id=<?= $plan_id ?>" method="POST">
+                <input type="text" name="memo_add" class="memo-add-form" placeholder="メモを入力">
+                <input type="hidden" name="segment_id" value="<?= $edit_segment_id ?>">
+                <button class="memo-add-btn" type="submit">追加</button>
+            </form>
         </div>
     </div>
 <?php

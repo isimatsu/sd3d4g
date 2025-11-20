@@ -211,58 +211,65 @@ try{
                     return (stripos($contentType, 'image/') === 0);
                 }
 
-                $genericImg = "/assets/img/music_img/汎用画像.jpg";   // ← 汎用画像
+                // 画像パス処理を 1 つの関数にまとめた
+                function resolveImagePath($song) {
+                    // 1. 外部URL
+                    if (!empty($song['image_path'])) {
+                        $url = trim($song['image_path']);
+                        if (is_valid_image_url($url)) {
+                            return $url;
+                        }
+                    }
 
+                    // 2. ローカル music_img
+                    if (!empty($song['image_path'])) {
+                        $rel = "/sd3d4g/assets/img/music_img/".ltrim($song['image_path'],'/');
+                        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) {
+                            return $rel;
+                        }
+                    }
+
+                    // 3. pref_id から spot_img
+                    $prefId = (int)($song['pref_id']);
+                    $spot = "/sd3d4g/assets/img/spot_img/".$prefId.".png";
+                    if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
+                        return $spot;
+                    }
+
+                    // 4. 汎用
+                    return "/assets/img/music_img/汎用画像.jpg";
+                }
                 ?>
-            <div class="hero-music-list-wrapper">
-                <div class="hero-music-list">
-                    <?php foreach ($songs as $song): ?>
-                        <?php
-                        $imgPath = '';
 
-                        // --- 1) 外部URL画像が有効なら採用 ---
-                        if (!empty($song['image_path'])) {
-                            $url = trim($song['image_path']);
-                            if (is_valid_image_url($url)) {
-                                $imgPath = $url;
-                            }
-                        }
+                <div class="hero-music-list-wrapper">
+                    <div class="hero-music-list">
 
-                        // --- 2) ローカル music_img が存在すれば採用 ---
-                        if (empty($imgPath) && !empty($song['image_path'])) {
-                            $rel = "/assets/img/music_img/" . ltrim($song['image_path'], '/');
-                            if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) {
-                                $imgPath = $rel;
-                            }
-                        }
-
-                        // --- 3) 無効URLだった場合、pref_id から spot_img を補完 ---
-                        if (empty($imgPath)) {
-                            $prefId = (int)($song['pref_id'] ?? 0);
-                            $spot = "/assets/img/spot_img/" . $prefId . ".png";
-
-                            if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
-                                $imgPath = $spot;
-                            }
-                        }
-
-                        // --- 4) それでも無ければ汎用画像 ---
-                        if (empty($imgPath)) {
-                            $imgPath = "/assets/img/music_img/汎用画像.jpg";
-                        }
-                        ?>
-                        <a href="#" class="hero-music-card" 
+                        <!-- 1セット目 -->
+                        <?php foreach ($songs as $song): ?>
+                            <?php $imgPath = resolveImagePath($song); ?>
+                            <a href="#" class="hero-music-card" 
                             style="background-image: url('<?= $imgPath ?>');">
                                 <div class="music-card-detail">
-                                    <div>
-                                        <h2><?= htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8') ?></h2>
-                                        <p><?= htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8') ?></p>
-                                    </div>
+                                    <h2><?= htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8') ?></h2>
+                                    <p><?= htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8') ?></p>
                                 </div>
                             </a>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+
+                        <!-- ★ コピーセット（完全に同じ画像を出力） -->
+                        <?php foreach ($songs as $song): ?>
+                            <?php $imgPath = resolveImagePath($song); ?>
+                            <a href="#" class="hero-music-card" 
+                            style="background-image: url('<?= $imgPath ?>');">
+                                <div class="music-card-detail">
+                                    <h2><?= htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8') ?></h2>
+                                    <p><?= htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
+
                 <div class="new-plan-create-box">
                     <a class="new-plan-create" href="createplan/">
                         <span class="material-symbols-rounded">add_circle</span>

@@ -70,6 +70,7 @@
 .hero-music-list{
     display: flex;
     gap: 16px;
+    padding-left: 20px;
     animation: scroll 20s linear infinite;
 }
 
@@ -89,16 +90,15 @@
 
 .hero-music-card{
     flex-shrink: 0;
-    width: 55%;
+    width: 200px;
     height: 140px;
-    margin: 0 10px;
     background-color: rgb(220, 238, 255);
-    border-radius: 30px;
+    border-radius: 20px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    display: block;
     position: relative;
-    scroll-snap-align: center;
 }   
 
 .music-card-detail{

@@ -26,17 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<a href="./signin/index.php">戻る</a>';
             exit;
         }
-    } else {
-        echo 'メールアドレスとパスワードを入力してください。';
-        echo '<a href="./signin/index.php">戻る</a>';
-        exit;
+        } else {
+            echo 'メールアドレスとパスワードを入力してください。';
+            echo '<a href="./signin/index.php">戻る</a>';
+            exit;
+        }
+        } else {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: signin/index.php');
+            exit;
+        }
     }
-} else {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: signin/index.php');
-        exit;
-    }
-}
 
 //DB接続情報
 $host = 'mysql326.phy.lolipop.lan';
@@ -68,7 +68,8 @@ try{
     // songテーブルからデータを保存順に取得
     $sql2 = "SELECT s.song_id, s.song_name, s.singer_name, s.image_path, s.pref_id
              FROM song s
-             ORDER BY s.song_id DESC";
+             ORDER BY s.song_id DESC
+             LIMIT 10";
     $stmt2 = $pdo->prepare($sql2);
     $stmt2->execute();
     $songs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
@@ -215,67 +216,51 @@ try{
                 ?>
             <div class="hero-music-list-wrapper">
                 <div class="hero-music-list">
-                <?php foreach ($songs as $song): ?>
-                    <?php
-                    $imgPath = '';
+                    <?php foreach ($songs as $song): ?>
+                        <?php
+                        $imgPath = '';
 
-                    // --- 1) 外部URL画像が有効かチェック ---
-                    if (!empty($song['image_url'])) {
-                        $url = trim($song['image_url']);
-                        if (is_valid_image_url($url)) {
-                            $imgPath = $url;
+                        // --- 1) 外部URL画像が有効なら採用 ---
+                        if (!empty($song['image_path'])) {
+                            $url = trim($song['image_path']);
+                            if (is_valid_image_url($url)) {
+                                $imgPath = $url;
+                            }
                         }
-                    }
 
-                    // --- 2) ローカルの music_img をチェック ---
-                    if (empty($imgPath) && !empty($song['image_path'])) {
-
-                        // 保存されているパス（例: song_abc.png）
-                        $rel = "/assets/img/music_img/" . ltrim($song['image_path'], '/');
-
-                        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) {
-                            $imgPath = $rel;
+                        // --- 2) ローカル music_img が存在すれば採用 ---
+                        if (empty($imgPath) && !empty($song['image_path'])) {
+                            $rel = "/assets/img/music_img/" . ltrim($song['image_path'], '/');
+                            if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) {
+                                $imgPath = $rel;
+                            }
                         }
-                    }
 
-                    // --- 3) pref_id に紐づく spot_img をチェック ---
-                    if (empty($imgPath)) {
-                        $prefId = (int)($song['pref_id'] ?? 0);
-                        $spot = "/assets/img/spot_img/" . $prefId . ".jpg";
+                        // --- 3) 無効URLだった場合、pref_id から spot_img を補完 ---
+                        if (empty($imgPath)) {
+                            $prefId = (int)($song['pref_id'] ?? 0);
+                            $spot = "/assets/img/spot_img/" . $prefId . ".png";
 
-                        if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
-                            $imgPath = $spot;
+                            if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
+                                $imgPath = $spot;
+                            }
                         }
-                    }
 
-                    // --- 4) 全て不正 → 汎用画像 ---
-                    if (empty($imgPath)) {
-                        $imgPath = $genericImg;
-                    }
-                    ?>
-                    <a href="#" class="hero-music-card" 
-                       style="background-image: url('<?= $song['image_path'] ?>');">
-                        <div class="music-card-detail">
-                            <div>
-                                <h2><?= $song['song_name'] ?></h2>
-                                <p><?= $song['singer_name'] ?></p>
-                            </div>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-
-                <!-- 🔁 無限ループ用に複製をもう一回 -->
-                <?php foreach ($songs as $song): ?>
-                    <a href="#" class="hero-music-card" 
-                       style="background-image: url('<?= $song['image_path'] ?>');">
-                        <div class="music-card-detail">
-                            <div>
-                                <h2><?= $song['song_name'] ?></h2>
-                                <p><?= $song['singer_name'] ?></p>
-                            </div>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
+                        // --- 4) それでも無ければ汎用画像 ---
+                        if (empty($imgPath)) {
+                            $imgPath = "/assets/img/music_img/汎用画像.jpg";
+                        }
+                        ?>
+                        <a href="#" class="hero-music-card" 
+                            style="background-image: url('<?= $imgPath ?>');">
+                                <div class="music-card-detail">
+                                    <div>
+                                        <h2><?= htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8') ?></h2>
+                                        <p><?= htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                                    </div>
+                                </div>
+                            </a>
+                    <?php endforeach; ?>
                 </div>
             </div>
                 <div class="new-plan-create-box">

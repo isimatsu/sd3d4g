@@ -41,8 +41,8 @@ if(isset($_POST['feedback'])){
     $feedback=$_POST['feedback'];
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     if($feedback==2 || $feedback==3){
-         $feedbackset=$pdo->prepare("INSERT INTO trip(feedback) VALUES ?");
-         $feedbackset->execute($feedback);
+         $feedbackset=$pdo->prepare("UPDATE trip SET feedback = ? WHERE trip_id = ?");
+        $feedbackset->execute([$feedback,$trip_id]);
     }
 }
 

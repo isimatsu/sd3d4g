@@ -38,6 +38,10 @@ if(!isset($_SESSION['user_id'])){
                 AND trip_id IS NOT NULL 
                 AND trip_id <> '' 
                 ORDER BY trip_id DESC";
+                //trip_idを１の時だけ表示という形に変える？
+                /*$sql = "SELECT * FROM trip 
+                WHERE user_id = ? 
+                AND trip_id =1  */
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_SESSION['user_id']]);

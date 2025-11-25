@@ -247,26 +247,16 @@ try{
                         <!-- 1セット目 -->
                         <?php foreach ($songs as $song): ?>
                             <?php $imgPath = resolveImagePath($song); ?>
-                            <a href="#" class="hero-music-card" 
+                            <a href="music-detail/?song_id=<?= $song['song_id'] ?>" class="hero-music-card" 
                             style="background-image: url('<?= $imgPath ?>');">
                                 <div class="music-card-detail">
                                     <h2><?= htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8') ?></h2>
                                     <p><?= htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8') ?></p>
+                                    
                                 </div>
                             </a>
                         <?php endforeach; ?>
 
-                        <!-- ★ コピーセット（完全に同じ画像を出力） -->
-                        <?php foreach ($songs as $song): ?>
-                            <?php $imgPath = resolveImagePath($song); ?>
-                            <a href="#" class="hero-music-card" 
-                            style="background-image: url('<?= $imgPath ?>');">
-                                <div class="music-card-detail">
-                                    <h2><?= htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8') ?></h2>
-                                    <p><?= htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8') ?></p>
-                                </div>
-                            </a>
-                        <?php endforeach; ?>
                     </div>
                 </div>
 

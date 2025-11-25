@@ -1,4 +1,111 @@
+<?php
 session_start();
+
+// DB接続
+$pdo = new PDO(
+    'mysql:host=mysql326.phy.lolipop.lan;
+    dbname=LAA1682282-sd3d4g;charset=utf8',
+    'LAA1682282',
+    'Passsd3d'
+);
+
+// ----------------------------------------------------
+// 画像判定関数（一覧画面と同じもの）
+// ----------------------------------------------------
+function is_valid_image_url(string $url, int $timeout = 3): bool {
+    if (!filter_var($url, FILTER_VALIDATE_URL)) return false;
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_exec($ch);
+
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+    curl_close($ch);
+
+    if ($httpCode < 200 || $httpCode >= 400) return false;
+    return (stripos($contentType, 'image/') === 0);
+}
+
+// ----------------------------------------------------
+// resolveImagePath（一覧画面と同じ）
+// ----------------------------------------------------
+function resolveImagePath($song) {
+
+    // 1. 外部URL（存在チェック）
+    if (!empty($song['image_path'])) {
+        $url = trim($song['image_path']);
+        if (is_valid_image_url($url)) return $url;
+    }
+
+    // 2. ローカル music_img
+    if (!empty($song['image_path'])) {
+        $rel = "/sd3d4g/assets/img/music_img/".ltrim($song['image_path'],'/');
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) return $rel;
+    }
+
+    // 3. pref_id → spot_img
+    $prefId = (int)$song['pref_id'];
+    $spot = "/sd3d4g/assets/img/spot_img/{$prefId}.png";
+    if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
+        return $spot;
+    }
+
+    // 4. 汎用画像
+    return "/assets/img/music_img/汎用画像.jpg";
+}
+
+// --- song_id を GET から取得 ---
+if (!isset($_GET['song_id']) || !ctype_digit($_GET['song_id'])) {
+    echo "曲IDが指定されていません。";
+    exit;
+}
+
+$song_id = (int)$_GET['song_id'];
+
+// --- 曲データ取得 ---
+$sql = "SELECT song_name, singer_name, pref_id, link, good, image_path 
+        FROM song WHERE song_id = :id LIMIT 1";
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id', $song_id, PDO::PARAM_INT);
+$stmt->execute();
+$song = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$song) {
+    echo "指定された曲が見つかりません。";
+    exit;
+}
+
+// --- 曲データを変数へセット ---
+$imagePath   = resolveImagePath($song);
+$songName    = htmlspecialchars($song['song_name'], ENT_QUOTES, 'UTF-8');
+$singerName  = htmlspecialchars($song['singer_name'], ENT_QUOTES, 'UTF-8');
+$pref_id     = (int)($song['pref_id'] ?? 0);
+$link        = htmlspecialchars($song['link'] ?? '', ENT_QUOTES, 'UTF-8');
+$good        = (int)($song['good'] ?? 0);
+
+// --- 都道府県名取得 ---
+$stmt = $pdo->prepare("SELECT pref_name FROM pref WHERE pref_id = ? LIMIT 1");
+$stmt->execute([$pref_id]);
+$pref = $stmt->fetch(PDO::FETCH_ASSOC);
+$pref_name = $pref ? $pref['pref_name'] : '（不明）';
+
+// --- 画像パスの調整 ---
+if (!empty($imagePath)) {
+    if (preg_match('/^https?:\/\//', $imagePath)) {
+        // 外部URLならそのまま
+        $imageSrc = $imagePath;
+    } else {
+        // ローカルファイル
+        $imageSrc = '../' . ltrim($imagePath, '/');
+    }
+} else {
+    $imageSrc = null;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,56 +129,6 @@ session_start();
             <div class="page-header">
                 <h1>楽曲詳細</h1>
             </div>
-            <?php 
-            // DB接続
-            $pdo=new PDO(
-	            'mysql:host=mysql326.phy.lolipop.lan;
-                    dbname=LAA1682282-sd3d4g;charset=utf8',
-                        'LAA1682282',
-                        'Passsd3d');
-
-
-            // 2. データベースから画像パスを取得
-            $sql = "SELECT song_name, singer_name, pref_id, link, good, image_path  FROM song WHERE song_id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':id', 477, PDO::PARAM_INT); // 例: id=1の画像を取得
-            $stmt->execute();
-            $song = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!empty($imagePath)) {
-            // URLか相対パスかを判定
-            if (preg_match('/^https?:\/\//', $imagePath)) {
-                // 外部URLの場合
-                $imageSrc = $imagePath;
-            } else {
-                // 内部パスの場合（例: ../uploads/image.jpg）
-                // サーバー構成に応じてベースパスを調整
-                $imageSrc = '../' . ltrim($imagePath, '/');
-            }
-            } else {
-            $imageSrc = null;
-            }
-
-            // 3. パスを変数に格納
-            $imagePath = $song['image_path'] ?? '';
-            $songName    = htmlspecialchars($song['song_name'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
-            $singerName  = htmlspecialchars($song['singer_name'] ?? '（不明）', ENT_QUOTES, 'UTF-8');
-            $pref_id     =(int)($song['pref_id'] ?? 0);
-            $link        = htmlspecialchars($song['link'] ?? '', ENT_QUOTES, 'UTF-8');
-            $good        = (int)($song['good'] ?? 0);
-
-            // pref_idから都道府県名を取得
-            $stmt = $pdo->prepare('SELECT pref_name FROM pref WHERE pref_id = ? LIMIT 1');
-            $stmt->execute([$pref_id]);
-            $pref = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($pref) {
-                $pref_name = $pref['pref_name'];
-            } else {
-                $pref_name = '（不明）';
-            }
-
-            ?>
         <div class="music-detail-box">
         <?php if ($imagePath): ?>
             <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" alt="画像">

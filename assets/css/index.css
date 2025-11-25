@@ -62,30 +62,16 @@
 }
 
 .hero-music-list-wrapper {
-    overflow: hidden;
+    overflow-x: auto; 
     width: 100%;
     position: relative;
+    scroll-behavior: smooth;
 }
 
 .hero-music-list{
     display: flex;
     gap: 16px;
     padding-left: 20px;
-    animation: scroll 20s linear infinite;
-}
-
-/* ホバー時に止まる */
-.hero-music-list:hover {
-    animation-play-state: paused;
-}
-
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
 }
 
 .hero-music-card{
@@ -166,5 +152,14 @@
 ::-webkit-scrollbar-thumb {
   background: #b5dbfb00;
   border-radius: 10px;
+}
+
+.hero-music-list-wrapper {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+.hero-music-list {
+    animation: none !important;
 }
 

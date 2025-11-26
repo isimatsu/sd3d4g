@@ -35,16 +35,11 @@ function is_valid_image_url(string $url, int $timeout = 3): bool {
 // ----------------------------------------------------
 function resolveImagePath($song) {
 
-    // 1. 外部URL（存在チェック）
+
+    // 2. 外部URL（存在チェック）
     if (!empty($song['image_path'])) {
         $url = trim($song['image_path']);
         if (is_valid_image_url($url)) return $url;
-    }
-
-    // 2. ローカル music_img
-    if (!empty($song['image_path'])) {
-        $rel = "/sd3d4g/assets/img/music_img/".ltrim($song['image_path'],'/');
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rel)) return $rel;
     }
 
     // 3. pref_id → spot_img
@@ -151,7 +146,9 @@ if (!empty($imagePath)) {
         </div>
         <div class="basic-form-box">
             <p class="input-name">楽曲リンク</span></p>
-            <p><?= $link ?></p>
+            <a href="<?= $link ?>" target="_blank" rel="noopener noreferrer" style="color:#007bff; text-decoration:underline;">
+                <?= $link ?>
+            </a>
         </div>
         <div class="basic-form-box">
             <p class="input-name">いいね</span></p>

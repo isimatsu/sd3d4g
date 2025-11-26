@@ -35,22 +35,36 @@ function is_valid_image_url(string $url, int $timeout = 3): bool {
 // ----------------------------------------------------
 function resolveImagePath($song) {
 
-
-    // 2. 外部URL（存在チェック）
     if (!empty($song['image_path'])) {
-        $url = trim($song['image_path']);
-        if (is_valid_image_url($url)) return $url;
+        $rawPath = trim($song['image_path']);
+
+        // 外部URL？
+        if (preg_match('/^https?:\/\//', $rawPath)) {
+            if (is_valid_image_url($rawPath)) return $rawPath;
+        }
+
+        // "../" を削除（DB保管時の相対パス対策）
+        $clean = preg_replace('/^\.+\//', '', $rawPath);
+
+        // Webパスに統一
+        $local = "/sd3d4g/" . $clean;
+
+        // 実在チェック
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $local)) {
+            return $local;
+        }
     }
 
-    // 3. pref_id → spot_img
+    // pref_id → spot_img（存在すれば）
     $prefId = (int)$song['pref_id'];
     $spot = "/sd3d4g/assets/img/spot_img/{$prefId}.png";
+
     if ($prefId > 0 && file_exists($_SERVER['DOCUMENT_ROOT'] . $spot)) {
         return $spot;
     }
 
-    // 4. 汎用画像
-    return "/assets/img/music_img/汎用画像.jpg";
+    // 汎用画像
+    return "/sd3d4g/assets/img/music_img/汎用画像.jpg";
 }
 
 // --- song_id を GET から取得 ---
@@ -88,18 +102,7 @@ $stmt->execute([$pref_id]);
 $pref = $stmt->fetch(PDO::FETCH_ASSOC);
 $pref_name = $pref ? $pref['pref_name'] : '（不明）';
 
-// --- 画像パスの調整 ---
-if (!empty($imagePath)) {
-    if (preg_match('/^https?:\/\//', $imagePath)) {
-        // 外部URLならそのまま
-        $imageSrc = $imagePath;
-    } else {
-        // ローカルファイル
-        $imageSrc = '../' . ltrim($imagePath, '/');
-    }
-} else {
-    $imageSrc = null;
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -125,12 +128,7 @@ if (!empty($imagePath)) {
                 <h1>楽曲詳細</h1>
             </div>
         <div class="music-detail-box">
-        <?php if ($imagePath): ?>
             <img src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" alt="画像">
-        <?php else: ?>
-            <p>画像が見つかりませんでした。</p>
-        <?php endif; ?>
-        
         <br>
         <div class="basic-form-box">
             <p class="input-name">曲名</span></p>

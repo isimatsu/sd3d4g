@@ -28,11 +28,13 @@
         $pref_stmt = $pdo->query($pref_sql);
         $prefs = $pref_stmt->fetchAll(PDO::FETCH_ASSOC);
         //全国ランキング取得
+// 集計(COUNT)をやめて、songテーブルのgoodカラムを 'good_count' という名前で取得します
         $national_sql = "SELECT s.*,
-                        (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
+                        s.good AS good_count, 
                         EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
                         AND user_id = :userid) AS is_good
                         FROM song s ORDER BY good_count DESC LIMIT 3";
+        
         $national_stmt = $pdo->prepare($national_sql);
         $national_stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
         $national_stmt -> execute();
@@ -144,10 +146,12 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
-                                        data-song-id="<?= $song['song_id'] ?>">
-                                            favorite
-                                    </span>
+                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
+                                        <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                            data-song-id="<?= $song['song_id'] ?>">
+                                                favorite
+                                        </span>
+                                    </button>
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                         <?= $song['good_count'] ?>
                                     </span>
@@ -225,6 +229,27 @@
                 });
             });
         });
+
+        function plusGood(song_id) {
+            const favorite_btn_print = document.getElementById(`song_favoritebtn_${song_id}`);
+            const good_print = document.getElementById(`good-count-${song_id}`);
+            
+            let current = parseInt(good_print.innerText);
+            const isAlreadyGood = favorite_btn_print.classList.contains('music-favorite-after');
+
+            if (isAlreadyGood) {
+                const afterGood = current - 1;
+                good_print.innerText = afterGood;
+                favorite_btn_print.classList.remove('music-favorite-after', 'after-favorite-btn');
+                favorite_btn_print.dataset.clicked = "false";
+            } else {
+                const afterGood = current + 1;
+                good_print.innerText = afterGood;
+                favorite_btn_print.classList.add('music-favorite-after', 'after-favorite-btn');
+                favorite_btn_print.dataset.clicked = "true";
+            }
+        }
+
     </script>
 
 

@@ -146,7 +146,7 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['good_count'] ?>)">
+                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
                                         <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
                                             data-song-id="<?= $song['song_id'] ?>">
                                                 favorite
@@ -233,18 +233,20 @@
         function plusGood(song_id) {
             const favorite_btn_print = document.getElementById(`song_favoritebtn_${song_id}`);
             const good_print = document.getElementById(`good-count-${song_id}`);
+            
+            let current = parseInt(good_print.innerText);
+            const isAlreadyGood = favorite_btn_print.classList.contains('music-favorite-after');
 
-            const current = parseInt(good_print.innerText);
-
-            if (!isClick) {
-                const afterGood = current + 1;
-                favorite_btn_print.classList.add('music-favorite-after', 'after-favorite-btn');
+            if (isAlreadyGood) {
+                const afterGood = current - 1;
                 good_print.innerText = afterGood;
-
-                // 状態を保存
+                favorite_btn_print.classList.remove('music-favorite-after', 'after-favorite-btn');
+                favorite_btn_print.dataset.clicked = "false";
+            } else {
+                const afterGood = current + 1;
+                good_print.innerText = afterGood;
+                favorite_btn_print.classList.add('music-favorite-after', 'after-favorite-btn');
                 favorite_btn_print.dataset.clicked = "true";
-
-                console.log(afterGood);
             }
         }
 

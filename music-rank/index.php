@@ -28,11 +28,13 @@
         $pref_stmt = $pdo->query($pref_sql);
         $prefs = $pref_stmt->fetchAll(PDO::FETCH_ASSOC);
         //全国ランキング取得
+// 集計(COUNT)をやめて、songテーブルのgoodカラムを 'good_count' という名前で取得します
         $national_sql = "SELECT s.*,
-                        (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
+                        s.good AS good_count, 
                         EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
                         AND user_id = :userid) AS is_good
                         FROM song s ORDER BY good_count DESC LIMIT 3";
+        
         $national_stmt = $pdo->prepare($national_sql);
         $national_stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
         $national_stmt -> execute();
@@ -46,8 +48,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
-<link rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" />
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -120,7 +121,7 @@
                                             favorite
                                     </span>
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
-                                        <p id="good_count_<?= $song['song_id'] ?>"><?= $song['good_count'] ?></p>
+                                        <?= $song['good_count'] ?>
                                     </span>
                                 </div>
                             </div>
@@ -151,7 +152,6 @@
                                                 favorite
                                         </span>
                                     </button>
-
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                         <?= $song['good_count'] ?>
                                     </span>
@@ -236,12 +236,16 @@
 
             const current = parseInt(good_print.innerText);
 
-            const afterGood = current + 1;
-            favorite_btn_print.classList.add('music-favorite-after');
-            favorite_btn_print.classList.add("after-favorite-btn");
-            good_print.innerText = afterGood;
+            if (!isClick) {
+                const afterGood = current + 1;
+                favorite_btn_print.classList.add('music-favorite-after', 'after-favorite-btn');
+                good_print.innerText = afterGood;
 
-            console.log(afterGood);
+                // 状態を保存
+                favorite_btn_print.dataset.clicked = "true";
+
+                console.log(afterGood);
+            }
         }
 
     </script>

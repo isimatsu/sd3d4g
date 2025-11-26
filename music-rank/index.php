@@ -46,7 +46,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
-     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,7 +120,7 @@
                                             favorite
                                     </span>
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
-                                        <?= $song['good_count'] ?>
+                                        <p id="good_count_<?= $song['song_id'] ?>"><?= $song['good_count'] ?></p>
                                     </span>
                                 </div>
                             </div>
@@ -144,10 +145,13 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
-                                        data-song-id="<?= $song['song_id'] ?>">
-                                            favorite
-                                    </span>
+                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['good_count'] ?>)">
+                                        <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                            data-song-id="<?= $song['song_id'] ?>">
+                                                favorite
+                                        </span>
+                                    </button>
+
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                         <?= $song['good_count'] ?>
                                     </span>
@@ -225,6 +229,21 @@
                 });
             });
         });
+
+        function plusGood(song_id) {
+            const favorite_btn_print = document.getElementById(`song_favoritebtn_${song_id}`);
+            const good_print = document.getElementById(`good-count-${song_id}`);
+
+            const current = parseInt(good_print.innerText);
+
+            const afterGood = current + 1;
+            favorite_btn_print.classList.add('music-favorite-after');
+            favorite_btn_print.classList.add("after-favorite-btn");
+            good_print.innerText = afterGood;
+
+            console.log(afterGood);
+        }
+
     </script>
 
 

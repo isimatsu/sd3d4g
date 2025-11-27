@@ -33,15 +33,16 @@ if(!isset($_SESSION['user_id'])){
         );
 
         //trip_idがNULL or 空でないデータを昇順で取得
-        $sql = "SELECT * FROM trip 
+        /*$sql = "SELECT * FROM trip 
                 WHERE user_id = ? 
                 AND trip_id IS NOT NULL 
                 AND trip_id <> '' 
-                ORDER BY trip_id DESC";
+                ORDER BY trip_id DESC";*/
                 //trip_idを１の時だけ表示という形に変える？
-                /*$sql = "SELECT * FROM trip 
+                $sql = "SELECT * FROM trip 
                 WHERE user_id = ? 
-                AND trip_id =1  */
+                AND trip_id =1
+                ORDER BY trip_id DESC";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_SESSION['user_id']]);

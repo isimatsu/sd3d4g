@@ -1,13 +1,17 @@
-session_start();
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登録処理</title>
-</head>
-<body>
 <?php
+    session_start();
+
+    // ログインしていなければリダイレクト
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: index.php');
+        exit;
+    }
+
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    
 try {
     // DB接続
     $pdo=new PDO(
@@ -22,6 +26,7 @@ try {
     $singer_name = $_POST['singer_name'] ?? '';
     $pref_name   = $_POST['pref'] ?? '';  // ← ★ pref_idではなくpref_nameが送られる
     $link        = $_POST['link'] ?? '';
+    $user_id     = $_SESSION['user_id'];
     $image_path  = ''; // ← 初期化（null禁止）
 
     // ------------------------------
@@ -74,9 +79,10 @@ try {
     // ------------------------------
     // DB登録処理
     // ------------------------------
-    $sql = "INSERT INTO song (song_name, singer_name, pref_id, link, image_path, good)
-            VALUES (:song_name, :singer_name, :pref_id, :link, :image_path, 0)";
+    $sql = "INSERT INTO song (song_name, singer_name, pref_id, link, user_id, image_path, good)
+            VALUES (:song_name, :singer_name, :pref_id, :link, :user_id, :image_path, 0)";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->bindValue(':song_name', $song_name, PDO::PARAM_STR);
     $stmt->bindValue(':singer_name', $singer_name, PDO::PARAM_STR);
     $stmt->bindValue(':pref_id', $pref_id, PDO::PARAM_INT);

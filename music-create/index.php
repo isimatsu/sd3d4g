@@ -1,4 +1,43 @@
+<?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+$pdo=new PDO('mysql:host=mysql326.phy.lolipop.lan;
+            dbname=LAA1682282-sd3d4g;charset=utf8',
+                'LAA1682282',
+                'Passsd3d');
+    
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if ($email !== '' && $password !== '') {
+        $sql = $pdo->prepare('SELECT * FROM user WHERE email = ? AND password = ?');
+        $sql->execute([$email, $password]);
+
+        if ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+            $_SESSION['user_id'] = $row['user_id'];
+            $_SESSION['user_name'] = $row['user_name'];
+            header('Location: index.php');
+            exit;
+        } else {
+            echo 'メールアドレスまたはパスワードが違います。';
+            echo '<a href="./signin/index.php">戻る</a>';
+            exit;
+        }
+        } else {
+            echo 'メールアドレスとパスワードを入力してください。';
+            echo '<a href="./signin/index.php">戻る</a>';
+            exit;
+        }
+        } else {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: signin/index.php');
+            exit;
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

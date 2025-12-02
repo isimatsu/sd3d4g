@@ -116,10 +116,12 @@
                                     <span class="music-play material-symbols-rounded">play_circle</span>
                                 </a>
                                 <div class="good-area">
-                                    <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
-                                        data-song-id="<?= $song['song_id'] ?>">
-                                            favorite
-                                    </span>
+                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
+                                        <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                            data-song-id="<?= $song['song_id'] ?>">
+                                                favorite
+                                        </span>
+                                    </button>
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                         <?= $song['good_count'] ?>
                                     </span>

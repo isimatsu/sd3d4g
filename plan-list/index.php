@@ -41,7 +41,7 @@ if(!isset($_SESSION['user_id'])){
                 //trip_idを１の時だけ表示という形に変える？
                 $sql = "SELECT * FROM trip 
                 WHERE user_id = ? 
-                AND trip_id =1
+                AND (feedback =1 OR feedback IS NULL)
                 ORDER BY trip_id DESC";
 
         $stmt = $pdo->prepare($sql);

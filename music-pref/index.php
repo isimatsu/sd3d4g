@@ -36,7 +36,7 @@
                 (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
                 EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
                 AND user_id = :userid) AS is_good
-                FROM song s WHERE s.pref_id = :pref_id 
+                FROM song_update s WHERE s.pref_id = :pref_id 
                 ORDER BY good_count DESC LIMIT 50";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
@@ -89,7 +89,7 @@
                             <p><?= htmlspecialchars($song['song_name']) ?></p>
                         </div>
                         <div class="music-action-btn">
-                            <a href="<?= htmlspecialchars($song['link']) ?>">
+                            <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" rel="noopener">
                                 <span class="music-play material-symbols-rounded">play_circle</span>
                             </a>
                             <div class="good-area">

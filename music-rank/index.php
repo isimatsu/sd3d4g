@@ -23,7 +23,7 @@
         //URLからpref_id取得
         $pref_id = isset($_GET['pref_id']) ? intval($_GET['pref_id']) : null;
 
-        // 都道府県リスト取得（prefテーブルがある前提）
+        // 都道府県リスト取得
         $pref_sql = "SELECT pref_id, pref_name FROM pref ORDER BY pref_id ASC";
         $pref_stmt = $pdo->query($pref_sql);
         $prefs = $pref_stmt->fetchAll(PDO::FETCH_ASSOC);

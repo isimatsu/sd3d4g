@@ -71,7 +71,6 @@
 .hero-music-list{
     display: flex;
     gap: 16px;
-    padding-left: 20px;
 }
 
 .hero-music-card{
@@ -91,7 +90,6 @@
     width: 100%;
     height: 70px;
     border-radius: 0 0 30px 30px;
-    display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -155,6 +153,7 @@
 }
 
 .hero-music-list-wrapper {
+    padding-bottom: 20px;
     overflow-x: auto !important;
     overflow-y: hidden !important;
 }

@@ -1,3 +1,24 @@
+<?php
+session_start();  
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+if(isset($_SESSION['user_id'])){
+        $user_id = $_SESSION['user_id'];
+        $user_name = $_SESSION['user_name'];
+    }
+
+    $host = 'mysql326.phy.lolipop.lan';
+	$dbname = 'LAA1682282-sd3d4g';
+    $user = 'LAA1682282';
+    $pass = 'Passsd3d';
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $stmt=$pdo->prepare("SELECT * FROM song_update WHERE user_id=?");
+    $stmt->execute([$user_id]);
+    $history_songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,17 +44,22 @@
                 <h1>履歴</h1>
             </div>
             <div class="page-contents">
+                <?php $rank = 1; foreach ($history_songs as $song): ?>
                 <div class="music-card">
                     <div class="music-info">
-                        <p style="font-weight: bold; color: #E6B422 ;">#1</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
+                                <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?? '#000000' ?>;">#<?= $rank ?></p>
+                                    <img class="music-img" src="<?= htmlspecialchars($song['image_path']) ?>">
+                                <p><?= htmlspecialchars($song['song_name']) ?></p>
+                            </div>
+                            <div class="music-action-btn">
+                                <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" rel="noopener">
+                                    <span class="music-play material-symbols-rounded">play_circle</span>
+                                </a>
+                                    <!-- goodボタンの機能は未実装です-->
+                                    <span class="music-favorite material-symbols-rounded">favorite</span>
+                            </div>
                 </div><!--music-card-->
+                <?php $rank++; endforeach; ?>
                 <div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: #b5b5b4ff ;">#2</p>

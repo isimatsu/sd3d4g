@@ -217,7 +217,7 @@
         document.querySelectorAll(".music-favorite").forEach(btn => {
             btn.addEventListener("click", function() {
                 let songId = this.dataset.songId;
-
+                console.log('goods実行')
                 fetch("../good/goods.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },

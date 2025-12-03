@@ -21,19 +21,23 @@
         }
 
         //URLからpref_id取得
-        $pref_id = isset($_GET['pref_id']) ? intval($_GET['pref_id']) : null;
+        $area_id = isset($_GET['area_id']) ? intval($_GET['area_id']) : null;
 
-        // 都道府県リスト取得
-        $pref_sql = "SELECT pref_id, pref_name FROM pref ORDER BY pref_id ASC";
-        $pref_stmt = $pdo->query($pref_sql);
-        $prefs = $pref_stmt->fetchAll(PDO::FETCH_ASSOC);
+        // エリアリスト取得
+        $areas = [
+            1 => "北海道・東北",
+            2 => "関東・東海",
+            3 => "近畿・中国・四国",
+            4 => "九州・沖縄"
+        ];
+        
         //全国ランキング取得
-// 集計(COUNT)をやめて、songテーブルのgoodカラムを 'good_count' という名前で取得します
+        // 集計(COUNT)をやめて、songテーブルのgoodカラムを 'good_count' という名前で取得します
         $national_sql = "SELECT s.*,
                         s.good AS good_count, 
                         EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
                         AND user_id = :userid) AS is_good
-                        FROM song_update s ORDER BY good_count DESC LIMIT 3";
+                        FROM song2 s ORDER BY good_count DESC LIMIT 3";
         
         $national_stmt = $pdo->prepare($national_sql);
         $national_stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
@@ -62,22 +66,21 @@
                 <?php include '../assets/include/header.php'?>
             </div>
 
-            <!-- ▼ 県選択ドロップダウン（タイトル位置に配置） -->
+            <!-- ▼ エリア選択ドロップダウン（タイトル位置に配置） -->
             <div class="page-header">
                 <h1>
-                    <select name="pref_id" onchange="location.href='?pref_id=' + this.value">
+                    <select name="area_id" onchange="location.href='?area_id=' + this.value">
                         <option value="">選択してください</option>
-                    <?php foreach($prefs as $pref): ?>
-                        <option value="<?= $pref['pref_id'] ?>"
-                            <?= ($pref_id === (int)$pref['pref_id']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($pref['pref_name']) ?>
+                    <?php foreach ($areas as $id => $name): ?>
+                        <option value="<?= $id ?>" <?= ($area_id === $id) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($name) ?>
                         </option>
                     <?php endforeach; ?>
                     </select>
                     <label>のランキング</label>
                 </h1>
 
-                <?php if ($pref_id !== null): ?>
+                <?php if ($area_id !== null): ?>
             
                 <?php
                 // 曲データ取得
@@ -85,13 +88,13 @@
                         (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
                         EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
                         AND user_id = :userid) AS is_good
-                        FROM song_update s WHERE s.pref_id = :pref_id 
+                        FROM song2 s WHERE s.area_id = :area_id 
                         ORDER BY good_count DESC LIMIT 3";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
-                $stmt->bindValue(':pref_id', $pref_id, PDO::PARAM_INT);
+                $stmt->bindValue(':area_id', $area_id, PDO::PARAM_INT);
                 $stmt->execute();
-                $pref_songs = $stmt->fetchAll();
+                $area_songs = $stmt->fetchAll();
 
                 // 順位カラー
                 $rank_colors = [
@@ -101,10 +104,10 @@
                 ];
                 ?>
 
-                <?php if (empty($pref_songs)): ?>
-                    <p>この県には登録された曲がありません。</p>
+                <?php if (empty($area_songs)): ?>
+                    <p>このエリアには登録された曲がありません。</p>
                 <?php else: ?>
-                    <?php $rank = 1; foreach ($pref_songs as $song): ?>
+                    <?php $rank = 1; foreach ($area_songs as $song): ?>
                         <div class="music-card">
                             <div class="music-info">
                                 <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?>;">#<?= $rank ?></p>
@@ -131,7 +134,7 @@
                     <?php $rank++; endforeach; ?>
                 <?php endif; ?>
                 <?php endif; ?>
-                <a class="all" href="../music-pref/index.php?pref_id=<?= htmlspecialchars($pref_id) ?>">
+                <a class="all" href="../music-pref/index.php?area_id=<?= htmlspecialchars($area_id) ?>">
                     すべて表示
                 </a>
                 

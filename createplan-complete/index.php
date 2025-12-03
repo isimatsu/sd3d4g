@@ -36,17 +36,21 @@ $move = $_POST['move'] ?? '';
 $budget = $_POST['budget'] ?? '上限なし';
 $special_requests = $_POST['special_requests'] ?? '';
 $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+
+// フィードバック処理
 if(isset($_POST['feedback'])){
     $trip_id=$_POST['plan_id'];
     $feedback=$_POST['feedback'];
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    if($feedback==2 || $feedback==3){
-         $feedbackset=$pdo->prepare("UPDATE trip SET feedback = ? WHERE trip_id = ?");
-        $feedbackset->execute([$feedback,$trip_id]);
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+        if($feedback==2 || $feedback==3){
+             $feedbackset=$pdo->prepare("UPDATE trip SET feedback = ? WHERE trip_id = ?");
+            $feedbackset->execute([$feedback,$trip_id]);
+        }
+    } catch (PDOException $e) {
+        debugLog("フィードバック更新エラー: " . $e->getMessage());
     }
 }
-
-
 
 // システムプロンプト
 $systemInstruction = <<<'EOT'
@@ -68,8 +72,8 @@ $systemInstruction = <<<'EOT'
 ・入力項目「移動手段」について移動手段は「車」「公共交通」がありますが。あくまでも旅行先での移動手段であって出発地から目的地が離れている場合は飛行機や新幹線の提案を優先してください。
 ・特別なリクエストはユーザーが自由に入力できる条件です。その指示に従って提案してください。
 ・「旅行予算」が設定されている場合、それを超えないようなプランを作成してください。
-・旅行に合うの曲を以下の【曲一覧】から最適なものを3つ選び song_idのみを配列で出力select_songに入れてください。
-【曲一覧】：「」
+・旅行に合うの曲を入力項目の【曲一覧】から最適なものを3つ選び song_idのみを配列で出力select_songに入れてください。曲一覧の仕様[1(曲ID):中央フリーウェイ（曲名）]
+選曲の条件は以下の通りです。「目的地（旅行先）の都道府県に名残がある曲（アーティストが出身、その地域を歌った曲など）。その地域に関連無い曲は選択しないでください」
 [出力形式(旅程JSON)]
 出力はJSONのみとし、説明文や補足は一切出力しないでください。
 {
@@ -80,7 +84,7 @@ $systemInstruction = <<<'EOT'
       "segment_type": "move",
       "segment_info": "plane",
       "segment_name": "移動手段",
-　  "segment_detail": null,
+      "segment_detail": null,
       "start_time": "2025-10-20T08:00:00",
       "end_time": "2025-10-20T10:30:00",
       "song_id": "https://www.youtube.com/watch?v=5qap5aO4i9A"
@@ -104,6 +108,7 @@ $systemInstruction = <<<'EOT'
 EOT;
 
 // ユーザー入力
+// 注意: 【曲一覧】が空だとAIが選べない可能性があります。必要に応じてDBから取得してここに埋め込む処理を追加してください。
 $userInput = "
 「入力項目」
 ・出発地：$departure_prefecture
@@ -114,7 +119,19 @@ $userInput = "
 ・移動手段：$move
 ・旅行予算：$budget
 ・絶対に経由する場所：$waypoint
-・特別なリクエスト：$special_requests";
+・特別なリクエスト：$special_requests
+・曲一覧：[
+1	HOWEVER,
+2	未来予想図II,
+3	大空と大地の中で,
+4	ワインレッドの心,
+5	時代,
+6	新宝島,
+7	虹,
+8	RUN,
+9	Everything,
+10	前前前世,
+]";
 
 // リクエストボディの作成
 $requestBody = [
@@ -172,26 +189,6 @@ curl_close($ch);
 
 debugLog("API応答受信 (HTTP: $httpCode, サイズ: " . strlen($response) . "bytes)");
 
-// YouTube URLから動画IDを抽出する関数
-function extractYoutubeId($url) {
-    if (empty($url)) return null;
-    $parsed = parse_url($url);
-    if (isset($parsed['query'])) {
-        parse_str($parsed['query'], $params);
-        return $params['v'] ?? null;
-    }
-    return null;
-}
-
-// 曲名とアーティスト名を分割する関数
-function parseSongTitle($title) {
-    $parts = explode(' - ', $title, 2);
-    return [
-        'song_name' => trim($parts[0] ?? $title),
-        'singer_name' => trim($parts[1] ?? '不明')
-    ];
-}
-
 // レスポンス処理
 $dbSaveResult = '';
 $tripId = null;
@@ -233,12 +230,12 @@ if ($httpCode === 200) {
     $tripData = json_decode($jsonText, true);
     
     if (json_last_error() !== JSON_ERROR_NONE) {
-    $error_msg = json_last_error_msg();
-    debugLog("旅程JSONパースエラー: " . $error_msg);
-    debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
-    $dbSaveResult = "❌ 旅程データの解析に失敗しました: {$error_msg}";
-    die($dbSaveResult . "<br><a href='../createplan/'>戻る</a>");
-}
+        $error_msg = json_last_error_msg();
+        debugLog("旅程JSONパースエラー: " . $error_msg);
+        debugLog("JSON内容(最初の500文字): " . substr($jsonText, 0, 500));
+        $dbSaveResult = "❌ 旅程データの解析に失敗しました: {$error_msg}";
+        die($dbSaveResult . "<br><a href='../createplan/'>戻る</a>");
+    }
     
     debugLog("JSON解析成功");
     
@@ -254,23 +251,25 @@ if ($httpCode === 200) {
             
             // トランザクション開始
             $pdo->beginTransaction();
-
             
-            $prefstmt=$pdo->prepare("SELECT pref_id FROM pref WHERE pref_name=?");
+            // 都道府県IDの取得
+            $prefstmt = $pdo->prepare("SELECT pref_id FROM pref WHERE pref_name=?");
             $prefstmt->execute([$destination_prefecture]);
-            $row=$prefstmt->fetch(PDO::FETCH_ASSOC);
+            $row = $prefstmt->fetch(PDO::FETCH_ASSOC);
 
-            echo "DEBUG row = ";
-            var_dump($row);
-            echo "<br>";
+            // デバッグ表示（必要なければコメントアウト）
+            // echo "DEBUG row = "; var_dump($row); echo "<br>";
 
             if ($row && isset($row['pref_id'])) {
                 $pref_id = $row['pref_id'];
             } else {
-                echo"❌ エラー: 都道府県 '{$destination_prefecture}' が pref テーブルに存在しません。";
+                // エラーハンドリング：IDが見つからない場合
+                // ここで処理を止めるか、デフォルト値を入れるか
+                // とりあえずエラー表示して終了
+                echo "❌ エラー: 都道府県 '{$destination_prefecture}' が pref テーブルに存在しません。";
+                $pdo->rollBack();
                 exit;
             }
-
             
             // 1. tripテーブルにデータを挿入
             $tripInsertSql = "INSERT INTO trip (trip_name, trip_overview, trip_start, trip_end, user_id, pref_id) 
@@ -281,66 +280,42 @@ if ($httpCode === 200) {
                 ':trip_overview' => $tripData['trip_overview'],
                 ':trip_start' => $trip_start,
                 ':trip_end' => $trip_end,
-                ':user_id' => $_SESSION['user_id'],
+                ':user_id' => $_SESSION['user_id'] ?? 11, // セッションがない場合のデフォルト値
                 ':pref_id' => $pref_id
             ]);
             
             $tripId = $pdo->lastInsertId();
             debugLog("Trip挿入完了 (ID: $tripId)");
             
-            // 2. songテーブルに楽曲を挿入
-            $songMap = [];
-            
+            // 2. trip_song_connectテーブルに楽曲を紐付け
+            // AIから返ってきた song_id (song2テーブルのID) を中間テーブルに保存
             if (isset($tripData['recommended_songs'])) {
-                $songInsertSql = "INSERT INTO song (song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
-                                  VALUES (:song_name, :singer_name, :link, :user_id, :trip_id, :pref_id, :song_time, :image_path)";
-                $songStmt = $pdo->prepare($songInsertSql);
+                $connectSql = "INSERT INTO trip_song_connect (trip_id, song_id) VALUES (:trip_id, :song_id)";
+                $connectStmt = $pdo->prepare($connectSql);
                 
-                foreach ($tripData['recommended_songs'] as $song) {
-                    $parsed = parseSongTitle($song['title']);
-                    $youtubeId = extractYoutubeId($song['url']);
-                    
-                    $songStmt->execute([
-                        ':song_name' => $parsed['song_name'],
-                        ':singer_name' => $parsed['singer_name'],
-                        ':link' => $song['url'],
-                        ':user_id' => $_SESSION['user_id'] ?? 11,
-                        ':trip_id' => $tripId,
-                        ':pref_id' => $pref_id,
-                        ':song_time' => 0,
-                        ':image_path' => $youtubeId ? "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg" : ''
-                    ]);
-                    
-                    $songMap[$song['url']] = $pdo->lastInsertId();
+                foreach ($tripData['recommended_songs'] as $rec) {
+                    if (isset($rec['select_song']) && is_array($rec['select_song'])) {
+                        foreach ($rec['select_song'] as $songIdInJson) {
+                            // 数値であることを確認
+                            if (is_numeric($songIdInJson)) {
+                                try {
+                                    $connectStmt->execute([
+                                        ':trip_id' => $tripId,
+                                        ':song_id' => $songIdInJson
+                                    ]);
+                                } catch (PDOException $e) {
+                                    // 存在しないIDなどでエラーが出ても処理を止めない
+                                    debugLog("楽曲紐付けスキップ(ID: $songIdInJson): " . $e->getMessage());
+                                }
+                            }
+                        }
+                    }
                 }
-                
-                debugLog("楽曲挿入完了 (" . count($songMap) . "件)");
+                debugLog("楽曲紐付け処理完了");
             }
-            
-            // 3. ダミー楽曲を確認・作成
-            $dummySongId = null;
-            $checkDummySql = "SELECT song_id FROM song WHERE song_name = '楽曲なし' AND trip_id = :trip_id LIMIT 1";
-            $checkStmt = $pdo->prepare($checkDummySql);
-            $checkStmt->execute([':trip_id' => $tripId]);
-            $dummyResult = $checkStmt->fetch();
-            
-            if ($dummyResult) {
-                $dummySongId = $dummyResult['song_id'];
-                debugLog("既存のダミー楽曲を使用 (ID: $dummySongId)");
-            } else {
-                $dummySongSql = "INSERT INTO song (song_name, singer_name, link, user_id, trip_id, pref_id, song_time, image_path) 
-                                 VALUES ('楽曲なし', '不明', '', :user_id, :trip_id, :pref_id, 0, '')";
-                $dummySongStmt = $pdo->prepare($dummySongSql);
-                $dummySongStmt->execute([
-                    ':user_id' => $_SESSION['user_id'] ?? 11,
-                    ':trip_id' => $tripId,
-                    ':pref_id' => $pref_id
-                ]);
-                $dummySongId = $pdo->lastInsertId();
-                debugLog("ダミー楽曲を作成 (ID: $dummySongId)");
-            }
-            
-            // 4. trip_infoテーブルにセグメントデータを挿入
+
+            // 3. trip_infoテーブルにセグメントデータを挿入
+            // song_id は新しい仕様では trip_info に紐づかないため NULL を設定します
             $segmentInsertSql = "INSERT INTO trip_info 
                                  (trip_id, segment_type, segment_info, segment_name, segment_detail, start_time, end_time, song_id) 
                                  VALUES (:trip_id, :segment_type, :segment_info, :segment_name, :segment_detail, :start_time, :end_time, :song_id)";
@@ -353,11 +328,8 @@ if ($httpCode === 200) {
             
             $segmentCount = 0;
             foreach ($tripData['itinerary'] as $index => $segment) {
-                $songIdDb = $dummySongId;
-                
-                if ($segment['segment_type'] === 'move' && !empty($segment['song_id'])) {
-                    $songIdDb = $songMap[$segment['song_id']] ?? $dummySongId;
-                }
+                // song_id は NULL とする
+                $songIdDb = null;
                 
                 $segmentStmt->execute([
                     ':trip_id' => $tripId,

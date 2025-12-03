@@ -13,9 +13,27 @@ if(isset($_SESSION['user_id'])){
     $user = 'LAA1682282';
     $pass = 'Passsd3d';
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    $stmt=$pdo->prepare("SELECT * FROM song_update WHERE user_id=?");
+    $sql = "
+        SELECT 
+        s.song_id,
+        s.song_name,
+        s.singer_name,
+        s.link,
+        s.good,
+        s.area_id,
+        s.song_time,
+        s.image_path
+        FROM trip t
+        JOIN trip_song_connect tc ON t.trip_id = tc.trip_id
+        JOIN song2 s ON tc.song_id = s.song_id
+        WHERE t.user_id = ?
+        AND (t.feedback = 1 OR t.feedback IS NULL)
+        ORDER BY s.song_id;";
+
+    $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_id]);
     $history_songs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 ?>

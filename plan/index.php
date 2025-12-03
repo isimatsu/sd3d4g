@@ -245,7 +245,7 @@
                                     </div>
                                     <div>
                                         <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
-                                        <button onclick="location.href='$music_url'"   class="music-play-btn"    data-url="{$music_url}">
+                                        <button onclick="location.href='$music_url'"   class="music-play-btn"    data-url="{$music_url}" target="_blank" rel="noopener">
                                             <span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span>
                                         </button>
                                     </div>

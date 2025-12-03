@@ -77,7 +77,7 @@
                         </option>
                     <?php endforeach; ?>
                     </select>
-                    <label>のランキング</label>
+                    <label>エリアのランキング</label>
                 </h1>
 
                 <?php if ($area_id !== null): ?>

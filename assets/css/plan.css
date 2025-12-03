@@ -461,3 +461,8 @@
     background-color: gold;
     color: #fff;
 }
+
+.musicplayer-img img{
+    width: 100%;
+    aspect-ratio: 1/1;
+}

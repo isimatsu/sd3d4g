@@ -1,16 +1,24 @@
 <?php
-    session_start();    
+    session_start(); 
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);   
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
         $user_name = $_SESSION['user_name'];
     }
 
-    //plan_idでDBから引っ張る
+    // plan_idのチェック
+    if (!isset($_GET['plan_id']) || empty($_GET['plan_id'])) {
+        die("旅程IDが指定されていません。");
+    }
+
+
     $plan_id = $_GET['plan_id'];
 
     //DB接続情報
     $host = 'mysql326.phy.lolipop.lan';
-	$dbname = 'LAA1682282-sd3d4g';
+    $dbname = 'LAA1682282-sd3d4g';
     $user = 'LAA1682282';
     $pass = 'Passsd3d';
 
@@ -18,11 +26,21 @@
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        // 旅程データ取得
         $sql = "SELECT * FROM `trip` WHERE `trip_id` = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$plan_id]);
         $trips = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // データが存在するかチェック
+        if (empty($trips)) {
+            die("旅程データの解析に失敗しました。指定された旅程が見つかりません。(ID: " . htmlspecialchars($plan_id) . ")");
+        }
+
+        // 最初の要素を取得（trip_idで検索するので通常1件）
+        $trip_info = $trips[0];
+
+        // 旅程詳細データ取得
         $parts_sql = "SELECT * FROM `trip_info` WHERE `trip_id` = ? ORDER BY `trip_info`.`segment_id` ASC";
         $stmt = $pdo->prepare($parts_sql);
         $stmt->execute([$plan_id]);
@@ -32,13 +50,20 @@
         die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
     }
 
-    
-    foreach($trips as $trip_info){
+        //memoが送られているかどうか
+    if (isset($_POST['memo_add'])) {
+        $memo = $_POST['memo_add'];
+        $sql_segment_id = $_POST['segment_id'];
 
+        $memo_sql = "UPDATE trip_info SET memo = :memo WHERE segment_id = $sql_segment_id";
+        $stmt = $pdo->prepare($memo_sql);
+        $stmt->bindValue(':memo', $memo, PDO::PARAM_STR);
+        $stmt->execute();
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+        
     }
-    
-
-    
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -62,45 +87,20 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/<?=$trip_info['pref_id']?>.png);">
+            <div class="plan-hero" style="background-image: url(../assets/img/spot_img/<?=htmlspecialchars($trip_info['pref_id'])?>.png);">
                 <div class="trip-title">
                     <!-- <div class="for-user">
-                        <p><?= $user_name ?>さんにぴったりの旅程を作成しました。</p>
+                        <p><?= htmlspecialchars($user_name) ?>さんにぴったりの旅程を作成しました。</p>
                     </div> -->
                     <div>
-                        <h1><?=$trip_info['trip_name']?></h1>
-                        <h5><?=$trip_info['trip_start']?>～<?=$trip_info['trip_end']?></h5>
-                        <p><?=$trip_info['trip_overview']?></p>
+                        <h1><?=htmlspecialchars($trip_info['trip_name'])?></h1>
+                        <h5><?=htmlspecialchars($trip_info['trip_start'])?>～<?=htmlspecialchars($trip_info['trip_end'])?></h5>
+                        <p><?=htmlspecialchars($trip_info['trip_overview'])?></p>
                     </div>
                 </div>
             </div>
             <div class="page-contents">
                 <div class="plan-tree">
-                
-                    <!-- <div class="tree-move">
-                        <div class="move-line"></div>
-                        <div class="move-info">
-                            <div class="move-detail">
-                                <span class="move-icon material-symbols-rounded">travel</span>
-                                <p>移動名</p>
-                            </div>
-                        </div>
-                    </div>move -->
-                    <!-- <div class="tree-point">
-                        <div class="point-card">
-                            <div class="point-info">
-                                <div class="point-detail">
-                                    <span class="move-icon material-symbols-rounded">distance</span>
-                                    <div class="point-name">
-                                        <h5>time</h5>
-                                        <h5>aaaa</h5>
-                                        <p>dsdadadsada</p>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>point -->
                     <?php
                         foreach($parts as $parts_tree){
                             $segment_id = $parts_tree['segment_id'];
@@ -109,9 +109,8 @@
                             $time = $parts_tree['start_time'];
                             $start_time = date("H:i", strtotime($time));
                             $segment_info = $parts_tree['segment_info'];
+                            $memo = $parts_tree['memo'];
                         
-
-                    
                             if($segment_type == 1){
                                 //移動アイコン
                                 switch($parts_tree['segment_info']):
@@ -131,7 +130,7 @@
                                         <div class='move-info'>
                                             <div class='move-detail'>
                                                 <span class='move-icon material-symbols-rounded'>{$segment_icon_name}</span>
-                                                <p>{$segment_name}</p>
+                                                <p>" . htmlspecialchars($segment_name) . "</p>
                                             </div>
                                             <button class='move-music-btn' onClick='play_music()'><span class='material-symbols-rounded'>music_note</span><p>音楽を再生</p></button>
                                         </div>
@@ -167,15 +166,25 @@
                                                         <div class='tourist-img'><span class='material-symbols-rounded'>image</span></div>
                                                         <div class='tourist-name'>
                                                             <h5 class='point-card-time'>{$start_time}</h5>
-                                                            <h4 class='point-card-name-tourist'>{$segment_name}</h4>
+                                                            <h4 class='point-card-name-tourist'>" . htmlspecialchars($segment_name) . "</h4>
                                                             
                                                         </div>
                                                     </div>
                                                     <div class='tourist-detail'>
-                                                        <p>{$segment_detail}</p>
+                                                        <p>" . htmlspecialchars($segment_detail) . "</p>
                                                     </div>
+                                                    <p>{$memo}</p>
                                                     <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                                 </div>
+                                                                                            ";
+                                                    if(isset($memo)){
+                                                        echo"
+                                                        <div class='segment-memo'>
+                                                            <p>メモ：{$memo}</p>
+                                                        </div>
+                                                        ";
+                                                    }
+                                echo "
                                             </div>
                                         </div>
                                     </div><!--point-->
@@ -190,11 +199,20 @@
                                                         <span class='point-icon material-symbols-rounded' style='color:#666;'>{$segment_icon_name}</span>
                                                         <div class='point-name'>
                                                             <h5 class='point-card-time' style='margin: 0 10px;'>{$start_time} </h5>
-                                                            <h5 class='point-card-name'>{$segment_name}</h5>
+                                                            <h5 class='point-card-name'>" . htmlspecialchars($segment_name) . "</h5>
                                                         </div>
                                                     </div>
                                                 <form action='#' method='POST'><input type='hidden' name='edit_segment_id' value='{$segment_id}'><button class='plan-edit-btn plan-edit-btn-tourist'><span class='material-symbols-rounded'>edit_note</span></button></form>
                                             </div>
+                                            ";
+                                                    if(isset($memo)){
+                                                        echo"
+                                                        <div class='segment-memo'>
+                                                            <p>メモ：{$memo}</p>
+                                                        </div>
+                                                        ";
+                                                    }
+                                echo "
                                         </div>
                                     </div><!--point-->
                                     "; 
@@ -207,7 +225,7 @@
                 <div class="planpage-music-list">
                     <div class="planpage-music-list-title">
                         <span class='point-icon material-symbols-rounded'>queue_music</span>
-                        <p><?=$trip_info['trip_name']?>のプレイリスト</p>
+                        <p><?=htmlspecialchars($trip_info['trip_name'])?>のプレイリスト</p>
                     </div>
                     <?php
                         $sql = "SELECT * FROM `song` WHERE `trip_id` = ? ORDER BY `trip_id` DESC";
@@ -216,9 +234,9 @@
                         $music = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         foreach($music as $row){
-                            $singer_name = $row['singer_name'];
-                            $song_name = $row['song_name'];
-                            $music_url = $row['link'];
+                            $singer_name = htmlspecialchars($row['singer_name']);
+                            $song_name = htmlspecialchars($row['song_name']);
+                            $music_url = htmlspecialchars($row['link']);
                             echo <<<HTML
                                 <div class="planpage-music-list-card">
                                     <div>
@@ -227,7 +245,7 @@
                                     </div>
                                     <div>
                                         <button><span class='music-list-icon material-symbols-rounded'>favorite</span></button>
-                                        <button class="music-play-btn" data-url="{$music_url}">
+                                        <button onclick="location.href='$music_url'"   class="music-play-btn"    data-url="{$music_url}">
                                             <span class='music-list-icon material-symbols-rounded' style="color: #7968FF;">play_circle</span>
                                         </button>
                                     </div>
@@ -235,11 +253,17 @@
                             HTML;
                         }
                     ?>
+                    <?php
+                        $sql = "SELECT * FROM `pref` WHERE `pref_id` = ?";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute([$trip_info['pref_id']]);
+                        $prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $pref = $prefs[0];
+                    ?>
+                    <a href="../music-rank/?pref_id=<?= $trip_info['pref_id'] ?>" class="pref-rank-btn">
+                        <?= htmlspecialchars($pref['pref_name'], ENT_QUOTES, 'UTF-8'); ?>のランキング
+                    </a>
                 </div>
-                <?php
-// フィードバック処理
-
-?>
                 <div class="plan-feedback">
                     <?php 
                     if(isset($_POST['destination_prefecture'])){?>
@@ -258,6 +282,7 @@
                             $move = $_POST['move'] ?? '';
                             $special_requests = $_POST['special_requests'] ?? '';
                             $waypoint = empty($_POST['waypoint']) ? 'なし' : $_POST['waypoint'];
+                            echo "テスト都道府県$destination_prefecture";
                             ?>
                             <input type="hidden" name="destination_prefecture" value="<?=htmlspecialchars($destination_prefecture)?>">
                             <input type="hidden" name="departure_prefecture" value="<?=htmlspecialchars($departure_prefecture)?>">
@@ -266,6 +291,7 @@
                             <input type="hidden" name="trip_end" value="<?=htmlspecialchars($trip_end)?>">
                             <input type="hidden" name="move" value="<?=htmlspecialchars($move)?>">
                             <input type="hidden" name="waypoint" value="<?=htmlspecialchars($waypoint)?>">
+                            <input type="hidden" name="plan_id" value="<?=htmlspecialchars($plan_id)?>">
                             <div class="feedback-btn-list">
                                 <input type="radio" name="feedback"  id="option1" value="1" class="feedback-radio" style="display: none;">
                                 <label class="feedback-level level-good" for="option1">
@@ -285,7 +311,11 @@
                             <input type="text" name="special_requests" class="feedback-text" placeholder="改善してほしい箇所、要望を具体的に入力してください" value="<?= htmlspecialchars($special_requests) ?>">
                             <button type="submit" class="basic-btn blue-btn" id="submitBtn">再生成</button>
                         </form>
-                    <?php } ?>
+                    <?php }elseif(isset($_POST['test'])){
+                        echo "エラー";
+                    }else{
+                        echo "フィードバック済";
+                    } ?>
                 </div>
 <script>
     const feedbackRadios = document.querySelectorAll('.feedback-radio');
@@ -300,13 +330,13 @@
                 specialRequests.disabled = true;
                 specialRequests.placeholder = '保存するため入力は不要です';
                 specialRequests.style.backgroundColor = '#f0f0f0';
-                feedback_form.action = "index.php?plan_id=<?= $plan_id ?>"; // ← 修正
+                feedback_form.action = "../plan-list/";
             } else {
                 submitBtn.textContent = '再生成';
                 specialRequests.disabled = false;
                 specialRequests.placeholder = '改善してほしい箇所、要望を具体的に入力してください';
                 specialRequests.style.backgroundColor = '#fff';
-                feedback_form.action = "../createplan-complete"; // ← 修正
+                feedback_form.action = "../createplan-complete/";
             }
         });
     });
@@ -328,12 +358,13 @@ if (isset($_POST['edit_segment_id'])) {
     $stmt->execute([$edit_segment_id, $plan_id]);
     $segment = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($segment as $row) {
-        $edit_segment_name = $row['segment_name'];
-    }
+    if (empty($segment)) {
+        echo "<!-- 編集対象のセグメントが見つかりません -->";
+    } else {
+        $edit_segment_name = $segment[0]['segment_name'];
     ?>
     <!-- HTML部分ここから -->
-    <div class='modal-outline' id='modal_outline'>
+    <div class='modal-outline memo-modal' id='modal_outline'>
         <div class='modal-area'>
             <button onClick='modal_close()' class='model-close-btn'>
                 <span class='material-symbols-rounded'>close</span>
@@ -449,99 +480,134 @@ if (isset($_POST['edit_segment_id'])) {
                 <?php endif; ?>
             <?php endforeach; ?>
 
-            <form action='#' method='POST'>
-                <input type='text' name='update_segment_prompt' class='feedback-text' placeholder='改善してほしい箇所、要望を具体的に入力してください'>
-                <button type='submit' class='basic-btn blue-btn'>再生成</button>
+            <form action="index.php?plan_id=<?= $plan_id ?>" method="POST">
+                <input type="text" name="memo_add" class="memo-add-form" placeholder="メモを入力">
+                <input type="hidden" name="segment_id" value="<?= $edit_segment_id ?>">
+                <button class="memo-add-btn" type="submit">追加</button>
             </form>
         </div>
     </div>
 <?php
+    }
 }
 ?>
 
-<?php
-$music_url = 'https://www.youtube.com/watch?v=TQ8WlA2GXbk' ?? ''; 
-
-if (strpos($music_url, 'watch?v=') !== false) {
-    $music_embed_url = str_replace('watch?v=', 'embed/', $music_url) . '?enablejsapi=1';
-} elseif (strpos($music_url, 'youtu.be/') !== false) {
-    $music_embed_url = str_replace('youtu.be/', 'www.youtube.com/embed/', $music_url) . '?enablejsapi=1';
-} else {
-    $music_embed_url = $music_url;
-}
-?>
-
-
-<div class='modal-outline music-play' id='music_modal_outline'>
+<!-- モーダル -->
+<div class='modal-outline music-play' id='music_modal_outline' style="display:none;">
   <div class='modal-area music-modal-area'>
     <button onClick='music_modal_close()' class='model-close-btn play-model-close-btn'>
       <span class='material-symbols-rounded'>close</span>
     </button>
 
-    <iframe class="player" id="player" width="" height=""
-      src="<?= $music_embed_url ?>"
-      frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <iframe class="player" id="player" width="560" height="315"
+      src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
     <div class="musicplayer-content">
-        <div class="musicplayer-img">
-            
-        </div>
+        <div class="musicplayer-img"></div>
         <div class="music-info">
-            <h2>Pretender</h2>
-            <h3>Official髭男dism</h3>
+            <h2></h2>
+            <h3></h3>
         </div>
     </div>
     <div class="musicplayer-control">
-        <button class="musicplayer-btn" onclick="playVideo()"><span class='material-symbols-rounded'>play_arrow</span></button>
-        <button onclick="pauseVideo()">⏸ 停止</button>
+        <button class="musicplayer-btn" onclick="playVideo()">
+            <span class='material-symbols-rounded'>play_arrow</span>
+        </button>
+        <button class="musicplayer-btn" onclick="pauseVideo()">
+            <span class='material-symbols-rounded'>pause</span>
+        </button>
     </div>
-
   </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-  let player;
+let player; // グローバル変数として宣言
 
-  function onYouTubeIframeAPIReady() {
+function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-      events: {
-        'onReady': () => console.log('YouTubeプレイヤー準備完了')
-      }
+        height: '315',
+        width: '560',
+        events: {
+            'onReady': () => console.log('YouTubeプレイヤー準備完了')
+        }
     });
-  }
+}
 
-  function play_music() {
+// PHP の $music 配列を JS に渡す
+const musicList = <?= json_encode($music, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+
+function play_music() {
+    // ランダム曲を選択
+    const number = Math.floor(Math.random() * musicList.length);
+    const song = musicList[number];
+    
+    // モーダル表示
     const music_modal = document.getElementById('music_modal_outline');
     music_modal.style.display = 'block';
-    if (player && typeof player.playVideo === 'function') {
-      player.playVideo();
+    
+    // 曲情報更新
+    const musicImg = document.querySelector('.musicplayer-img');
+    // 画像がある場合は表示、ない場合はプレースホルダー
+    if (song.image_path && song.image_path !== '') {
+        musicImg.innerHTML = `<img src="${song.image_path}" alt="${song.song_name}">`;
     } else {
-      console.log('プレイヤー未準備。');
+        // 画像がない場合はアイコンを表示
+        musicImg.innerHTML = `<span class='material-symbols-rounded'>music_note</span>`;
     }
-  }
+    document.querySelector('.music-info h2').textContent = song.song_name || '';
+    document.querySelector('.music-info h3').textContent = song.singer_name || '';
+    
+    // YouTube URLを埋め込み形式に変換
+    let embedUrl = song.link;
+    
+    if (song.link.includes('watch?v=')) {
+        // 通常のYouTube URL (例: https://www.youtube.com/watch?v=VIDEO_ID)
+        const videoId = song.link.split('watch?v=')[1].split('&')[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+    } else if (song.link.includes('youtu.be/')) {
+        // 短縮URL (例: https://youtu.be/VIDEO_ID)
+        const videoId = song.link.split('youtu.be/')[1].split('?')[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+    } else if (!song.link.includes('enablejsapi=1')) {
+        // すでに埋め込み形式だがAPIパラメータがない場合
+        embedUrl = song.link + (song.link.includes('?') ? '&' : '?') + 'enablejsapi=1';
+    }
+    
+    // iframeのsrcを設定
+    const iframe = document.getElementById('player');
+    iframe.src = embedUrl;
+}
 
-  function music_modal_close() {
-    const modal = document.getElementById('music_modal_outline');
-    modal.style.display = 'none';
+function music_modal_close() {
+    const music_modal = document.getElementById('music_modal_outline');
+    music_modal.style.display = 'none';
+    
+    // 動画を停止してiframeをクリア
+    if (player && typeof player.stopVideo === 'function') {
+        player.stopVideo();
+    }
+    
+    const iframe = document.getElementById('player');
+    iframe.src = '';
+}
+
+function playVideo() {
+    if (player && typeof player.playVideo === 'function') {
+        player.playVideo();
+    }
+}
+
+function pauseVideo() {
     if (player && typeof player.pauseVideo === 'function') {
-      player.pauseVideo();
+        player.pauseVideo();
     }
-  }
+}
 
-  function playVideo() {
-    if (player && typeof player.playVideo === 'function') player.playVideo();
-  }
-
-  function pauseVideo() {
-    if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
-  }
-
-  function modal_close(){
+function modal_close(){
     const modal = document.getElementById('modal_outline');
     modal.style.display = 'none';
-  }
+}
 </script>
-
 
 </html>

@@ -191,6 +191,7 @@
 }
 
 .planpage-music-list{
+    text-align: center;
     width: 100%;
     padding: 20px;
     border-radius: 20px;
@@ -451,5 +452,12 @@
     border-radius: 20px;
     margin-top: 10px;
     background-color: #007bff;
+    color: #fff;
+}
+
+.pref-rank-btn{
+    margin: 20px auto;
+    padding: 10px 40px;
+    background-color: gold;
     color: #fff;
 }

@@ -253,6 +253,16 @@
                             HTML;
                         }
                     ?>
+                    <?php
+                        $sql = "SELECT * FROM `pref` WHERE `pref_id` = ?";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute([$trip_info['pref_id']]);
+                        $prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $pref = $prefs[0];
+                    ?>
+                    <a href="../music-rank/?pref_id=<?= $trip_info['pref_id'] ?>" class="pref-rank-btn">
+                        <?= htmlspecialchars($pref['pref_name'], ENT_QUOTES, 'UTF-8'); ?>のランキング
+                    </a>
                 </div>
                 <div class="plan-feedback">
                     <?php 

@@ -161,7 +161,7 @@ try{
                             
                         }
                         if($print_count == 0){
-                            echo '<h2>おすすめの旅行地！</h2>';
+                            // echo '<h2>おすすめの旅行地！</h2>';
                             //echo '結果なし';
                             for($i=0;$i<3;$i++){
                             $number=mt_rand(1,47);

@@ -40,7 +40,7 @@
                 ->execute([':uid' => $user_id, ':sid' => $song_id]);
 
             // songテーブルのgoodカウントを減らす
-            $pdo->prepare("UPDATE song SET good = good - 1 WHERE song_id = :sid")
+            $pdo->prepare("UPDATE song2 SET good = good - 1 WHERE song_id = :sid")
                 ->execute([':sid' => $song_id]);
 
             $status = "ungooded";
@@ -50,14 +50,14 @@
                 ->execute([':uid' => $user_id, ':sid' => $song_id]);
 
             // songテーブルのgoodカウントを増やす
-            $pdo->prepare("UPDATE song SET good = good + 1 WHERE song_id = :sid")
+            $pdo->prepare("UPDATE song2 SET good = good + 1 WHERE song_id = :sid")
                 ->execute([':sid' => $song_id]);
 
             $status = "gooded";
         }
 
         // 最新のgood数を取得
-        $count_stmt = $pdo->prepare("SELECT good FROM song WHERE song_id = :sid");
+        $count_stmt = $pdo->prepare("SELECT good FROM song2 WHERE song_id = :sid");
         $count_stmt->execute([':sid' => $song_id]);
         $good_count = $count_stmt->fetchColumn();
 

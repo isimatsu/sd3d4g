@@ -52,6 +52,30 @@ if(isset($_POST['feedback'])){
     }
 }
 
+//prefからareaの曲を持ってくる
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $sql = "SELECT * FROM `pref` WHERE `pref_name` = ? ORDER BY `pref_id` ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$destination_prefecture]);
+    $areas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $area = $areas[0];
+
+    $sql = "SELECT * FROM `song2` WHERE `area_id` = ? ORDER BY `song2`.`good` DESC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$area['area_id']]);
+    $music_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $area_music_list = ""; // 最初に「空の文字」にしておく（重要！）
+
+    foreach($music_list as $music){
+        // 「ID」と「:」と「曲名」と「,」を繋げる
+        $area_music_list .= $music['song_id'] . ":" . $music['song_name'] . ", ";
+    }
+
+    // 最後に余分な「, 」を消す（お好みで）
+    $area_music_list = rtrim($area_music_list, ", ");
+
+
 // システムプロンプト
 $systemInstruction = <<<'EOT'
 あなたは旅程を提案するAIです。以下の条件に沿って旅程を提案し【出力フォーマット】に沿った出力を行ってください。また、旅行と目的地に相性の良い曲や歌を2～5件ほど提案してください
@@ -120,18 +144,7 @@ $userInput = "
 ・旅行予算：$budget
 ・絶対に経由する場所：$waypoint
 ・特別なリクエスト：$special_requests
-・曲一覧：[
-1	HOWEVER,
-2	未来予想図II,
-3	大空と大地の中で,
-4	ワインレッドの心,
-5	時代,
-6	新宝島,
-7	虹,
-8	RUN,
-9	Everything,
-10	前前前世,
-]";
+・曲一覧：[$area_music_list]";
 
 // リクエストボディの作成
 $requestBody = [

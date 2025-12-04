@@ -29,6 +29,7 @@
         $user_id = $_SESSION['user_id'];
         $song_id = intval($_POST['song_id']);
 
+
         $sql = "SELECT 1 FROM good WHERE user_id = :uid AND song_id = :sid";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':uid' => $user_id, ':sid' => $song_id]);

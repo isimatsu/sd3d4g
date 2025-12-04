@@ -79,7 +79,6 @@ if(isset($_SESSION['user_id'])){
                 </div><!--music-card-->
                 <?php $rank++; endforeach; ?>
                 
-                </div><!--music-card-->
                 
 
             </div>

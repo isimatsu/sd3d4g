@@ -168,29 +168,57 @@
                 <a class="all" href="../music-japan/index.php">すべて表示</a>
 
                  <h1>履歴</h1>
-                 <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: #E6B422 ;">#1</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><!--music-card-->
+                 <?php
+                     $sql_history = "
+                    SELECT 
+                    s.song_id,
+                    s.song_name,
+                    s.singer_name,
+                    s.link,
+                    s.good,
+                    s.area_id,
+                    s.song_time,
+                    s.image_path
+                    FROM trip t
+                    JOIN trip_song_connect tc ON t.trip_id = tc.trip_id
+                    JOIN song2 s ON tc.song_id = s.song_id
+                    WHERE t.user_id = ?
+                    AND (t.feedback = 1 OR t.feedback IS NULL)
+                    ORDER BY s.song_id;";
+
+                    $stmt_history = $pdo->prepare($sql_history);
+                    $stmt_history->execute([$user_id]);
+                    $history_songs = $stmt_history->fetchAll(PDO::FETCH_ASSOC);
+                    
+                 ?>
+                 <?php $rank = 1; foreach ($history_songs as $song): ?>
                 <div class="music-card">
                     <div class="music-info">
-                        <p style="font-weight: bold; color: #b5b5b4ff ;">#2</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
+                                <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?? '#000000' ?>;">#<?= $rank ?></p>
+                                    <img class="music-img" src="<?= htmlspecialchars($song['image_path']) ?>">
+                                <p><?= htmlspecialchars($song['song_name']) ?></p>
+                            </div>
+                            <div class="music-action-btn">
+                                <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" rel="noopener">
+                                    <span class="music-play material-symbols-rounded">play_circle</span>
+                                </a>
+                                    <!-- goodボタンの機能は未実装です-->
+                                    <!--<span class="music-favorite material-symbols-rounded">favorite</span>-->
+                            </div>
+                            <div class="good-area">
+                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
+                                        <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                            data-song-id="<?= $song['song_id'] ?>">
+                                                favorite
+                                        </span>
+                                    </button>
+                                    <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                        <?= $song['good_count'] ?>
+                                    </span>
+                                </div>
                 </div><!--music-card-->
-                <div class="music-card">
+                <?php $rank++; endforeach; ?>
+                <!--<div class="music-card">
                     <div class="music-info">
                         <p style="font-weight: bold; color: #b87333 ;">#3</p>
                         <img class="music-img" src="../assets/img/music_tmp_img.jpg">
@@ -200,7 +228,7 @@
                         <span class="music-play material-symbols-rounded">play_circle</span>
                         <span class="music-favorite material-symbols-rounded">favorite</span>
                     </div>
-                </div><!--music-card-->
+                </div><music-card-->
                  <a class="all" href="../music-history/index.php">すべて表示</a>
 
             </div>

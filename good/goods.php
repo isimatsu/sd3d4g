@@ -37,22 +37,22 @@
 
         if ($exists) {
             // good解除
-            $pdo->prepare("DELETE FROM good WHERE user_id = :uid AND song_id = :sid")
-                ->execute([':uid' => $user_id, ':sid' => $song_id]);
+            $stmt=$pdo->prepare("DELETE FROM good WHERE user_id = :uid AND song_id = :sid");
+                $stmt->execute([':uid' => $user_id, ':sid' => $song_id]);
 
             // songテーブルのgoodカウントを減らす
-            $pdo->prepare("UPDATE song2 SET good = good - 1 WHERE song_id = :sid")
-                ->execute([':sid' => $song_id]);
+            $stmt2=$pdo->prepare("UPDATE song2 SET good = good - 1 WHERE song_id = :sid");
+                $stmt2->execute([':sid' => $song_id]);
 
             $status = "ungooded";
         } else {
             // good登録
-            $pdo->prepare("INSERT INTO good(user_id, song_id) VALUES(:uid, :sid)")
-                ->execute([':uid' => $user_id, ':sid' => $song_id]);
+            $stmt=$pdo->prepare("INSERT INTO good(user_id, song_id) VALUES(:uid, :sid)");
+                $stmt->execute([':uid' => $user_id, ':sid' => $song_id]);
 
             // songテーブルのgoodカウントを増やす
-            $pdo->prepare("UPDATE song2 SET good = good + 1 WHERE song_id = :sid")
-                ->execute([':sid' => $song_id]);
+            $stmt2=$pdo->prepare("UPDATE song2 SET good = good + 1 WHERE song_id = :sid");
+                $stmt2->execute([':sid' => $song_id]);
 
             $status = "gooded";
         }

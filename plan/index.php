@@ -271,8 +271,21 @@
                         $prefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         if (!empty($prefs)) {
                             $pref = $prefs[0];
-                            $pref_name_html = htmlspecialchars($pref['pref_name'], ENT_QUOTES, 'UTF-8');
-                            echo "<a href='../music-rank/?pref_id={$trip_info['pref_id']}' class='pref-rank-btn'>{$pref_name_html}のランキング</a>";
+                            switch($pref['area_id']){
+                                case '1':
+                                    $area_name = '北海道・東北';
+                                break;
+                                case '2':
+                                    $area_name = '関東・東海';
+                                break;
+                                case '3':
+                                    $area_name = '近畿・中国・四国';
+                                break;
+                                case '4':
+                                    $area_name = '九州';
+                                break;
+                            }
+                            echo "<div class='planpage-music-list-card'><a href='../music-rank/?area_id={$pref['area_id']}' class='pref-rank-btn'>{$area_name}のランキング</a></div>";
                         }
                     ?>
                 </div>

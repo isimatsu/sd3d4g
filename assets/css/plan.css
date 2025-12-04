@@ -456,10 +456,16 @@
 }
 
 .pref-rank-btn{
-    margin: 20px auto;
+    margin: 10px auto;
     padding: 10px 40px;
-    background-color: gold;
+    background-color: #7968FF;
+    border-radius: 20px;
     color: #fff;
+    text-decoration: none;
+}
+
+.pref-rank-btn a{
+    text-decoration: none;
 }
 
 .musicplayer-img img{

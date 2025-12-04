@@ -66,7 +66,8 @@ try{
 }
 
     // songテーブルからデータを保存順に取得
-    $sql2 = "SELECT * FROM `song2` ORDER BY `song2`.`good` DESC";
+    $sql2 = "SELECT * FROM `song2` ORDER BY `song2`.`good` DESC LIMIT 10";
+
     $stmt2 = $pdo->prepare($sql2);
     $stmt2->execute();
     $songs = $stmt2->fetchAll(PDO::FETCH_ASSOC);

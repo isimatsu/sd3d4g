@@ -20,29 +20,32 @@
             die("データベース接続エラー： " . htmlspecialchars($e->getMessage(),ENT_QUOTES,'UTF-8'));
         }
 
-        //URLからpref_id取得
-        $pref_id = isset($_GET['pref_id']) ? intval($_GET['pref_id']) : null;
-        if ($pref_id === null) exit("県IDが指定されていません");
+        //URLからarea_id取得
+        $area_id = isset($_GET['area_id']) ? intval($_GET['area_id']) : null;
+        if ($area_id === null) exit("エリアが指定されていません");
 
-        //対象県名取得
-        $pref_stmt = $pdo->prepare("SELECT pref_name FROM pref WHERE pref_id=:pref_id");
-        $pref_stmt->bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
-        $pref_stmt->execute();
-        $pref_row = $pref_stmt->fetch();
-        $pref_name = $pref_row ? $pref_row['pref_name'] : "不明な県";
+        //対象エリア名取得
+        $areas = [
+            1 => "北海道・東北",
+            2 => "関東・東海",
+            3 => "近畿・中国・四国",
+            4 => "九州・沖縄"
+        ];
+
+        $area_name = $areas[$area_id] ?? "不明なエリア";
 
         //曲データ取得
         $sql = "SELECT s.*, 
                 (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
                 EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
                 AND user_id = :userid) AS is_good
-                FROM song_update s WHERE s.pref_id = :pref_id 
+                FROM song2 s WHERE s.area_id = :area_id 
                 ORDER BY good_count DESC LIMIT 50";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
-        $stmt -> bindValue(":pref_id", $pref_id, PDO::PARAM_INT);
+        $stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt -> bindValue(":area_id", $area_id, PDO::PARAM_INT);
         $stmt -> execute();
-        $pref_songs = $stmt->fetchAll();
+        $area_songs = $stmt->fetchAll();
     
         $rank_colors = [
                 1 => "#E6B422",
@@ -73,15 +76,15 @@
             </div>
 
             <div class="page-header">
-                <a href="index.php?pref_id=<?= $pref_id ?>">戻る</a>
-                <h1><?= htmlspecialchars($pref_name) ?>のランキング</h1>
+                <a href="../music-rank/index.php?area_id=<?= $area_id ?>">戻る</a>
+                <h1><?= htmlspecialchars($area_name) ?>のランキング</h1>
             </div>
-            <?php if (empty($pref_songs)): ?>
+            <?php if (empty($area_songs)): ?>
                 <p>表示できる曲がありません。</p>
             <?php else: ?>
 
             <div class="page-contents">
-                <?php $rank = 1; foreach ($pref_songs as $song): ?>
+                <?php $rank = 1; foreach ($area_songs as $song): ?>
                     <div class="music-card">
                         <div class="music-info">
                             <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?? '#000000' ?>;">#<?= $rank ?></p>
@@ -93,14 +96,31 @@
                                 <span class="music-play material-symbols-rounded">play_circle</span>
                             </a>
                             <div class="good-area">
-                                <span class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "gooded" : "" ?>"
-                                    data-song-id="<?= $song['song_id'] ?>">
-                                        favorite
-                                </span>
+                                <button class="favorite-btn" data-song-id="<?= $song['song_id'] ?>">
+                                    <span id="song_favoritebtn_<?= $song['song_id'] ?>"
+                                        class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                        data-song-id="<?= $song['song_id'] ?>">
+                                            favorite
+                                    </span>
+                                </button>
                                 <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                     <?= $song['good_count'] ?>
                                 </span>
                             </div>
+
+                        <!--試しで上のに変更中
+                            <div class="good-area">
+                                <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
+                                    <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                        data-song-id="<?= $song['song_id'] ?>">
+                                            favorite
+                                    </span>
+                                </button>
+                                <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
+                                    <?= $song['good_count'] ?>
+                                </span>
+                            </div>
+                        -->
                         </div>
                     </div><!--music-card-->
                 <?php $rank++; endforeach; ?>
@@ -118,7 +138,9 @@
         document.querySelectorAll(".music-favorite").forEach(btn => {
             btn.addEventListener("click", function() {
                 let songId = this.dataset.songId;
-
+                const icon = document.getElementById(`song_favoritebtn_${songId}`);
+                const goodPrint = document.getElementById(`good-count-${songId}`);
+                console.log('goods実行')
                 fetch("../good/goods.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -126,7 +148,12 @@
                 })
                 .then(res => res.json())
                 .then(data => {
+                    const goodPrint = document.getElementById(`good-count-${songId}`);
 
+                    // DBの最新値を画面に反映
+                    if (data.good_count !== undefined) {
+                        goodPrint.innerText = data.good_count;
+                    }
                     if(data.status === "gooded") {
                         this.classList.add("gooded");
                     } else {
@@ -135,125 +162,28 @@
                 });
             });
         });
+/*
+        function plusGood(song_id) {
+            const favorite_btn_print = document.getElementById(`song_favoritebtn_${song_id}`);
+            const good_print = document.getElementById(`good-count-${song_id}`);
+            
+            let current = parseInt(good_print.innerText);
+            const isAlreadyGood = favorite_btn_print.classList.contains('music-favorite-after');
+
+            if (isAlreadyGood) {
+                const afterGood = current - 1;
+                good_print.innerText = afterGood;
+                favorite_btn_print.classList.remove('music-favorite-after', 'after-favorite-btn');
+                favorite_btn_print.dataset.clicked = "false";
+            } else {
+                const afterGood = current + 1;
+                good_print.innerText = afterGood;
+                favorite_btn_print.classList.add('music-favorite-after', 'after-favorite-btn');
+                favorite_btn_print.dataset.clicked = "true";
+            }
+        }
+*/
     </script>
 </body>
 
 </html>
-
-<!-- 既存コード
-            <div class="page-header">
-                <a href="../music-rank/index.php">戻る</a>
-                <h1>○○県のランキング</h1>
-            </div>
-            <div class="page-contents">
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: #E6B422 ;">#1</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: #b5b5b4ff ;">#2</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: #b87333 ;">#3</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#4</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#5</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#6</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#7</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#8</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#9</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div><--music-card--
-                <div class="music-card">
-                    <div class="music-info">
-                        <p style="font-weight: bold; color: black ;">#10</p>
-                        <img class="music-img" src="../assets/img/music_tmp_img.jpg">
-                        <p>曲名がはいる</p>
-                    </div>
-                    <div class="music-action-btn">
-                        <span class="music-play material-symbols-rounded">play_circle</span>
-                        <span class="music-favorite material-symbols-rounded">favorite</span>
-                    </div>
-                </div>
--->

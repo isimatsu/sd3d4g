@@ -169,27 +169,56 @@
 
                  <h1>履歴</h1>
                  <?php
-                     $sql_history = "
-                    SELECT 
-                    s.song_id,
-                    s.song_name,
-                    s.singer_name,
-                    s.link,
-                    s.good,
-                    s.area_id,
-                    s.song_time,
-                    s.image_path
-                    FROM trip t
-                    JOIN trip_song_connect tc ON t.trip_id = tc.trip_id
-                    JOIN song2 s ON tc.song_id = s.song_id
-                    WHERE t.user_id = ?
-                    AND (t.feedback = 1 OR t.feedback IS NULL)
-                    ORDER BY s.song_id;";
+                    //  $sql_history = "
+                    // SELECT 
+                    // s.song_id,
+                    // s.song_name,
+                    // s.singer_name,
+                    // s.link,
+                    // s.good,
+                    // s.area_id,
+                    // s.song_time,
+                    // s.image_path
+                    // FROM trip t
+                    // JOIN trip_song_connect tc ON t.trip_id = tc.trip_id
+                    // JOIN song2 s ON tc.song_id = s.song_id
+                    // WHERE t.user_id = ?
+                    // AND (t.feedback = 1 OR t.feedback IS NULL)
+                    // ORDER BY s.song_id;";
 
-                    $stmt_history = $pdo->prepare($sql_history);
-                    $stmt_history->execute([$user_id]);
-                    $history_songs = $stmt_history->fetchAll(PDO::FETCH_ASSOC);
+                    // $stmt_history = $pdo->prepare($sql_history);
+                    // $stmt_history->execute([$user_id]);
+                    // $history_songs = $stmt_history->fetchAll(PDO::FETCH_ASSOC);
                     
+
+                        if ($user_id) {
+                            $sql_history = "
+                            SELECT DISTINCT
+                                s.song_id,
+                                s.song_name,
+                                s.singer_name,
+                                s.link,
+                                s.good,
+                                s.area_id,
+                                s.song_time,
+                                s.image_path,
+                                (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
+                                EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
+                                    AND user_id = :userid) AS is_good
+                            FROM trip t
+                            JOIN trip_song_connect tc ON t.trip_id = tc.trip_id
+                            JOIN song2 s ON tc.song_id = s.song_id
+                            WHERE t.user_id = :userid
+                            AND (t.feedback = 1 OR t.feedback IS NULL)
+                            ORDER BY s.song_id";
+
+                            $stmt_history = $pdo->prepare($sql_history);
+                            $stmt_history->bindValue(':userid', $user_id, PDO::PARAM_INT);
+                            $stmt_history->execute();
+                            $history_songs = $stmt_history->fetchAll(PDO::FETCH_ASSOC);
+                        } else {
+                            $history_songs = [];
+                        }
                  ?>
                  <?php $rank = 1; foreach ($history_songs as $song): ?>
                 <div class="music-card">
@@ -204,18 +233,19 @@
                                 </a>
                                     <!-- goodボタンの機能は未実装です-->
                                     <!--<span class="music-favorite material-symbols-rounded">favorite</span>-->
-                            </div>
-                            <div class="good-area">
-                                    <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
-                                        <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                <div class="good-area">
+                                    <button onclick="plusGood(<?= $song['song_id'] ?>, <?= $song['is_good'] ? 1 : 0 ?>)">
+                                        <span id="song_favoritebtn_<?= $song['song_id'] ?>" 
+                                            class="music-favorite material-symbols-rounded <?= $song['is_good'] ? 'music-favorite-after' : '' ?>"
                                             data-song-id="<?= $song['song_id'] ?>">
-                                                favorite
+                                            favorite
                                         </span>
                                     </button>
                                     <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
                                         <?= $song['good_count'] ?>
                                     </span>
                                 </div>
+                            </div>
                 </div><!--music-card-->
                 <?php $rank++; endforeach; ?>
                 <!--<div class="music-card">

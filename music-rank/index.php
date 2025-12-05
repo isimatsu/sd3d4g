@@ -23,7 +23,7 @@
         //URLからpref_id取得
         $area_id = isset($_GET['area_id']) ? intval($_GET['area_id']) : null;
 
-        // エリアリスト取得
+        // エリアリスト
         $areas = [
             1 => "北海道・東北",
             2 => "関東・東海",

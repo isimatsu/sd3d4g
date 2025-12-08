@@ -42,9 +42,9 @@ if(isset($_POST['out'])){
                     <button class="basic-btn blue-btn">ログイン</button>
             </form><!--basic-form-->
 
-                <div class="error-message">
+                <!-- <div class="error-message">
                     <p><strong>*メールアドレスかパスワードが違います</strong></p>
-                </div>
+                </div> -->
 
 
 

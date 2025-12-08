@@ -65,7 +65,7 @@
             <div class="page-contents">
                 <?php $rank = 1; foreach ($national_songs as $song): ?>
                     <div class="music-card">
-                        <a href="../music-detail/?song_id=<?= $song['song_id'] ?>" class="music-info">
+                        <a class="music-info" href="../music-detail/?song_id=<?= $song['song_id'] ?>">
                             <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?>;">#<?= $rank ?></p>
                                 <img class="music-img" src="<?= htmlspecialchars($song['image_path']) ?>">
                             <p><?= htmlspecialchars($song['song_name']) ?></p>

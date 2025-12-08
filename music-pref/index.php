@@ -88,11 +88,11 @@
             <div class="page-contents">
                 <?php $rank = 1; foreach ($area_songs as $song): ?>
                     <div class="music-card">
-                        <div class="music-info">
-                            <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?? '#000000' ?>;">#<?= $rank ?></p>
+                        <a class="music-info" href="../music-detail/?song_id=<?= $song['song_id'] ?>">
+                            <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?>;">#<?= $rank ?></p>
                                 <img class="music-img" src="<?= htmlspecialchars($song['image_path']) ?>">
                             <p><?= htmlspecialchars($song['song_name']) ?></p>
-                        </div>
+                        </a>
                         <div class="music-action-btn">
                             <a href="<?= htmlspecialchars($song['link']) ?>" target="_blank" rel="noopener">
                                 <span class="music-play material-symbols-rounded">play_circle</span>
@@ -108,20 +108,6 @@
                                     <?= $song['good_count'] ?>
                                 </span>
                             </div>
-
-                        <!--試しで上のに変更中
-                            <div class="good-area">
-                                <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
-                                    <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
-                                        data-song-id="<?= $song['song_id'] ?>">
-                                            favorite
-                                    </span>
-                                </button>
-                                <span class="good-count" id="good-count-<?= $song['song_id'] ?>">
-                                    <?= $song['good_count'] ?>
-                                </span>
-                            </div>
-                        -->
                         </div>
                     </div><!--music-card-->
                 <?php $rank++; endforeach; ?>

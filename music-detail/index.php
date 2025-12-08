@@ -53,6 +53,7 @@ try{
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
+            <button id="back-btn" type="button">前のページに戻る</button>
             <div class="page-header">
                 <h1>楽曲詳細</h1>
             </div>
@@ -92,5 +93,13 @@ try{
     <div class="menu-bar-area">
         <?php include '../assets/include/menu-bar.php'?>
     </div>
+    <script>
+        const backBtn = document.getElementById('back-btn');
+
+        backBtn.addEventListener('click', function() {
+        window.history.back(); // ブラウザの「戻る」と同じ動作
+        // window.history.go(-1); // これでも同じ動作になります
+        });
+    </script>
 </body>
 </html>

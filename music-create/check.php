@@ -24,7 +24,7 @@ try {
     // POSTデータ受け取り
     $song_name   = $_POST['song_name'] ?? '';
     $singer_name = $_POST['singer_name'] ?? '';
-    $pref_name   = $_POST['pref'] ?? '';  // ← ★ pref_idではなくpref_nameが送られる
+    $area   = $_POST['area'] ?? '';  // ← ★ pref_idではなくpref_nameが送られる
     $link        = $_POST['link'] ?? '';
     $user_id     = $_SESSION['user_id'];
     $image_path  = ''; // ← 初期化（null禁止）
@@ -65,28 +65,29 @@ try {
             exit('❌ 画像が選択されていません。');
         }
 
-    // ------------------------------
-    // 都道府県名からpref_idを取得
-    // ------------------------------
-    $stmt = $pdo->prepare('SELECT pref_id FROM pref WHERE pref_name = ? LIMIT 1');
-    $stmt->execute([$pref_name]);
-    $pref = $stmt->fetch(PDO::FETCH_ASSOC);
+    $area_map = [
+    '北日本' => 1,
+    '東日本' => 2,
+    '西日本' => 3,
+    '南日本' => 4,
+    ];
 
-    if ($pref) {
-    $pref_id = $pref['pref_id'];
+    if (isset($area_map[$area])) {
+        $area_id = $area_map[$area];
+    } else {
+        // 未選択などエラー処理
+        exit('❌ ゆかりの地域を選択してください。<a href="index.php">戻る</a>');
     }
-
     // ------------------------------
     // DB登録処理
     // ------------------------------
-    $sql = "INSERT INTO song (song_name, singer_name, pref_id, link, user_id, image_path, good)
-            VALUES (:song_name, :singer_name, :pref_id, :link, :user_id, :image_path, 0)";
+    $sql = "INSERT INTO song2 (song_name, singer_name, good, link, area_id, image_path)
+            VALUES (:song_name, :singer_name, 0 , :link, :area_id, :image_path)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->bindValue(':song_name', $song_name, PDO::PARAM_STR);
     $stmt->bindValue(':singer_name', $singer_name, PDO::PARAM_STR);
-    $stmt->bindValue(':pref_id', $pref_id, PDO::PARAM_INT);
     $stmt->bindValue(':link', $link, PDO::PARAM_STR);
+    $stmt->bindValue(':area_id', $area_id, PDO::PARAM_INT);
     $stmt->bindValue(':image_path', $image_path, PDO::PARAM_STR);
     $stmt->execute();
 

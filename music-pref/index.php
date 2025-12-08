@@ -35,12 +35,14 @@
         $area_name = $areas[$area_id] ?? "不明なエリア";
 
         //曲データ取得
-        $sql = "SELECT s.*, 
-                (SELECT COUNT(*) FROM good WHERE song_id = s.song_id) AS good_count,
-                EXISTS(SELECT 1 FROM good WHERE song_id = s.song_id 
-                AND user_id = :userid) AS is_good
-                FROM song2 s WHERE s.area_id = :area_id 
-                ORDER BY good_count DESC LIMIT 50";
+        $sql = "SELECT s.*, s.good AS good_count,
+                    EXISTS(
+                        SELECT 1 FROM good 
+                        WHERE song_id = s.song_id 
+                        AND user_id = :userid
+                    ) AS is_good FROM song2 s WHERE s.area_id = :area_id 
+                ORDER BY good_count DESC
+                LIMIT 50";
         $stmt = $pdo->prepare($sql);
         $stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt -> bindValue(":area_id", $area_id, PDO::PARAM_INT);
@@ -96,9 +98,8 @@
                                 <span class="music-play material-symbols-rounded">play_circle</span>
                             </a>
                             <div class="good-area">
-                                <button class="favorite-btn" data-song-id="<?= $song['song_id'] ?>">
-                                    <span id="song_favoritebtn_<?= $song['song_id'] ?>"
-                                        class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
+                                <button onclick="plusGood(<?= $song['song_id'] ?>,<?= $song['is_good'] ?>)">
+                                    <span id="song_favoritebtn_<?= $song['song_id'] ?>" class="music-favorite material-symbols-rounded <?= $song['is_good'] ? "music-favorite-after" : "" ?>"
                                         data-song-id="<?= $song['song_id'] ?>">
                                             favorite
                                     </span>
@@ -135,6 +136,84 @@
 
     <!-- goods.phpにリクエストを送信するjs -->
     <script>
+        // document.querySelectorAll(".music-favorite")... のブロックは削除し、以下の関数のみにします
+
+        function plusGood(song_id) {
+            // ID重複に対応するため、getElementByIdではなくquerySelectorAllですべて取得する
+            // [id="..."] という書き方をすることで、重複IDもすべて取得できます
+            const allBtns = document.querySelectorAll(`[id="song_favoritebtn_${song_id}"]`);
+            const allCounts = document.querySelectorAll(`[id="good-count-${song_id}"]`);
+
+            if (allBtns.length === 0) return;
+
+            // 現在の状態を判定（どれか1つのボタンの状態を見ればOK）
+            const firstBtn = allBtns[0];
+            const good_print = allCounts[0];
+            
+            let current = parseInt(good_print.innerText);
+            const isAlreadyGood = firstBtn.classList.contains('music-favorite-after');
+
+            let newCount;
+            let addClass;
+
+            // --- 1. 計算と状態決定 ---
+            if (isAlreadyGood) {
+                // いいね解除
+                newCount = current - 1;
+                addClass = false;
+            } else {
+                // いいね登録
+                newCount = current + 1;
+                addClass = true;
+            }
+
+            // --- 2. ページ内の該当するすべてのボタンと数字を一括更新 ---
+            // これにより、ランキングと履歴で同じ曲があっても両方同時に変わります
+            allBtns.forEach(btn => {
+                if (addClass) {
+                    btn.classList.add('music-favorite-after', 'after-favorite-btn');
+                    btn.dataset.clicked = "true";
+                } else {
+                    btn.classList.remove('music-favorite-after', 'after-favorite-btn');
+                    btn.dataset.clicked = "false";
+                }
+            });
+
+            allCounts.forEach(span => {
+                span.innerText = newCount;
+            });
+
+            // --- 3. サーバーへ送信 ---
+            console.log('goods実行: ' + song_id);
+            fetch("../good/goods.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "song_id=" + song_id
+            })
+            .then(res => res.json())
+            .then(data => {
+                // サーバーから返ってきた正確な値で再度更新（念のため）
+                if (data.good_count !== undefined) {
+                    allCounts.forEach(span => {
+                        span.innerText = data.good_count;
+                    });
+                }
+                
+                // ステータスの同期
+                allBtns.forEach(btn => {
+                    if(data.status === "gooded") {
+                        btn.classList.add("gooded", "music-favorite-after", "after-favorite-btn");
+                    } else {
+                        btn.classList.remove("gooded", "music-favorite-after", "after-favorite-btn");
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+    <!--
+    <script>
         document.querySelectorAll(".music-favorite").forEach(btn => {
             btn.addEventListener("click", function() {
                 let songId = this.dataset.songId;
@@ -162,7 +241,7 @@
                 });
             });
         });
-/*
+
         function plusGood(song_id) {
             const favorite_btn_print = document.getElementById(`song_favoritebtn_${song_id}`);
             const good_print = document.getElementById(`good-count-${song_id}`);
@@ -182,8 +261,9 @@
                 favorite_btn_print.dataset.clicked = "true";
             }
         }
-*/
+
     </script>
+-->
 </body>
 
 </html>

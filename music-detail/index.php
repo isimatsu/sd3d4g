@@ -15,6 +15,52 @@ try{
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]
     );
+
+    // 画像判定関数
+    function is_valid_image_url(string $url, int $timeout = 3): bool {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) return false;
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_exec($ch);
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        curl_close($ch);
+
+        if ($httpCode < 200 || $httpCode >= 400) return false;
+        return (stripos($contentType, 'image/') === 0);
+    }
+
+    // resolveImagePath（一覧画面と同じ）
+    function resolveImagePath($song) {
+
+    if (!empty($song['image_path'])) {
+        $rawPath = trim($song['image_path']);
+
+        // 外部URL？
+        if (preg_match('/^https?:\/\//', $rawPath)) {
+            if (is_valid_image_url($rawPath)) return $rawPath;
+        }
+
+        // "../" を削除（DB保管時の相対パス対策）
+        $clean = preg_replace('/^\.+\//', '', $rawPath);
+
+        // Webパスに統一
+        $local = "/sd3d4g/" . $clean;
+
+        // 実在チェック
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $local)) {
+            return $local;
+        }
+    }
+    // 汎用画像
+    return "/sd3d4g/assets/img/music_img/汎用画像.jpg";
+}
+
     //trip_idがNULL or 空でないデータを昇順で取得
     $sql = "SELECT * FROM `song2` WHERE `song_id` = ?";
     $stmt = $pdo->prepare($sql);
@@ -23,12 +69,23 @@ try{
     
     foreach($musics as $music){
         $link = $music['link'];
-        $image_path = $music['image_path'];
+        $imagePath   = resolveImagePath($music);
         $music_name = $music['song_name'];
         $singer_name = $music['singer_name'];
         $area_id = $music['area_id'];
         $good = $music['good'];
     };
+    $area_map = [
+        1 =>'北日本(北海道・東北地方)',
+        2 =>'東日本(関東地方・中部地方)',
+        3 =>'西日本(近畿地方・中国地方・四国地方)',
+        4 =>'南日本(九州地方・沖縄県)',
+    ];
+
+    $area_name = $area_map[$area_id];
+
+    
+
 }catch(PDOException $e){
     die("データベースエラー: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
 }
@@ -53,12 +110,12 @@ try{
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <button id="back-btn" type="button">戻る</button>
+            <button id="back-btn" type="button" style="color: #0066cc;">戻る</button>
             <div class="page-header">
                 <h1>楽曲詳細</h1>
             </div>
         <div class="music-detail-box">
-            <img src="<?= $image_path ?>" alt="画像">
+            <img src=" <?=htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" alt="画像">
         <br>
         <div class="basic-form-box">
             <p class="input-name">曲名</span></p>
@@ -70,7 +127,7 @@ try{
         </div>
         <div class="basic-form-box">
             <p class="input-name">ゆかりの地域</span></p>
-            <p><?= $area_id ?></p>
+            <p><?= $area_name ?></p>
         </div>
         <div class="basic-form-box">
             <p class="input-name">楽曲リンク</span></p>

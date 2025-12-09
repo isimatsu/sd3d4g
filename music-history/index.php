@@ -65,8 +65,8 @@ if(isset($_SESSION['user_id'])){
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
+            <a href="../music-rank/index.php">戻る</a>
             <div class="page-header">
-                <a href="../music-rank/index.php">戻る</a>
                 <h1>履歴</h1>
             </div>
             <div class="page-contents">

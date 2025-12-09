@@ -82,9 +82,8 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-
+            <a href="../music-rank/index.php?area_id=<?= $area_id ?>">戻る</a>
             <div class="page-header">
-                <a href="../music-rank/index.php?area_id=<?= $area_id ?>">戻る</a>
                 <h1><?= htmlspecialchars($area_name) ?>のランキング</h1>
             </div>
             <?php if (empty($area_songs)): ?>

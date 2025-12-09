@@ -92,7 +92,7 @@
                 <h1>
                     <select name="area_id" onchange="location.href='?area_id=' + this.value">
                         <?php if ($no_select): ?>
-                        <!-- 初回のみ表示（選択可能） -->
+                        <!-- 初回のみ表示 -->
                             <option value="" selected>選択してください</option>
                         <?php else: ?>
                         <!-- 2回目以降は表示するが選択不可 -->

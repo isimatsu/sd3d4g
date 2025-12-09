@@ -49,6 +49,52 @@
                     ) AS is_good FROM song2 s WHERE s.area_id = :area_id 
                 ORDER BY good_count DESC
                 LIMIT 50";
+
+                // 画像判定関数
+                function is_valid_image_url(string $url, int $timeout = 3): bool {
+                    if (!filter_var($url, FILTER_VALIDATE_URL)) return false;
+
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_NOBODY, true);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_exec($ch);
+
+                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+                    curl_close($ch);
+
+                    if ($httpCode < 200 || $httpCode >= 400) return false;
+                    return (stripos($contentType, 'image/') === 0);
+                }
+
+                // resolveImagePath（一覧画面と同じ）
+                function resolveImagePath($song) {
+
+                if (!empty($song['image_path'])) {
+                    $rawPath = trim($song['image_path']);
+
+                    // 外部URL？
+                    if (preg_match('/^https?:\/\//', $rawPath)) {
+                        if (is_valid_image_url($rawPath)) return $rawPath;
+                    }
+
+                    // "../" を削除（DB保管時の相対パス対策）
+                    $clean = preg_replace('/^\.+\//', '', $rawPath);
+
+                    // Webパスに統一
+                    $local = "/sd3d4g/" . $clean;
+
+                    // 実在チェック
+                    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $local)) {
+                        return $local;
+                    }
+                }
+                // 汎用画像
+                return "/sd3d4g/assets/img/music_img/汎用画像.jpg";
+            }
+
         $stmt = $pdo->prepare($sql);
         $stmt -> bindValue(':userid', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt -> bindValue(":area_id", $area_id, PDO::PARAM_INT);
@@ -92,10 +138,11 @@
 
             <div class="page-contents">
                 <?php $rank = 1; foreach ($area_songs as $song): ?>
+                    <?php $imagePath = resolveImagePath($song); ?>
                     <div class="music-card">
                         <a class="music-info" href="../music-detail/?song_id=<?= $song['song_id'] ?>">
                             <p style="font-weight: bold; color: <?= $rank_colors[$rank] ?>;">#<?= $rank ?></p>
-                                <img class="music-img" src="<?= htmlspecialchars($song['image_path']) ?>">
+                                <img class="music-img" src="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>">
                             <p><?= htmlspecialchars($song['song_name']) ?></p>
                         </a>
                         <div class="music-action-btn">

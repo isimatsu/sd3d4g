@@ -5,7 +5,7 @@
     error_reporting(E_ALL);
 
     if (!isset($_SESSION['user_id'])) {
-            header('Location: signin/index.php');
+            header('Location: ../signin/index.php');
             exit;
         }
 

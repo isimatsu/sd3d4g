@@ -57,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="sm">
             <div class="header">
                 <?php include '../assets/include/header.php'?>
-                <button id="back-btn" type="button">戻る</button>
             </div>
+            <button id="back-btn" type="button">戻る</button>
             <div class="page-header">
                 <h1>楽曲登録</h1>
                 <p style="text-align:center;">楽曲を登録します。必要な情報を入力してください。</p>

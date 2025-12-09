@@ -53,7 +53,7 @@ try{
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <button id="back-btn" type="button">前のページに戻る</button>
+            <button id="back-btn" type="button">戻る</button>
             <div class="page-header">
                 <h1>楽曲詳細</h1>
             </div>

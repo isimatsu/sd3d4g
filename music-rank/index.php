@@ -78,7 +78,6 @@
             <div class="header">
                 <?php include '../assets/include/header.php'?>
             </div>
-            <!-- ▼ エリア選択ドロップダウン（タイトル位置に配置） -->
             <div class="page-header">
                 <div class="music-menu">
                     <a href="../music-create/" class="music-create-btn">
@@ -86,9 +85,19 @@
                         <p>音楽を登録</p>
                     </a>
                 </div>
+                <!-- ▼ エリア選択ドロップダウン（タイトル位置に配置） -->
+                 <?php
+                    $no_select = ($area_id === null);  // area_id が無ければ true
+                ?>
                 <h1>
                     <select name="area_id" onchange="location.href='?area_id=' + this.value">
-                        <option value="">選択してください</option>
+                        <?php if ($no_select): ?>
+                        <!-- 初回のみ表示（選択可能） -->
+                            <option value="" selected>選択してください</option>
+                        <?php else: ?>
+                        <!-- 2回目以降は表示するが選択不可 -->
+                            <option value="" disabled>選択してください</option>
+                        <?php endif; ?>
                     <?php foreach ($areas as $id => $name): ?>
                         <option value="<?= $id ?>" <?= ($area_id === $id) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($name) ?>

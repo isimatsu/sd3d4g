@@ -496,11 +496,11 @@ function submitForm() {
     });
     
     // バリデーション
-    // if (!destination) {
-    //     alert('行き先を選択してください');
-    //     console.log('バリデーションエラー: 行き先未選択');
-    //     return;
-    // }
+    if (!destination) {
+         alert('行き先を選択してください');
+         console.log('バリデーションエラー: 行き先未選択');
+         return;
+     }
     if (!departure) {
         alert('出発地を選択してください');
         console.log('バリデーションエラー: 出発地未選択');

@@ -3,7 +3,7 @@
 
     // ログインしていなければリダイレクト
     if (!isset($_SESSION['user_id'])) {
-        header('Location: index.php');
+        header('Location: ../signin/index.php');
         exit;
     }
 
@@ -78,6 +78,91 @@ try {
         // 未選択などエラー処理
         exit('❌ ゆかりの地域を選択してください。<a href="index.php">戻る</a>');
     }
+
+    // ------------------------------
+    // 🔍 重複チェック
+    // ------------------------------
+    $check_sql = "SELECT song_id, song_name, singer_name FROM song2 
+                  WHERE song_name = :song_name AND singer_name = :singer_name";
+    $check_stmt = $pdo->prepare($check_sql);
+    $check_stmt->bindValue(':song_name', $song_name, PDO::PARAM_STR);
+    $check_stmt->bindValue(':singer_name', $singer_name, PDO::PARAM_STR);
+    $check_stmt->execute();
+
+    $existing = $check_stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($existing) {
+        // 既に登録されている → 詳細ページへ誘導
+        $song_id = $existing['song_id'];
+
+        echo '
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    margin: 0;
+                    font-family: "Helvetica", "Arial", sans-serif;
+                    background: linear-gradient(to bottom, #fff4e6, #d9ecff);
+                    height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .card {
+                    background: white;
+                    padding: 40px 55px;
+                    border-radius: 16px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                    text-align: center;
+                    max-width: 380px;
+                }
+                h2 {
+                    color: #d9534f;
+                    margin-bottom: 25px;
+                    font-size: 22px;
+                    line-height: 1.5;
+                }
+                .label {
+                    font-weight: bold;
+                    margin-top: 10px;
+                    font-size: 17px;
+                }
+                .value {
+                    font-size: 18px;
+                    margin-bottom: 15px;
+                }
+                a {
+                    display: block;
+                    margin-top: 20px;
+                    color: #3b6cff;
+                    text-decoration: none;
+                    font-size: 15px;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <h2>この楽曲は既に登録されています。</h2>
+
+                <div class="label">曲名：</div>
+                <div class="value">' . htmlspecialchars($existing["song_name"]) . '</div>
+
+                <div class="label">アーティスト：</div>
+                <div class="value">' . htmlspecialchars($existing["singer_name"]) . '</div>
+
+                <a href="../music-detail/index.php?song_id=' . $song_id . '">登録済み楽曲の詳細を見る</a>
+                <a href="../music-rank/index.php">一覧へ戻る</a>
+            </div>
+        </body>
+        </html>
+        ';
+        exit; // これ以上実行しない
+    }
+
     // ------------------------------
     // DB登録処理
     // ------------------------------
@@ -91,8 +176,54 @@ try {
     $stmt->bindValue(':image_path', $image_path, PDO::PARAM_STR);
     $stmt->execute();
 
-    echo "<p>✅ 楽曲を登録しました！</p>";
-    echo '<a href="../music-rank/index.php">戻る</a>';
+    echo '
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                margin: 0;
+                font-family: "Helvetica", "Arial", sans-serif;
+                background: linear-gradient(to bottom, #fff4e6, #d9ecff);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .card {
+                background: white;
+                padding: 40px 60px;
+                border-radius: 16px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                text-align: center;
+            }
+            h2 {
+                color: #ff4b4b;
+                font-size: 24px;
+                margin-bottom: 25px;
+            }
+            a {
+                display: block;
+                margin-top: 20px;
+                color: #3b6cff;
+                text-decoration: none;
+                font-size: 15px;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+
+    <div class="card">
+        <h2>登録完了！</h2>
+        <a href="../music-rank/index.php">戻る</a>
+    </div>
+
+    </body>
+    </html>
+    ';
 
 } catch (PDOException $e) {
     echo 'データベースエラー: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES);

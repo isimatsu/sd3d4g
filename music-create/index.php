@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         } else {
         if (!isset($_SESSION['user_id'])) {
-            header('Location: signin/index.php');
+            header('Location: ../signin/index.php');
             exit;
         }
     }
